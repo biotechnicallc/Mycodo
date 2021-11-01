@@ -2,6 +2,8 @@
 #
 # pcf8574.py - Output for PCF8574
 #
+from collections import OrderedDict
+
 from flask_babel import lazy_gettext
 
 from mycodo.config_translations import TRANSLATIONS
@@ -10,83 +12,18 @@ from mycodo.outputs.base_output import AbstractOutput
 from mycodo.utils.database import db_retrieve_table_daemon
 
 # Measurements
-measurements_dict = {
-    0: {
+measurements_dict = OrderedDict()
+channels_dict = OrderedDict()
+for each_channel in range(8):
+    measurements_dict[each_channel] = {
         'measurement': 'duration_time',
-        'unit': 's',
-    },
-    1: {
-        'measurement': 'duration_time',
-        'unit': 's',
-    },
-    2: {
-        'measurement': 'duration_time',
-        'unit': 's',
-    },
-    3: {
-        'measurement': 'duration_time',
-        'unit': 's',
-    },
-    4: {
-        'measurement': 'duration_time',
-        'unit': 's',
-    },
-    5: {
-        'measurement': 'duration_time',
-        'unit': 's',
-    },
-    6: {
-        'measurement': 'duration_time',
-        'unit': 's',
-    },
-    7: {
-        'measurement': 'duration_time',
-        'unit': 's',
+        'unit': 's'
     }
-}
-
-channels_dict = {
-    0: {
-        'name': 'Channel 1',
+    channels_dict[each_channel] = {
+        'name': 'Channel {}'.format(each_channel + 1),
         'types': ['on_off'],
-        'measurements': [0]
-    },
-    1: {
-        'name': 'Channel 2',
-        'types': ['on_off'],
-        'measurements': [1]
-    },
-    2: {
-        'name': 'Channel 3',
-        'types': ['on_off'],
-        'measurements': [2]
-    },
-    3: {
-        'name': 'Channel 4',
-        'types': ['on_off'],
-        'measurements': [3]
-    },
-    4: {
-        'name': 'Channel 5',
-        'types': ['on_off'],
-        'measurements': [4]
-    },
-    5: {
-        'name': 'Channel 6',
-        'types': ['on_off'],
-        'measurements': [5]
-    },
-    6: {
-        'name': 'Channel 7',
-        'types': ['on_off'],
-        'measurements': [6]
-    },
-    7: {
-        'name': 'Channel 8',
-        'types': ['on_off'],
-        'measurements': [7]
+        'measurements': [each_channel]
     }
-}
 
 # Output information
 OUTPUT_INFORMATION = {
@@ -142,7 +79,7 @@ OUTPUT_INFORMATION = {
                 (1, 'On')
             ],
             'name': lazy_gettext('Startup State'),
-            'phrase': lazy_gettext('Set the state of the GPIO when Mycodo starts')
+            'phrase': 'Set the state of the GPIO when Mycodo starts'
         },
         {
             'id': 'state_shutdown',
@@ -153,7 +90,7 @@ OUTPUT_INFORMATION = {
                 (1, 'On')
             ],
             'name': lazy_gettext('Shutdown State'),
-            'phrase': lazy_gettext('Set the state of the GPIO when Mycodo shuts down')
+            'phrase': 'Set the state of the GPIO when Mycodo shuts down'
         },
         {
             'id': 'on_state',
@@ -164,22 +101,22 @@ OUTPUT_INFORMATION = {
                 (0, 'LOW')
             ],
             'name': lazy_gettext('On State'),
-            'phrase': lazy_gettext('The state of the GPIO that corresponds to an On state')
+            'phrase': 'The state of the GPIO that corresponds to an On state'
         },
         {
             'id': 'trigger_functions_startup',
             'type': 'bool',
             'default_value': False,
             'name': lazy_gettext('Trigger Functions at Startup'),
-            'phrase': lazy_gettext('Whether to trigger functions when the output switches at startup')
+            'phrase': 'Whether to trigger functions when the output switches at startup'
         },
         {
             'id': 'amps',
             'type': 'float',
             'default_value': 0.0,
             'required': True,
-            'name': lazy_gettext('Current (Amps)'),
-            'phrase': lazy_gettext('The current draw of the device being controlled')
+            'name': '{} ({})'.format(lazy_gettext('Current'), lazy_gettext('Amps')),
+            'phrase': 'The current draw of the device being controlled'
         }
     ]
 }
@@ -228,11 +165,17 @@ class OutputModule(AbstractOutput):
             self.logger.error(
                 "OSError: {}. Check that the device is connected properly, the correct "
                 "address is selected, and you can communicate with the device.".format(err))
+
         self.output_states = dict_states
 
         for channel in channels_dict:
             if self.options_channels['trigger_functions_startup'][channel]:
-                self.check_triggers(self.unique_id, output_channel=channel)
+                try:
+                    self.check_triggers(self.unique_id, output_channel=channel)
+                except Exception as err:
+                    self.logger.error(
+                        "Could not check Trigger for channel {} of output {}: {}".format(
+                            channel, self.unique_id, err))
 
     def output_switch(self,
                       state,

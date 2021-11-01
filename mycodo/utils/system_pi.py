@@ -474,12 +474,13 @@ def epoch_of_next_time(time_str):
         return None
 
 
-def cmd_output(command, stdout_pipe=True, timeout=360, user='mycodo', cwd='/home'):
+def cmd_output(command, stdout_pipe=True, shell=True, timeout=360, user='mycodo', cwd='/home'):
     """
     Executes a bash command and returns the output
 
     :param command: Bash command to execute
     :param stdout_pipe: Capture output
+    :param shell: Set the shell argument
     :param timeout: Kill process if it runs longer than this many seconds
     :param user: The user to execute the command as
     :param cwd: The current working directory of the environment
@@ -521,14 +522,16 @@ def cmd_output(command, stdout_pipe=True, timeout=360, user='mycodo', cwd='/home
 
     if stdout_pipe:
         cmd = subprocess.Popen(command,
+                               stdin=subprocess.PIPE,
                                stdout=subprocess.PIPE,
-                               shell=True,
+                               stderr=subprocess.PIPE,
+                               shell=shell,
                                preexec_fn=demote(user_uid, user_gid, user_groups),
                                cwd=cwd,
                                env=env)
     else:
         cmd = subprocess.Popen(command,
-                               shell=True,
+                               shell=shell,
                                preexec_fn=demote(user_uid, user_gid, user_groups),
                                cwd=cwd,
                                env=env)
@@ -536,9 +539,11 @@ def cmd_output(command, stdout_pipe=True, timeout=360, user='mycodo', cwd='/home
     def kill_process():
         nonlocal cmd_success
         cmd_success = False
-        os.killpg(os.getpgid(cmd.pid), signal.SIGTERM)
-        logger.debug("cmd_output() timed out after {} seconds "
-                     "with command '{}'".format(timeout, command))
+        logger.error(
+            "cmd_output() with PID {} timed out after {} seconds "
+            "with command '{}'. Killing PID.".format(
+                cmd.pid, timeout, command))
+        os.kill(cmd.pid, signal.SIGTERM)
 
     # Add timeout functionality
     timer = Timer(timeout, kill_process)

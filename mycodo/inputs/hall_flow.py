@@ -47,14 +47,14 @@ INPUT_INFORMATION = {
             'type': 'float',
             'default_value': 1.0,
             'name': lazy_gettext('Pulses per Liter'),
-            'phrase': lazy_gettext("Enter the conversion factor for this meter (pulses to Liter).")
+            'phrase': "Enter the conversion factor for this meter (pulses to Liter)."
         }
     ],
 
     'custom_actions_message': 'The total session volume can be cleared with the following button or as a Function Action.',
     'custom_actions': [
         {
-            'id': 'clear_session_total_volume',
+            'id': 'clear_total_session_volume',
             'type': 'button',
             'name': lazy_gettext('Clear Total Volume')
         }
@@ -116,7 +116,6 @@ class InputModule(AbstractInput):
 
     def clear_total_session_volume(self, args_dict):
         self.sensor.clear_totals()
-        return 1, "Success"
 
 
 class ReadHall:

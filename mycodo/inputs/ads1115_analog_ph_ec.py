@@ -2,38 +2,33 @@
 import copy
 import traceback
 
-from flask import flash
 from flask_babel import lazy_gettext
 
+from mycodo.databases.models import Conversion
 from mycodo.inputs.base_input import AbstractInput
+from mycodo.inputs.sensorutils import convert_from_x_to_y_unit
 from mycodo.utils.constraints_pass import constraints_pass_positive_value
+from mycodo.utils.database import db_retrieve_table_daemon
+from mycodo.utils.system_pi import get_measurement
+from mycodo.utils.system_pi import return_measurement_info
 
 
 def execute_at_modification(
+        messages,
         mod_input,
         request_form,
         custom_options_dict_presave,
         custom_options_channels_dict_presave,
         custom_options_dict_postsave,
         custom_options_channels_dict_postsave):
-    allow_saving = True
-    success = []
-    error = []
-
     try:
         if (custom_options_dict_postsave['adc_channel_ph'] ==
                 custom_options_dict_postsave['adc_channel_ec']):
-            error.append("Cannot set pH and EC to be measured from the same channel.")
-            allow_saving = False
+            messages["error"].append("Cannot set pH and EC to be measured from the same channel.")
     except Exception:
-        error.append("execute_at_modification() Error: {}".format(traceback.print_exc()))
-        allow_saving = False
+        messages["error"].append("execute_at_modification() Error: {}".format(traceback.print_exc()))
 
-    for each_error in error:
-        flash(each_error, 'error')
-    for each_success in success:
-        flash(each_success, 'success')
-    return (allow_saving,
+    return (messages,
             mod_input,
             custom_options_dict_postsave,
             custom_options_channels_dict_postsave)
@@ -55,8 +50,8 @@ measurements_dict = {
 # Input information
 INPUT_INFORMATION = {
     'input_name_unique': 'ANALOG_PH_EC',
-    'input_manufacturer': 'Generic',
-    'input_name': 'ADS1115: Analog pH/EC',
+    'input_manufacturer': 'Texas Instruments',
+    'input_name': 'ADS1115: Generic Analog pH/EC',
     'input_library': 'Adafruit_CircuitPython_ADS1x15',
     'measurements_name': 'Ion Concentration/Electrical Conductivity',
     'measurements_dict': measurements_dict,
@@ -150,7 +145,7 @@ INPUT_INFORMATION = {
             'required': True,
             'constraints_pass': constraints_pass_positive_value,
             'name': "{}: {}".format(lazy_gettext('Temperature Compensation'), lazy_gettext('Max Age')),
-            'phrase': lazy_gettext('The maximum age (seconds) of the measurement to use for temperature compensation')
+            'phrase': lazy_gettext('The maximum age (seconds) of the measurement to use')
         },
         {  # This message will be displayed after the new line
             'type': 'message',
@@ -390,9 +385,12 @@ class InputModule(AbstractInput):
         else:
             self.adc_gain = self.input_dev.adc_gain
 
-        self.adc = ADS.ADS1115(
-            ExtendedI2C(self.input_dev.i2c_bus),
-            address=int(str(self.input_dev.i2c_location), 16))
+        try:
+            self.adc = ADS.ADS1115(
+                ExtendedI2C(self.input_dev.i2c_bus),
+                address=int(str(self.input_dev.i2c_location), 16))
+        except Exception as err:
+            self.logger.error("Error while initializing: {}".format(err))
 
     def calibrate_ph(self, cal_slot, args_dict):
         """Calibration helper method"""
@@ -530,7 +528,7 @@ class InputModule(AbstractInput):
         return volt_25C
 
     def get_temp_data(self):
-        """Get the temperature."""
+        """Get the temperature"""
         if self.temperature_comp_meas_measurement_id:
             self.logger.debug("Temperature corrections will be applied")
 
@@ -540,21 +538,33 @@ class InputModule(AbstractInput):
                 max_age=self.max_age
             )
 
-            if last_measurement:
-                self.logger.debug("Latest temperature: {temp}".format(
-                    temp=last_measurement[1]))
-                temp_data = last_measurement[1]
+            if last_measurement and len(last_measurement) > 1:
+                device_measurement = get_measurement(
+                    self.temperature_comp_meas_measurement_id)
+                conversion = db_retrieve_table_daemon(
+                    Conversion, unique_id=device_measurement.conversion_id)
+                _, unit, _ = return_measurement_info(
+                    device_measurement, conversion)
+
+                if unit != "C":
+                    out_value = convert_from_x_to_y_unit(
+                        unit, "C", last_measurement[1])
+                else:
+                    out_value = last_measurement[1]
+
+                self.logger.debug("Latest temperature: {temp} C".format(
+                    temp=out_value))
             else:
                 self.logger.error(
                     "Temperature measurement not found within the "
                     "past {} seconds".format(self.max_age))
-                temp_data = None
+                out_value = None
 
         else:
             self.logger.debug("No temperature corrections applied")
-            temp_data = None
+            out_value = None
 
-        return temp_data
+        return out_value
 
     def get_volt_data(self, channel):
         """Measure voltage at ADC channel."""
@@ -604,6 +614,10 @@ class InputModule(AbstractInput):
 
     def get_measurement(self):
         """ Gets the measurement """
+        if not self.adc:
+            self.logger.error("Input not set up")
+            return
+
         self.return_dict = copy.deepcopy(measurements_dict)
 
         # Store measurement for each channel

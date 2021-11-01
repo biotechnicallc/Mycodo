@@ -52,12 +52,32 @@ INPUT_INFORMATION = {
             'type': 'select',
             'default_value': 'on',
             'options_select': [
-                ('on', 'Always On'),
-                ('off', 'Always Off'),
-                ('measure', 'Only On During Measure')
+                ('on', lazy_gettext('Always On')),
+                ('off', lazy_gettext('Always Off')),
+                ('measure', lazy_gettext('Only On During Measure'))
             ],
             'name': lazy_gettext('LED Mode'),
             'phrase': lazy_gettext('When to turn the LED on')
+        }
+    ],
+
+    'custom_actions_message':
+        'The I2C address can be changed. Enter a new address in the 0xYY format '
+        '(e.g. 0x22, 0x50), then press Set I2C Address. Remember to deactivate and '
+        'change the I2C address option after setting the new address.',
+
+    'custom_actions': [
+        {
+            'id': 'new_i2c_address',
+            'type': 'text',
+            'default_value': '0x6a',
+            'name': lazy_gettext('New I2C Address'),
+            'phrase': lazy_gettext('The new I2C to set the device to')
+        },
+        {
+            'id': 'set_i2c_address',
+            'type': 'button',
+            'name': lazy_gettext('Set I2C Address')
         }
     ]
 }
@@ -137,3 +157,15 @@ class InputModule(AbstractInput):
         self.value_set(0, pressure)
 
         return self.return_dict
+
+    def set_i2c_address(self, args_dict):
+        if 'new_i2c_address' not in args_dict:
+            self.logger.error("Cannot set new I2C address without an I2C address")
+            return
+        try:
+            i2c_address = int(str(args_dict['new_i2c_address']), 16)
+            write_cmd = "I2C,{}".format(i2c_address)
+            self.logger.debug("I2C Change command: {}".format(write_cmd))
+            self.atlas_device.atlas_write(write_cmd)
+        except:
+            self.logger.exception("Exception changing I2C address")

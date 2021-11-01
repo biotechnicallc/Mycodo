@@ -57,10 +57,8 @@ INPUT_INFORMATION = {
                 ('3', 'Long Range (33 ms, 2 m)'),
                 ('4', 'High Speed, Low Accuracy (20 ms, 1.2 m)')
             ],
-            'name': lazy_gettext('Accuracy'),
-            'phrase': "{}. {}.".format(
-                lazy_gettext('Set the accuracy'),
-                lazy_gettext('A longer measurement duration yields a more accurate measurement'))
+            'name': 'Accuracy',
+            'phrase': 'Set the accuracy. A longer measurement duration yields a more accurate measurement'
         }
     ],
 
@@ -75,7 +73,7 @@ INPUT_INFORMATION = {
             'type': 'text',
             'default_value': '0x52',
             'name': lazy_gettext('New I2C Address'),
-            'phrase': 'The new I2C to set the sensor to'
+            'phrase': lazy_gettext('The new I2C to set the device to')
         },
         {
             'id': 'set_i2c_address',

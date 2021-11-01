@@ -3,6 +3,7 @@
 # pump_generic.py - Output for Atlas Scientific EZO Pump
 #
 import copy
+import datetime
 import threading
 import time
 
@@ -82,7 +83,7 @@ OUTPUT_INFORMATION = {
             'required': False,
             'constraints_pass': constraints_pass_positive_or_zero_value,
             'name': lazy_gettext('GPIO Pin (BCM)'),
-            'phrase': lazy_gettext('The pin to control the state of')
+            'phrase': 'The pin to control the state of'
         },
         {
             'id': 'on_state',
@@ -93,7 +94,7 @@ OUTPUT_INFORMATION = {
                 (0, 'LOW')
             ],
             'name': lazy_gettext('On State'),
-            'phrase': lazy_gettext('The state of the GPIO that corresponds to an On state')
+            'phrase': 'The state of the GPIO that corresponds to an On state'
         },
         {
             'id': 'fastest_dispense_rate_ml_min',
@@ -119,8 +120,8 @@ OUTPUT_INFORMATION = {
                 ('fastest_flow_rate', 'Fastest Flow Rate'),
                 ('specify_flow_rate', 'Specify Flow Rate')
             ],
-            'name': lazy_gettext('Flow Rate Method'),
-            'phrase': lazy_gettext('The flow rate to use when pumping a volume')
+            'name': 'Flow Rate Method',
+            'phrase': 'The flow rate to use when pumping a volume'
         },
         {
             'id': 'flow_rate',
@@ -135,8 +136,8 @@ OUTPUT_INFORMATION = {
             'type': 'float',
             'default_value': 0.0,
             'required': True,
-            'name': lazy_gettext('Current (Amps)'),
-            'phrase': lazy_gettext('The current draw of the device being controlled')
+            'name': '{} ({})'.format(lazy_gettext('Current'), lazy_gettext('Amps')),
+            'phrase': 'The current draw of the device being controlled'
         }
     ]
 }
@@ -194,6 +195,7 @@ class OutputModule(AbstractOutput):
         self.logger.debug("Output turned on")
         self.GPIO.output(self.options_channels['pin'][0], self.options_channels['on_state'][0])
         timer_dispense = time.time() + total_dispense_seconds
+        timestamp_start = datetime.datetime.utcnow()
 
         while time.time() < timer_dispense and self.currently_dispensing:
             time.sleep(0.01)
@@ -201,7 +203,7 @@ class OutputModule(AbstractOutput):
         self.GPIO.output(self.options_channels['pin'][0], not self.options_channels['on_state'][0])
         self.currently_dispensing = False
         self.logger.debug("Output turned off")
-        self.record_dispersal(amount, total_dispense_seconds, total_dispense_seconds)
+        self.record_dispersal(amount, total_dispense_seconds, total_dispense_seconds, timestamp=timestamp_start)
 
     def dispense_volume_rate(self, amount, dispense_rate):
         """ Dispense at a specific flow rate """
@@ -225,6 +227,7 @@ class OutputModule(AbstractOutput):
 
         self.currently_dispensing = True
         timer_dispense = time.time() + total_dispense_seconds
+        timestamp_start = datetime.datetime.utcnow()
 
         while time.time() < timer_dispense and self.currently_dispensing:
             # On for duration
@@ -242,14 +245,18 @@ class OutputModule(AbstractOutput):
                 time.sleep(0.01)
 
         self.currently_dispensing = False
-        self.record_dispersal(amount, total_seconds_on, total_dispense_seconds)
+        self.record_dispersal(amount, total_seconds_on, total_dispense_seconds, timestamp=timestamp_start)
 
-    def record_dispersal(self, amount, total_on_seconds, total_dispense_seconds):
+    def record_dispersal(self, amount, total_on_seconds, total_dispense_seconds, timestamp=None):
         measure_dict = copy.deepcopy(measurements_dict)
         measure_dict[0]['value'] = total_on_seconds
         measure_dict[1]['value'] = amount
         measure_dict[2]['value'] = total_dispense_seconds
-        add_measurements_influxdb(self.unique_id, measure_dict)
+        if timestamp:
+            measure_dict[0]['timestamp_utc'] = timestamp
+            measure_dict[1]['timestamp_utc'] = timestamp
+            measure_dict[2]['timestamp_utc'] = timestamp
+        add_measurements_influxdb(self.unique_id, measure_dict, use_same_timestamp=False)
 
     def output_switch(self, state, output_type=None, amount=None, output_channel=None):
         self.logger.debug("state: {}, output_type: {}, amount: {}".format(

@@ -18,6 +18,7 @@ PIGPIO_URL="https://github.com/joan2937/pigpio/archive/v79.tar.gz"
 MCB2835_URL="http://www.airspayce.com/mikem/bcm2835/bcm2835-1.50.tar.gz"
 WIRINGPI_URL="https://project-downloads.drogon.net/wiringpi-latest.deb"
 INFLUXDB_VERSION="1.8.0"
+VIRTUALENV_VERSION="20.7.0"
 
 # Required apt packages. This has only been tested with Raspbian for the
 # Raspberry Pi but should work with most Debian-based systems.
@@ -119,6 +120,8 @@ case "${1:-''}" in
         mkdir -p /var/log/mycodo
         mkdir -p /var/Mycodo-backups
         mkdir -p "${MYCODO_PATH}"/note_attachments
+        mkdir -p "${MYCODO_PATH}"/mycodo/mycodo_flask/static/js/user_js
+        mkdir -p "${MYCODO_PATH}"/mycodo/mycodo_flask/static/css/user_css
 
         if [[ ! -e /var/log/mycodo/mycodo.log ]]; then
             touch /var/log/mycodo/mycodo.log
@@ -186,18 +189,15 @@ case "${1:-''}" in
     ;;
     'restart-daemon')
         printf "\n#### Restarting the Mycodo daemon\n"
-        service mycodo stop
-        sleep 2
-        "${MYCODO_PATH}"/env/bin/python "${MYCODO_PATH}"/mycodo/scripts/restart_daemon.py
-        service mycodo start
+        service mycodo restart
     ;;
     'setup-virtualenv')
         printf "\n#### Checking python 3 virtualenv\n"
         if [[ ! -e ${MYCODO_PATH}/env/bin/python3 ]]; then
             printf "#### Virtualenv doesn't exist. Creating...\n"
-            pip install virtualenv --upgrade
+            python3 -m pip install virtualenv==${VIRTUALENV_VERSION}
             rm -rf "${MYCODO_PATH}"/env
-            virtualenv --system-site-packages -p "${PYTHON_BINARY_SYS_LOC}" "${MYCODO_PATH}"/env
+            python3 -m virtualenv --system-site-packages -p "${PYTHON_BINARY_SYS_LOC}" "${MYCODO_PATH}"/env
         else
             printf "#### Virtualenv already exists, skipping creation\n"
         fi
@@ -250,10 +250,9 @@ case "${1:-''}" in
         printf "\n#### Updating apt repositories\n"
         apt-get update -y
     ;;
-    'update-cron')
-        printf "\n#### Updating Mycodo restart monitor crontab entry\n"
+    'update-cron')  # TODO: Remove at next major revision
+        printf "\n#### Remove Mycodo restart monitor crontab entry (if it exists)\n"
         /bin/bash "${MYCODO_PATH}"/install/crontab.sh restart_daemon --remove
-        /bin/bash "${MYCODO_PATH}"/install/crontab.sh restart_daemon
     ;;
     'update-dependencies')
         printf "\n#### Checking for updates to dependencies\n"
@@ -280,8 +279,7 @@ case "${1:-''}" in
         wget ${WIRINGPI_URL} -O wiringpi-latest.deb
         dpkg -i wiringpi-latest.deb
     ;;
-    'install-pigpiod')
-        printf "\n#### Installing pigpiod\n"
+    'build-pigpiod')
         apt-get install -y python3-pigpio
         cd "${MYCODO_PATH}"/install || return
         # wget --quiet -P "${MYCODO_PATH}"/install abyz.co.uk/rpi/pigpio/pigpio.zip
@@ -294,6 +292,10 @@ case "${1:-''}" in
         cd "${MYCODO_PATH}"/install || return
         rm -rf ./PIGPIO
         rm -rf pigpio.tar.gz
+    ;;
+    'install-pigpiod')
+        printf "\n#### Installing pigpiod\n"
+        /bin/bash "${MYCODO_PATH}"/mycodo/scripts/upgrade_commands.sh build-pigpio
         /bin/bash "${MYCODO_PATH}"/mycodo/scripts/upgrade_commands.sh disable-pigpiod
         /bin/bash "${MYCODO_PATH}"/mycodo/scripts/upgrade_commands.sh enable-pigpiod-high
         mkdir -p /opt/mycodo
@@ -420,7 +422,7 @@ case "${1:-''}" in
         apt-get remove -y apache2 python-cffi-backend python3-cffi-backend
         apt-get install -y ${APT_PKGS}
         python3 /usr/lib/python3/dist-packages/easy_install.py pip
-        pip install --upgrade pip
+        python3 -m pip install --upgrade pip
     ;;
     'update-permissions')
         printf "\n#### Setting permissions\n"
@@ -437,17 +439,17 @@ case "${1:-''}" in
     ;;
     'update-pip3')
         printf "\n#### Updating pip\n"
-        "${MYCODO_PATH}"/env/bin/pip3 install --upgrade pip
+        "${MYCODO_PATH}"/env/bin/python -m pip install --upgrade pip
     ;;
     'update-pip3-packages')
         printf "\n#### Installing pip requirements\n"
         if [[ ! -d ${MYCODO_PATH}/env ]]; then
             printf "\n## Error: Virtualenv doesn't exist. Create with %s setup-virtualenv\n" "${0}"
         else
-            "${MYCODO_PATH}"/env/bin/pip3 install --upgrade pip setuptools
-            "${MYCODO_PATH}"/env/bin/pip3 install --upgrade -r "${MYCODO_PATH}"/install/requirements.txt
-            "${MYCODO_PATH}"/env/bin/pip3 install --upgrade -r "${MYCODO_PATH}"/install/requirements-rpi.txt
-            "${MYCODO_PATH}"/env/bin/pip3 install --upgrade -r "${MYCODO_PATH}"/install/requirements-testing.txt
+            "${MYCODO_PATH}"/env/bin/python -m pip install --upgrade pip setuptools
+            "${MYCODO_PATH}"/env/bin/python -m pip install --upgrade -r "${MYCODO_PATH}"/install/requirements.txt
+            "${MYCODO_PATH}"/env/bin/python -m pip install --upgrade -r "${MYCODO_PATH}"/install/requirements-rpi.txt
+            "${MYCODO_PATH}"/env/bin/python -m pip install --upgrade -r "${MYCODO_PATH}"/install/requirements-testing.txt
         fi
     ;;
     'update-swap-size')
@@ -521,17 +523,17 @@ case "${1:-''}" in
     'docker-compile-translations')
         printf "\n#### Compiling Translations\n"
         cd "${MYCODO_PATH}"/mycodo || exit
-        pybabel compile -d mycodo_flask/translations
+        "${MYCODO_PATH}"/env/bin/pybabel compile -d mycodo_flask/translations
     ;;
     'docker-update-pip')
         printf "\n#### Updating pip\n"
-        pip install --upgrade pip
+        "${MYCODO_PATH}"/env/bin/python -m pip install --upgrade pip
     ;;
     'docker-update-pip-packages')
         printf "\n#### Installing pip requirements\n"
-        pip install --upgrade pip setuptools
-        pip install --no-cache-dir -r /home/mycodo/install/requirements.txt
-        pip install --no-cache-dir -r /home/mycodo/install/requirements-rpi.txt
+        "${MYCODO_PATH}"/env/bin/python -m pip install --upgrade pip setuptools
+        "${MYCODO_PATH}"/env/bin/python -m pip install --no-cache-dir -r /home/mycodo/install/requirements.txt
+        "${MYCODO_PATH}"/env/bin/python -m pip install --no-cache-dir -r /home/mycodo/install/requirements-rpi.txt
     ;;
     'install-docker-ce-cli')
         printf "\n#### Installing Docker Client\n"

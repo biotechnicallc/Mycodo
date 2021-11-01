@@ -1,13 +1,24 @@
 # coding=utf-8
 import csv
 import datetime
+import io
 import logging
 import os
+import shutil
 import time
+import zipfile
 from collections import OrderedDict
 
 from dateutil import relativedelta
 
+from mycodo.config import INFLUXDB_DATABASE
+from mycodo.config import INSTALL_DIRECTORY
+from mycodo.config import PATH_FUNCTIONS_CUSTOM
+from mycodo.config import PATH_INPUTS_CUSTOM
+from mycodo.config import PATH_OUTPUTS_CUSTOM
+from mycodo.config import PATH_USER_SCRIPTS
+from mycodo.config import PATH_WIDGETS_CUSTOM
+from mycodo.config import SQL_DATABASE_MYCODO
 from mycodo.config import USAGE_REPORTS_PATH
 from mycodo.databases.models import Conversion
 from mycodo.databases.models import DeviceMeasurements
@@ -20,11 +31,88 @@ from mycodo.utils.influx import average_start_end_seconds
 from mycodo.utils.influx import output_sec_on
 from mycodo.utils.logging_utils import set_log_level
 from mycodo.utils.system_pi import assure_path_exists
+from mycodo.utils.system_pi import cmd_output
 from mycodo.utils.system_pi import return_measurement_info
 from mycodo.utils.system_pi import set_user_grp
 
 logger = logging.getLogger("mycodo.tools")
 logger.setLevel(set_log_level(logging))
+
+
+def create_measurements_export(save_path=None):
+    try:
+        data = io.BytesIO()
+        influx_backup_dir = os.path.join(INSTALL_DIRECTORY, 'influx_backup')
+
+        # Delete influxdb directory if it exists
+        if os.path.isdir(influx_backup_dir):
+            shutil.rmtree(influx_backup_dir)
+
+        # Create new directory (make sure it's empty)
+        assure_path_exists(influx_backup_dir)
+
+        cmd = "/usr/bin/influxd backup -database {db} -portable {path}".format(
+            db=INFLUXDB_DATABASE, path=influx_backup_dir)
+        _, _, status = cmd_output(cmd)
+
+        if not status:
+            # Zip all files in the influx_backup directory
+            with zipfile.ZipFile(data, mode='w') as z:
+                for _, _, files in os.walk(influx_backup_dir):
+                    for filename in files:
+                        z.write(os.path.join(influx_backup_dir, filename),
+                                filename)
+            data.seek(0)
+
+            # Delete influxdb directory if it exists
+            if os.path.isdir(influx_backup_dir):
+                shutil.rmtree(influx_backup_dir)
+
+            if save_path:
+                with open(save_path, "wb") as f:
+                    f.write(data.getbuffer())
+                set_user_grp(save_path, 'mycodo', 'mycodo')
+                return 0, save_path
+            else:
+                return 0, data
+    except Exception as err:
+        logger.error("Error: {}".format(err))
+        return 1, err
+
+
+def create_settings_export(save_path=None):
+    try:
+        data = io.BytesIO()
+        with zipfile.ZipFile(data, mode='w') as z:
+            z.write(SQL_DATABASE_MYCODO,
+                    os.path.basename(SQL_DATABASE_MYCODO))
+            export_directories = [
+                (PATH_FUNCTIONS_CUSTOM, "custom_functions"),
+                (PATH_INPUTS_CUSTOM, "custom_inputs"),
+                (PATH_OUTPUTS_CUSTOM, "custom_outputs"),
+                (PATH_WIDGETS_CUSTOM, "custom_widgets"),
+                (PATH_USER_SCRIPTS, "user_scripts")
+            ]
+            for each_backup in export_directories:
+                if not os.path.exists(each_backup[0]):
+                    continue
+                for folder_name, sub_folders, filenames in os.walk(each_backup[0]):
+                    for filename in filenames:
+                        if filename == "__init__.py" or filename.endswith("pyc"):
+                            continue
+                        file_path = os.path.join(folder_name, filename)
+                        z.write(file_path, "{}/{}".format(each_backup[1], os.path.basename(file_path)))
+        data.seek(0)
+        if save_path:
+            with open(save_path, "wb") as f:
+                f.write(data.getbuffer())
+            set_user_grp(save_path, 'mycodo', 'mycodo')
+            return 0, save_path
+        else:
+            return 0, data
+    except Exception as err:
+        logger.error("Error: {}".format(err))
+        return 1, err
 
 
 def next_schedule(time_span='daily', set_day=None, set_hour=None):

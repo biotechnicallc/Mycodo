@@ -18,6 +18,7 @@ from mycodo.databases.models import Camera
 from mycodo.databases.models import Conditional
 from mycodo.databases.models import ConditionalConditions
 from mycodo.databases.models import Conversion
+from mycodo.databases.models import CustomController
 from mycodo.databases.models import DeviceMeasurements
 from mycodo.databases.models import Input
 from mycodo.databases.models import LCD
@@ -166,7 +167,6 @@ def get_condition_value(condition_id):
 
     # Return controller active state
     elif sql_condition.condition_type == 'controller_status':
-        controller_type, _, _ = which_controller(sql_condition.controller_id)
         control = DaemonControl()
         return control.controller_is_active(sql_condition.controller_id)
 
@@ -215,6 +215,40 @@ def get_condition_value_dict(condition_id):
                     string_ts_values += ';'
 
         return string_ts_values
+
+
+def action_camera_timelapse_pause(cond_action, message):
+    """Pauses a camera timelapse"""
+    unique_id = cond_action.do_unique_id.split(",")[0]
+    this_camera = db_retrieve_table_daemon(
+        Camera, unique_id=unique_id, entry='first')
+    message += " Pause timelapse with Camera {unique_id} ({id}, {name}).".format(
+        unique_id=unique_id,
+        id=this_camera.id,
+        name=this_camera.name)
+    with session_scope(MYCODO_DB_PATH) as new_session:
+        mod_camera = new_session.query(Camera).filter(
+            Camera.unique_id == unique_id).first()
+        mod_camera.timelapse_paused = True
+        new_session.commit()
+    return message
+
+
+def action_camera_timelapse_resume(cond_action, message):
+    """Resumes a camera timelapse"""
+    unique_id = cond_action.do_unique_id.split(",")[0]
+    this_camera = db_retrieve_table_daemon(
+        Camera, unique_id=unique_id, entry='first')
+    message += " Resume timelapse with Camera {unique_id} ({id}, {name}).".format(
+        unique_id=unique_id,
+        id=this_camera.id,
+        name=this_camera.name)
+    with session_scope(MYCODO_DB_PATH) as new_session:
+        mod_camera = new_session.query(Camera).filter(
+            Camera.unique_id == unique_id).first()
+        mod_camera.timelapse_paused = False
+        new_session.commit()
+    return message
 
 
 def action_clear_flow_meter_total_volume(cond_action, message):
@@ -1070,6 +1104,10 @@ def trigger_action(
                 cond_action.do_unique_id and
                 cond_action.do_output_amount > 0):
             message = action_output_volume(cond_action, message)
+        elif cond_action.action_type == 'camera_timelapse_pause':
+            message = action_camera_timelapse_pause(cond_action, message)
+        elif cond_action.action_type == 'camera_timelapse_resume':
+            message = action_camera_timelapse_resume(cond_action, message)
         elif cond_action.action_type == 'command':
             message = action_command(cond_action, message)
         elif cond_action.action_type == 'create_note':
@@ -1240,11 +1278,17 @@ def which_controller(unique_id):
     controller_type = None
     controller_object = None
     controller_entry = None
+
     if db_retrieve_table_daemon(Conditional, unique_id=unique_id):
         controller_type = 'Conditional'
         controller_object = Conditional
         controller_entry = db_retrieve_table_daemon(
             Conditional, unique_id=unique_id)
+    elif db_retrieve_table_daemon(CustomController, unique_id=unique_id):
+        controller_type = 'Function'
+        controller_object = CustomController
+        controller_entry = db_retrieve_table_daemon(
+            CustomController, unique_id=unique_id)
     elif db_retrieve_table_daemon(Input, unique_id=unique_id):
         controller_type = 'Input'
         controller_object = Input
@@ -1270,4 +1314,5 @@ def which_controller(unique_id):
         controller_object = Trigger
         controller_entry = db_retrieve_table_daemon(
             Trigger, unique_id=unique_id)
+
     return controller_type, controller_object, controller_entry

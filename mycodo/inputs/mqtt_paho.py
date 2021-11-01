@@ -24,7 +24,7 @@ channels_dict = {
 INPUT_INFORMATION = {
     'input_name_unique': 'MQTT_PAHO',
     'input_manufacturer': 'Mycodo',
-    'input_name': 'MQTT Subscribe (value payload)',
+    'input_name': 'MQTT Subscribe (Value payload)',
     'input_library': 'paho-mqtt',
     'measurements_name': 'Variable measurements',
     'measurements_dict': measurements_dict,
@@ -48,7 +48,8 @@ INPUT_INFORMATION = {
     'interfaces': ['Mycodo'],
 
     'dependencies_module': [
-        ('pip-pypi', 'paho', 'paho-mqtt==1.5.1')],
+        ('pip-pypi', 'paho', 'paho-mqtt==1.5.1')
+    ],
 
     'custom_options': [
         {
@@ -74,17 +75,15 @@ INPUT_INFORMATION = {
             'required': True,
             'constraints_pass': constraints_pass_positive_value,
             'name': lazy_gettext('Keep Alive'),
-            'phrase': "{} {}".format(
-                lazy_gettext('Maximum amount of time between received signals.'),
-                lazy_gettext('Set to 0 to disable.'))
+            'phrase': 'Maximum amount of time between received signals. Set to 0 to disable.'
         },
         {
             'id': 'mqtt_clientid',
             'type': 'text',
             'default_value': 'mycodo_mqtt_client',
             'required': True,
-            'name': lazy_gettext('Client ID'),
-            'phrase': lazy_gettext('Unique client ID for connecting to the server')
+            'name': 'Client ID',
+            'phrase': 'Unique client ID for connecting to the server'
         },
         {
             'id': 'mqtt_login',
@@ -114,19 +113,25 @@ INPUT_INFORMATION = {
             'default_value': '',
             'required': False,
             'name': lazy_gettext('Password'),
-            'phrase': "{} {}".format(
-                lazy_gettext('Password for connecting to the server.'),
-                lazy_gettext('Leave blank to disable.'))
+            'phrase': 'Password for connecting to the server. Leave blank to disable.'
         }
     ],
 
     'custom_channel_options': [
         {
+            'id': 'name',
+            'type': 'text',
+            'default_value': '',
+            'required': False,
+            'name': TRANSLATIONS['name']['title'],
+            'phrase': TRANSLATIONS['name']['phrase']
+        },
+        {
             'id': 'subscribe_topic',
             'type': 'text',
             'default_value': '',
             'required': True,
-            'name': lazy_gettext('Subscription Topic'),
+            'name': 'Subscription Topic',
             'phrase': 'The MQTT topic to subscribe to'
         }
     ]
@@ -209,28 +214,35 @@ class InputModule(AbstractInput):
         """ Set up the subscriptions to the proper MQTT channels to listen to """
         try:
             for channel in self.channels_measurement:
-                self.client.subscribe(self.options_channels['subscribe_topic'][channel])
-                self.logger.debug("Subscribed to MQTT channel '{}'".format(
+                self.logger.debug("Subscribing to MQTT topic '{}'".format(
                     self.channels_measurement[channel].name))
+                self.client.subscribe(self.options_channels['subscribe_topic'][channel])
         except:
             self.logger.error("Could not subscribe to MQTT channel '{}'".format(
                 self.mqtt_channel))
 
     def on_connect(self, client, obj, flags, rc):
-        self.logger.debug("Connected to '{}', rc: {}".format(
+        self.logger.debug("Connected to '{}'. Return code: {}".format(
             self.mqtt_channel, rc))
 
     def on_subscribe(self, client, obj, mid, granted_qos):
-        self.logger.debug("Subscribing to mqtt topic: {}, {}, {}".format(
+        self.logger.debug("Subscribed to mqtt topic: {}, {}, {}".format(
             self.mqtt_channel, mid, granted_qos))
 
     def on_log(self, mqttc, obj, level, string):
         self.logger.info("Log: {}".format(string))
 
     def on_message(self, client, userdata, msg):
+        try:
+            payload = msg.payload.decode()
+            self.logger.debug("Received message: topic: {}, payload: {}".format(
+                msg.topic, payload))
+        except Exception as exc:
+            self.logger.error(
+                "Payload could not be decoded: {}".format(exc))
+            return
+
         datetime_utc = datetime.datetime.utcnow()
-        self.logger.debug("Message received: Channel: {}, Value: {}".format(
-            msg.topic, msg.payload.decode()))
         measurement = {}
         channel = None
         for each_channel in self.channels_measurement:
@@ -246,26 +258,18 @@ class InputModule(AbstractInput):
             return
 
         try:
-            value = float(msg.payload.decode())
-            self.logger.debug("Payload is float: {}".format(value))
-        except Exception:
-            try:
-                self.logger.error(
-                    "Message doesn't represent a float value: {}".format(
-                        msg.payload.decode()))
-            except:
-                self.logger.error(
-                    "Message doesn't represent a float and could not decode payload")
-            return
-
-        # Original value/unit
-        measurement[channel] = {}
-        measurement[channel]['measurement'] = self.channels_measurement[channel].measurement
-        measurement[channel]['unit'] = self.channels_measurement[channel].unit
-        measurement[channel]['value'] = value
-        measurement[channel]['timestamp_utc'] = datetime_utc
-
-        self.add_measurement_influxdb(channel, measurement)
+            value = float(payload)
+            self.logger.debug("Payload represents a float: {}".format(value))
+            measurement[channel] = {}
+            measurement[channel]['measurement'] = self.channels_measurement[channel].measurement
+            measurement[channel]['unit'] = self.channels_measurement[channel].unit
+            measurement[channel]['value'] = value
+            measurement[channel]['timestamp_utc'] = datetime_utc
+            self.add_measurement_influxdb(channel, measurement)
+        except Exception as err:
+            self.logger.error(
+                "Error processing message payload '{}': {}".format(
+                    payload, err))
 
     def add_measurement_influxdb(self, channel, measurement):
         # Convert value/unit is conversion_id present and valid
@@ -295,7 +299,7 @@ class InputModule(AbstractInput):
                 use_same_timestamp=INPUT_INFORMATION['measurements_use_same_timestamp'])
 
     def on_disconnect(self, client, userdata, rc=0):
-        self.logger.debug("Disconnected result code {}".format(rc))
+        self.logger.debug("Disconnected. Return code: {}".format(rc))
 
     def stop_input(self):
         """ Called when Input is deactivated """

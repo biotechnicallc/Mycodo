@@ -3,8 +3,13 @@ import copy
 
 from flask_babel import lazy_gettext
 
+from mycodo.databases.models import Conversion
 from mycodo.inputs.base_input import AbstractInput
+from mycodo.inputs.sensorutils import convert_from_x_to_y_unit
 from mycodo.utils.constraints_pass import constraints_pass_positive_value
+from mycodo.utils.database import db_retrieve_table_daemon
+from mycodo.utils.system_pi import get_measurement
+from mycodo.utils.system_pi import return_measurement_info
 
 # Measurements
 measurements_dict = {
@@ -29,6 +34,7 @@ INPUT_INFORMATION = {
         'i2c_location',
         'period',
     ],
+    'options_disabled': ['interface'],
 
     'dependencies_module': [
         ('apt', 'libjpeg-dev', 'libjpeg-dev'),
@@ -37,7 +43,7 @@ INPUT_INFORMATION = {
         ('apt', 'python3-scipy', 'python3-scipy'),
         ('pip-pypi', 'usb.core', 'pyusb==1.1.1'),
         ('pip-pypi', 'adafruit_extended_bus', 'Adafruit-extended-bus==1.0.1'),
-        ('pip-pypi', 'anyleaf', 'anyleaf==0.1.8.1')
+        ('pip-pypi', 'anyleaf', 'anyleaf==0.1.9')
     ],
 
     'interfaces': ['I2C'],
@@ -54,7 +60,7 @@ INPUT_INFORMATION = {
                 'Function',
                 'Math'
             ],
-            'name': lazy_gettext('Temperature Compensation Measurement'),
+            'name': "{}: {}".format(lazy_gettext('Temperature Compensation'), lazy_gettext('Measurement')),
             'phrase': lazy_gettext('Select a measurement for temperature compensation')
         },
         {
@@ -63,8 +69,8 @@ INPUT_INFORMATION = {
             'default_value': 120,
             'required': True,
             'constraints_pass': constraints_pass_positive_value,
-            'name': lazy_gettext('Temperature Compensation Max Age'),
-            'phrase': lazy_gettext('The maximum age (seconds) of the measurement to use for temperature compensation')
+            'name': "{}: {}".format(lazy_gettext('Temperature Compensation'), lazy_gettext('Max Age')),
+            'phrase': lazy_gettext('The maximum age (seconds) of the measurement to use')
         },
         {
             'id': 'cal1_v',
@@ -286,15 +292,28 @@ class InputModule(AbstractInput):
         from anyleaf import OffBoard
         from anyleaf import OnBoard
 
-        last_temp_measurement = None
+        last_measurement = None
         if self.temperature_comp_meas_measurement_id:
-            last_temp_measurement = self.get_last_measurement(
+            last_measurement = self.get_last_measurement(
                 self.temperature_comp_meas_device_id,
                 self.temperature_comp_meas_measurement_id,
                 max_age=self.max_age)
 
-        if last_temp_measurement:
-            return OffBoard(last_temp_measurement[1])
+        if last_measurement and len(last_measurement) > 1:
+            device_measurement = get_measurement(
+                self.temperature_comp_meas_measurement_id)
+            conversion = db_retrieve_table_daemon(
+                Conversion, unique_id=device_measurement.conversion_id)
+            _, unit, _ = return_measurement_info(
+                device_measurement, conversion)
+
+            if unit != "C":
+                out_value = convert_from_x_to_y_unit(
+                    unit, "C", last_measurement[1])
+            else:
+                out_value = last_measurement[1]
+
+            return OffBoard(out_value)
         else:
             return OnBoard()
 

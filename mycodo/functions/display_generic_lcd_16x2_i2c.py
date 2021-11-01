@@ -75,6 +75,7 @@ def execute_at_creation(error, new_func, dict_functions=None):
 
 
 def execute_at_modification(
+        messages,
         mod_function,
         request_form,
         custom_options_dict_presave,
@@ -95,10 +96,6 @@ def execute_at_modification(
     :param custom_options_channels_dict_postsave: dict of post-saved custom output channel options
     :return:
     """
-    allow_saving = True
-    success = []
-    error = []
-
     try:
         dict_controllers = parse_function_information()
 
@@ -122,6 +119,7 @@ def execute_at_modification(
         if (custom_options_dict_postsave['number_line_sets'] >
                 custom_options_dict_presave['number_line_sets']):
 
+            page_refresh = True
             start_channel = channels.count()
 
             for index in range(start_channel, end_channel):
@@ -132,10 +130,10 @@ def execute_at_modification(
                 new_channel.function_id = mod_function.unique_id
                 new_channel.channel = index
 
-                error, custom_options = custom_channel_options_return_json(
-                    error, dict_controllers, request_form,
+                messages["error"], custom_options = custom_channel_options_return_json(
+                    messages["error"], dict_controllers, request_form,
                     mod_function.unique_id, index,
-                    device=mod_function.device, use_defaults=True)
+                    device=mod_function.device, use_defaults=False)
                 custom_options_dict = json.loads(custom_options)
                 custom_options_dict["name"] = new_channel.name
                 new_channel.custom_options = json.dumps(custom_options_dict)
@@ -146,19 +144,15 @@ def execute_at_modification(
         elif (custom_options_dict_postsave['number_line_sets'] <
                 custom_options_dict_presave['number_line_sets']):
 
+            page_refresh = True
             for index, each_channel in enumerate(channels.all()):
                 if index >= end_channel:
                     delete_entry_with_id(FunctionChannel, each_channel.unique_id)
 
     except Exception:
-        error.append("execute_at_modification() Error: {}".format(traceback.print_exc()))
-        allow_saving = False
+        messages["error"].append("execute_at_modification() Error: {}".format(traceback.print_exc()))
 
-    for each_error in error:
-        flash(each_error, 'error')
-    for each_success in success:
-        flash(each_success, 'success')
-    return (allow_saving,
+    return (messages,
             mod_function,
             custom_options_dict_postsave,
             custom_options_channels_dict_postsave)
@@ -172,6 +166,11 @@ FUNCTION_INFORMATION = {
     'execute_at_modification': execute_at_modification,
 
     'message': 'This Function outputs to a generic 16x2 LCD display via I2C. Since this display can show 2 lines at a time, channels are added in sets of 2 when Number of Line Sets is modified. Every Period, the LCD will refresh and display the next set of lines. Therefore, the first 2 lines that are displayed are channels 0 and 1, then 2 and 3, and so on. After all channels have been displayed, it will cycle back to the beginning.',
+
+    'options_disabled': [
+        'measurements_select',
+        'measurements_configure'
+    ],
 
     'custom_options': [
         {
@@ -247,8 +246,8 @@ FUNCTION_INFORMATION = {
             'default_value': 360,
             'required': True,
             'constraints_pass': constraints_pass_positive_value,
-            'name': 'Measurement Max Age',
-            'phrase': 'The maximum allowed age of the measurement'
+            'name': lazy_gettext('{} {}'.format(lazy_gettext('Measurement'), lazy_gettext('Max Age'))),
+            'phrase': lazy_gettext('The maximum age (seconds) of the measurement to use')
         },
         {
             'id': 'measure_decimal',

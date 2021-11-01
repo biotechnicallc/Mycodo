@@ -7,10 +7,14 @@ import time
 
 import mock
 
+from mycodo.config import FUNCTIONS
+from mycodo.databases.models import Conditional
 from mycodo.databases.models import CustomController
+from mycodo.databases.models import Function
 from mycodo.databases.models import Input
-from mycodo.databases.models import Misc
 from mycodo.databases.models import Output
+from mycodo.databases.models import PID
+from mycodo.databases.models import Trigger
 from mycodo.databases.models import User
 from mycodo.mycodo_flask.utils.utils_general import choices_custom_functions
 from mycodo.mycodo_flask.utils.utils_general import generate_form_input_list
@@ -51,7 +55,7 @@ def test_sees_admin_creation_form(testapp):
 def test_does_not_see_admin_creation_form(testapp):
     """ Admin user exists: user sees the normal login page """
     print("\nTest: test_does_not_see_admin_creation_form")
-    expected_body_msg = "<!-- Route: /login -->"
+    expected_body_msg = "<!-- Route: /login_password -->"
     assert expected_body_msg in testapp.get('/').maybe_follow()
 
 
@@ -348,7 +352,6 @@ def test_routes_logged_in_as_admin(_, testapp):
         ('settings/input', '<!-- Route: /settings/input -->'),
         ('settings/measurement', '<!-- Route: /settings/measurement -->'),
         ('settings/users', '<!-- Route: /settings/users -->'),
-        ('calibration', '<!-- Route: /calibration -->'),
         ('camera', '<!-- Route: /camera -->'),
         ('dashboard', '<!-- Route: /dashboard -->'),
         ('input', '<!-- Route: /input -->'),
@@ -367,8 +370,6 @@ def test_routes_logged_in_as_admin(_, testapp):
         ('output', '<!-- Route: /output -->'),
         ('remote/setup', '<!-- Route: /remote/setup -->'),
         ('reset_password', '<!-- Route: /reset_password -->'),
-        ('setup_atlas_ph', '<!-- Route: /setup_atlas_ph -->'),
-        ('setup_ds_resolution', '<!-- Route: /setup_ds_resolution -->'),
         ('usage', '<!-- Route: /usage -->'),
         ('usage_reports', '<!-- Route: /usage_reports -->')
     ]
@@ -406,10 +407,12 @@ def test_add_all_input_devices_logged_in_as_admin(_, testapp):
         print("test_add_all_input_devices_logged_in_as_admin: Adding, saving, and deleting Input ({}/{}): {}".format(
             index + 1, len(choices_input), each_input))
         response = add_data(testapp, input_type=each_input)
-
-        # Verify success message flashed
-        assert "{} Input with ID".format(choice_name) in response
-        assert "successfully added" in response
+        assert 'data' in response.json
+        assert 'messages' in response.json['data']
+        assert 'error' in response.json['data']['messages']
+        assert response.json['data']['messages']['error'] == []
+        assert 'success' in response.json['data']['messages']
+        assert len(response.json['data']['messages']['success']) == 1
 
         # Verify data was entered into the database
         input_count += 1
@@ -421,12 +424,24 @@ def test_add_all_input_devices_logged_in_as_admin(_, testapp):
 
         # Save input
         response = save_data(testapp, 'input', device_dev=input_dev)
-        assert "Success: Modify Input" in response
+        assert 'data' in response.json
+        assert 'messages' in response.json['data']
+        assert 'error' in response.json['data']['messages']
+        assert response.json['data']['messages']['error'] == []
+        assert 'success' in response.json['data']['messages']
+        assert len(response.json['data']['messages']['success']) == 1
 
         # Delete input (speeds up further input addition checking)
         response = delete_data(testapp, 'input', device_dev=input_dev)
-        assert "Delete input with ID: {}".format(input_dev.unique_id) in response
+        assert 'data' in response.json
+        assert 'messages' in response.json['data']
+        assert 'error' in response.json['data']['messages']
+        assert response.json['data']['messages']['error'] == []
+        assert 'success' in response.json['data']['messages']
+        assert len(response.json['data']['messages']['success']) == 1
         input_count -= 1
+        assert Input.query.count() == input_count, "Number of Inputs doesn't match: In DB {}, Should be: {}".format(
+            Input.query.count(), input_count)
 
 
 @mock.patch('mycodo.mycodo_flask.routes_authentication.login_log')
@@ -453,8 +468,12 @@ def test_add_all_output_devices_logged_in_as_admin(_, testapp):
         print("test_add_all_output_devices_logged_in_as_admin: Adding, saving, and deleting Output ({}/{}): {}".format(
             index + 1, len(choices_output), each_output))
         response = add_output(testapp, output_type=each_output)
-        # Verify success message flashed
-        assert "with ID 1 successfully added" in response
+        assert 'data' in response.json
+        assert 'messages' in response.json['data']
+        assert 'error' in response.json['data']['messages']
+        assert response.json['data']['messages']['error'] == []
+        assert 'success' in response.json['data']['messages']
+        assert len(response.json['data']['messages']['success']) == 1
 
         # Verify data was entered into the database
         output_count += 1
@@ -465,12 +484,24 @@ def test_add_all_output_devices_logged_in_as_admin(_, testapp):
 
         # Save output
         response = save_data(testapp, 'output', device_dev=output)
-        assert "Success: Modify Output" in response
+        assert 'data' in response.json
+        assert 'messages' in response.json['data']
+        assert 'error' in response.json['data']['messages']
+        assert response.json['data']['messages']['error'] == []
+        assert 'success' in response.json['data']['messages']
+        assert len(response.json['data']['messages']['success']) == 1
 
         # Delete output (speeds up further output addition checking)
         response = delete_data(testapp, 'output', device_dev=output)
-        assert "Success: Delete output with ID: {}".format(output.unique_id) in response
+        assert 'data' in response.json
+        assert 'messages' in response.json['data']
+        assert 'error' in response.json['data']['messages']
+        assert response.json['data']['messages']['error'] == []
+        assert 'success' in response.json['data']['messages']
+        assert len(response.json['data']['messages']['success']) == 1
         output_count -= 1
+        assert Output.query.count() == output_count, "Number of Outputs doesn't match: In DB {}, Should be: {}".format(
+            Output.query.count(), output_count)
 
 
 @mock.patch('mycodo.mycodo_flask.routes_authentication.login_log')
@@ -481,34 +512,73 @@ def test_add_all_function_devices_logged_in_as_admin(_, testapp):
 
     # Add All Custom Functions
     function_count = 0
-    choices_function = choices_custom_functions()
+    # choices_function = choices_custom_functions()
+
+    list_function_tables = [
+        CustomController,
+        Conditional,
+        Function,
+        PID,
+        Trigger,
+    ]
+
+    choices_functions = []
+    for choice_function in FUNCTIONS:
+        choices_functions.append({'value': choice_function[0], 'item': choice_function[1]})
+    choices_functions_cus = choices_custom_functions()
+    # Combine function lists
+    choices_function = choices_functions + choices_functions_cus
 
     for index, each_function in enumerate(choices_function):
-        choice_name = each_function["item"]
         print("test_add_all_function_devices_logged_in_as_admin: Adding, saving, and deleting Function ({}/{}): {}".format(
             index + 1, len(choices_function), each_function["value"]))
         response = add_function(testapp, function_type=each_function["value"])
-
-        # Verify success message flashed
-        assert "{} Function with ID".format(choice_name) in response
-        assert "Success: Add Function" in response
+        assert 'data' in response.json
+        assert 'messages' in response.json['data']
+        assert 'error' in response.json['data']['messages']
+        assert response.json['data']['messages']['error'] == []
+        assert 'success' in response.json['data']['messages']
+        assert len(response.json['data']['messages']['success']) == 1
 
         # Verify data was entered into the database
         function_count += 1
-        assert CustomController.query.count() == function_count, "Number of Functions doesn't match: In DB {}, Should be: {}".format(
-            CustomController.query.count(), function_count)
+        total_count = (CustomController.query.count() +
+                       Conditional.query.count() +
+                       Function.query.count() +
+                       PID.query.count() +
+                       Trigger.query.count())
+        assert total_count == function_count, "Number of Functions doesn't match: In DB {}, Should be: {}".format(
+            total_count, function_count)
 
-        function_dev = CustomController.query.filter(CustomController.id == function_count).first()
-        assert each_function["value"] == function_dev.device, "Function name doesn't match: {}".format(choice_name)
+        function_dev = None
+        for each_table in list_function_tables:
+            function_dev = each_table.query.filter(each_table.id == function_count).first()
+            if function_dev:
+                break
 
         # Save function
         response = save_data(testapp, 'function', device_dev=function_dev)
-        assert "Success: Modify Controller" in response
+        assert 'data' in response.json
+        assert 'messages' in response.json['data']
+        assert 'error' in response.json['data']['messages']
+        assert 'success' in response.json['data']['messages']
 
         # Delete function (speeds up further function addition checking)
         response = delete_data(testapp, 'function', device_dev=function_dev)
-        assert "Delete custom_controller with ID: {}".format(function_dev.unique_id) in response
+        assert 'data' in response.json
+        assert 'messages' in response.json['data']
+        assert 'error' in response.json['data']['messages']
+        assert response.json['data']['messages']['error'] == []
+        assert 'success' in response.json['data']['messages']
+        assert len(response.json['data']['messages']['success']) == 1
         function_count -= 1
+        total_count = (CustomController.query.count() +
+                       Conditional.query.count() +
+                       Function.query.count() +
+                       PID.query.count() +
+                       Trigger.query.count())
+        assert total_count == function_count, "Number of Functions doesn't match: In DB {}, Should be: {}".format(
+            total_count, function_count)
 
 
 # ---------------------------
@@ -561,27 +631,42 @@ def create_user(mycodo_db, role_id, name, password):
 def add_data(testapp, input_type='RPi'):
     """ Go to the data page and create input """
     form = testapp.get('/input').maybe_follow().forms['new_input_form']
-    form.select(name='input_type', value=input_type)
-    response = form.submit(name='input_add', value='Add').maybe_follow()
+    form_dict = {}
+    for each_field in form.fields.items():
+        if each_field[0]:
+            form_dict[each_field[0]] = form[each_field[0]].value
+    form_dict['input_add'] = 'Add'
+    form_dict['input_type'] = input_type
+    response = testapp.post('/input_submit', form_dict)
     # response.showbrowser()
     return response
 
 
 def add_output(testapp, output_type='wired'):
-    """ Go to the data page and create output """
+    """ Go to the output page and add output """
     form = testapp.get('/output').maybe_follow().forms['new_output_form']
-    form.set(name='output_quantity', value=1)
-    form.select(name='output_type', value=output_type)
-    response = form.submit(name='output_add', value='Add').maybe_follow()
+    form_dict = {}
+    for each_field in form.fields.items():
+        if each_field[0]:
+            form_dict[each_field[0]] = form[each_field[0]].value
+    form_dict['output_add'] = 'Add'
+    form_dict['output_type'] = output_type
+    form_dict['output_quantity'] = 1
+    response = testapp.post('/output_submit', form_dict)
     # response.showbrowser()
     return response
 
 
 def add_function(testapp, function_type=''):
-    """ Go to the data page and create input """
+    """ Go to the function page and add function """
     form = testapp.get('/function').maybe_follow().forms['new_function_form']
-    form.select(name='function_type', value=function_type)
-    response = form.submit(name='func_add', value='Add').maybe_follow()
+    form_dict = {}
+    for each_field in form.fields.items():
+        if each_field[0]:
+            form_dict[each_field[0]] = form[each_field[0]].value
+    form_dict['function_add'] = 'Add'
+    form_dict['function_type'] = function_type
+    response = testapp.post('/function_submit', form_dict)
     # response.showbrowser()
     return response
 
@@ -590,17 +675,11 @@ def delete_data(testapp, data_type, device_dev=None):
     """ Go to the data page and delete input/output/function """
     response = None
     if data_type == 'input':
-        form = testapp.get('/input').maybe_follow().forms['mod_input_form']
-        form['input_id'].force_value(device_dev.unique_id)
-        response = form.submit(name='input_delete', value='Delete').maybe_follow()
+        response = testapp.post('/input_submit', {'input_delete': 'Delete', 'input_id': device_dev.unique_id})
     elif data_type == 'output':
-        form = testapp.get('/output').maybe_follow().forms['mod_output_form']
-        form['output_id'].force_value(device_dev.unique_id)
-        response = form.submit(name='delete', value='Delete').maybe_follow()
+        response = testapp.post('/output_submit', {'output_delete': 'Delete', 'output_id': device_dev.unique_id})
     elif data_type == 'function':
-        form = testapp.get('/function').maybe_follow().forms['mod_function_form']
-        form['function_id'].force_value(device_dev.unique_id)
-        response = form.submit(name='delete_controller', value='Delete').maybe_follow()
+        response = testapp.post('/function_submit', {'function_delete': 'Delete', 'function_id': device_dev.unique_id})
     # response.showbrowser()
     return response
 
@@ -610,16 +689,28 @@ def save_data(testapp, data_type, device_dev=None):
     response = None
     if data_type == 'input':
         form = testapp.get('/input').maybe_follow().forms['mod_input_form']
-        form['input_id'].force_value(device_dev.unique_id)
-        response = form.submit(name='input_mod', value='Save').maybe_follow()
+        form_dict = {}
+        for each_field in form.fields.items():
+            if each_field[0]:
+                form_dict[each_field[0]] = form[each_field[0]].value
+        form_dict['input_mod'] = 'Save'
+        response = testapp.post('/input_submit', form_dict)
     elif data_type == 'output':
         form = testapp.get('/output').maybe_follow().forms['mod_output_form']
-        form['output_id'].force_value(device_dev.unique_id)
-        response = form.submit(name='save', value='Save').maybe_follow()
+        form_dict = {}
+        for each_field in form.fields.items():
+            if each_field[0]:
+                form_dict[each_field[0]] = form[each_field[0]].value
+        form_dict['output_mod'] = 'Save'
+        response = testapp.post('/output_submit', form_dict)
     elif data_type == 'function':
         form = testapp.get('/function').maybe_follow().forms['mod_function_form']
-        form['function_id'].force_value(device_dev.unique_id)
-        response = form.submit(name='save_controller', value='Save').maybe_follow()
+        form_dict = {}
+        for each_field in form.fields.items():
+            if each_field[0]:
+                form_dict[each_field[0]] = form[each_field[0]].value
+        form_dict['function_mod'] = 'Save'
+        response = testapp.post('/function_submit', form_dict)
     # response.showbrowser()
     return response
 
@@ -632,7 +723,6 @@ def sees_navbar(testapp):
     assert response.status_code == 200
     navbar_strings = [
         'Asynchronous Graphs',
-        'Calibration & Setup',
         'Camera',
         'Configure',
         'Dashboard',
@@ -640,7 +730,7 @@ def sees_navbar(testapp):
         'Export',
         'Function',
         'LCD',
-        'Live',
+        'Live Measurements',
         'Logout',
         'Mycodo Logs',
         'Method',

@@ -137,8 +137,8 @@ INPUT_INFORMATION = {
                 ('non-atlas', 'Non-Atlas Scientific Flow Meter')
             ],
             'constraints_pass': constraints_pass_meter_type,
-            'name': lazy_gettext('Flow Meter Type'),
-            'phrase': lazy_gettext('Set the type of flow meter used')
+            'name': 'Flow Meter Type',
+            'phrase': 'Set the type of flow meter used'
         },
         {
             'id': 'flow_rate_unit',
@@ -150,8 +150,8 @@ INPUT_INFORMATION = {
                 ('h', 'Liters per Hour')
             ],
             'constraints_pass': constraints_pass_rate,
-            'name': lazy_gettext('Atlas Meter Time Base'),
-            'phrase': lazy_gettext('If using an Atlas Scientific flow meter, set the flow rate/time base')
+            'name': 'Atlas Meter Time Base',
+            'phrase': 'If using an Atlas Scientific flow meter, set the flow rate/time base'
         },
         {
             'id': 'internal_resistor',
@@ -169,14 +169,14 @@ INPUT_INFORMATION = {
             ],
             'constraints_pass': constraints_pass_resistor,
             'name': lazy_gettext('Internal Resistor'),
-            'phrase': lazy_gettext('Set an internal resistor for the flow meter')
+            'phrase': 'Set an internal resistor for the flow meter'
         },
         {
             'id': 'custom_k_values',
             'type': 'text',
             'default_value': '',
-            'name': lazy_gettext('Custom K Value(s)'),
-            'phrase': lazy_gettext("If using a non-Atlas Scientific flow meter, enter the meter's K value(s). For a single K value, enter '[volume per pulse],[number of pulses]'. For multiple K values (up to 16), enter '[volume at frequency],[frequency in Hz];[volume at frequency],[frequency in Hz];...'. Leave blank to disable.")
+            'name': 'Custom K Value(s)',
+            'phrase': "If using a non-Atlas Scientific flow meter, enter the meter's K value(s). For a single K value, enter '[volume per pulse],[number of pulses]'. For multiple K values (up to 16), enter '[volume at frequency],[frequency in Hz];[volume at frequency],[frequency in Hz];...'. Leave blank to disable."
         },
         {
             'id': 'custom_k_value_time_base',
@@ -189,17 +189,36 @@ INPUT_INFORMATION = {
                 ('h', 'Liters per Hour')
             ],
             'constraints_pass': constraints_pass_custom_k_value_time_base,
-            'name': lazy_gettext('K Value Time Base'),
-            'phrase': lazy_gettext('If using a non-Atlas Scientific flow meter, set the flow rate/time base for the custom K values entered.')
+            'name': 'K Value Time Base',
+            'phrase': 'If using a non-Atlas Scientific flow meter, set the flow rate/time base for the custom K values entered.'
         },
     ],
 
-    'custom_actions_message': 'The total volume can be cleared with the following button or as a Function Action.',
     'custom_actions': [
+        {
+            'type': 'message',
+            'default_value': """The total volume can be cleared with the following button or with a Function Action."""
+        },
         {
             'id': 'clear_total_volume',
             'type': 'button',
             'name': lazy_gettext('Clear Total Volume')
+        },
+        {
+            'type': 'message',
+            'default_value': """The I2C address can be changed. Enter a new address in the 0xYY format (e.g. 0x22, 0x50), then press Set I2C Address. Remember to deactivate and change the I2C address option after setting the new address."""
+        },
+        {
+            'id': 'new_i2c_address',
+            'type': 'text',
+            'default_value': '0x68',
+            'name': lazy_gettext('New I2C Address'),
+            'phrase': lazy_gettext('The new I2C to set the device to')
+        },
+        {
+            'id': 'set_i2c_address',
+            'type': 'button',
+            'name': lazy_gettext('Set I2C Address')
         }
     ]
 }
@@ -262,16 +281,20 @@ class InputModule(AbstractInput):
                             self.atlas_device.query('K,{}'.format(each_k))
                             self.logger.debug("Set K Value: {}".format(each_k))
                         else:
-                            self.logger.error("Improperly-formatted K-value: {}".format(each_k))
+                            self.logger.error(
+                                "Improperly-formatted K-value: {}".format(each_k))
                 elif ',' in self.custom_k_values:
                     self.atlas_device.query('K,clear')
                     self.logger.debug("Cleared K Values")
                     self.atlas_device.query('K,{}'.format(self.custom_k_values))
                     self.logger.debug("Set K Value: {}".format(self.custom_k_values))
                 else:
-                    self.logger.error("Improperly-formatted K-value: {}".format(self.custom_k_values))
+                    self.logger.error(
+                        "Improperly-formatted K-value: {}".format(
+                            self.custom_k_values))
                 self.atlas_device.query('Vp,{}'.format(self.custom_k_value_time_base))
-                self.logger.debug("Set Custom Time Base: {}".format(self.custom_k_value_time_base))
+                self.logger.debug("Set Custom Time Base: {}".format(
+                    self.custom_k_value_time_base))
             else:
                 self.atlas_device.query('Set,{}'.format(self.flow_meter_type))
                 self.logger.debug("Set Flow Meter: {}".format(self.flow_meter_type))
@@ -322,7 +345,8 @@ class InputModule(AbstractInput):
         elif self.interface == 'I2C':
             return_status, return_string = self.atlas_device.query('R')
             if return_status == 'error':
-                self.logger.error("Sensor read unsuccessful: {err}".format(err=return_string))
+                self.logger.error("Sensor read unsuccessful: {err}".format(
+                    err=return_string))
             elif return_status == 'success':
                 return_string = return_string
 
@@ -351,23 +375,14 @@ class InputModule(AbstractInput):
         if total_volume is not None:
             self.logger.debug("Total Volume: {} l".format(total_volume))
         if flow_rate_raw is not None:
-            self.logger.debug("Flow Rate (from sensor): {:.5f} l/{}".format(flow_rate_raw, self.flow_rate_unit))
+            self.logger.debug(
+                "Flow Rate (from sensor): {:.5f} l/{}".format(
+                    flow_rate_raw, self.flow_rate_unit))
         if flow_rate is not None:
-            self.logger.debug("Flow Rate (converted to l/m): {:.5f} l/m".format(flow_rate))
+            self.logger.debug(
+                "Flow Rate (converted to l/m): {:.5f} l/m".format(flow_rate))
 
         return self.return_dict
-
-    def clear_total_volume(self, args_dict):
-        while self.sensor_is_measuring:
-            time.sleep(0.1)
-        self.sensor_is_clearing = True
-        self.logger.debug("Clearing total volume")
-        return_status, return_string = self.atlas_device.query('Clear')
-        self.sensor_is_clearing = False
-        if return_status == 'error':
-            return 1, "Error: {}".format(return_string)
-        elif return_status == 'success':
-            return 0, "Success"
 
     def convert_to_l_m(self, amount):
         if (self.custom_k_value_time_base and
@@ -385,3 +400,27 @@ class InputModule(AbstractInput):
             return amount
         elif time_base_unit == 's':
             return amount * 60
+
+    def clear_total_volume(self, args_dict):
+        while self.sensor_is_measuring:
+            time.sleep(0.1)
+        self.sensor_is_clearing = True
+        self.logger.debug("Clearing total volume")
+        return_status, return_string = self.atlas_device.query('Clear')
+        self.sensor_is_clearing = False
+        if return_status == 'error':
+            return 1, "Error: {}".format(return_string)
+        elif return_status == 'success':
+            return 0, "Success"
+
+    def set_i2c_address(self, args_dict):
+        if 'new_i2c_address' not in args_dict:
+            self.logger.error("Cannot set new I2C address without an I2C address")
+            return
+        try:
+            i2c_address = int(str(args_dict['new_i2c_address']), 16)
+            write_cmd = "I2C,{}".format(i2c_address)
+            self.logger.debug("I2C Change command: {}".format(write_cmd))
+            self.atlas_device.atlas_write(write_cmd)
+        except:
+            self.logger.exception("Exception changing I2C address")

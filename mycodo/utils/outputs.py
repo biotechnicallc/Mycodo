@@ -72,7 +72,7 @@ def parse_output_information(exclude_custom=False):
             full_path = "{}/{}".format(real_path, each_file)
             output_custom = load_module_from_file(full_path, 'outputs')
 
-            if not hasattr(output_custom, 'OUTPUT_INFORMATION'):
+            if not output_custom or not hasattr(output_custom, 'OUTPUT_INFORMATION'):
                 continue
 
             # Populate dictionary of output information
@@ -91,7 +91,11 @@ def parse_output_information(exclude_custom=False):
             dict_outputs = dict_has_value(dict_outputs, output_custom, 'channels_dict')
 
             dict_outputs = dict_has_value(dict_outputs, output_custom, 'on_state_internally_handled')
+            dict_outputs = dict_has_value(dict_outputs, output_custom, 'no_run')
             dict_outputs = dict_has_value(dict_outputs, output_custom, 'output_types')
+
+            dict_outputs = dict_has_value(dict_outputs, output_custom, 'execute_at_creation')
+            dict_outputs = dict_has_value(dict_outputs, output_custom, 'execute_at_modification')
 
             dict_outputs = dict_has_value(dict_outputs, output_custom, 'message')
 
@@ -102,6 +106,7 @@ def parse_output_information(exclude_custom=False):
 
             # Dependencies
             dict_outputs = dict_has_value(dict_outputs, output_custom, 'dependencies_module')
+            dict_outputs = dict_has_value(dict_outputs, output_custom, 'dependencies_message')
 
             # Interface
             dict_outputs = dict_has_value(dict_outputs, output_custom, 'interfaces')

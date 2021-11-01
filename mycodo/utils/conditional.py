@@ -10,27 +10,6 @@ from mycodo.utils.system_pi import set_user_grp
 logger = logging.getLogger(__name__)
 
 
-pre_statement_run = """import os
-import sys
-sys.path.append(os.path.abspath('/var/mycodo-root'))
-from mycodo.controllers.base_conditional import AbstractConditional
-from mycodo.mycodo_client import DaemonControl
-control = DaemonControl()
-
-class ConditionalRun(AbstractConditional):
-    def __init__(self, logger, function_id, message):
-        super(ConditionalRun, self).__init__(logger, function_id, message)
-
-        self.logger = logger
-        self.function_id = function_id
-        self.variables = {}
-        self.message = message
-        self.running = True
-
-    def conditional_code_run(self):
-"""
-
-
 def cond_statement_replace(
         cond_statement,
         table_conditions_all,
@@ -55,20 +34,54 @@ def cond_statement_replace(
 def save_conditional_code(
         error,
         cond_statement,
+        cond_status,
         unique_id,
         table_conditions_all,
         table_actions_all,
+        timeout=30,
         test=False):
     lines_code = None
     cmd_status = None
     cmd_out = None
 
     try:
-        indented_code = textwrap.indent(cond_statement, ' ' * 8)
+        pre_statement_run = """import os
+import sys
+sys.path.append(os.path.abspath('/var/mycodo-root'))
+from mycodo.controllers.base_conditional import AbstractConditional
+from mycodo.mycodo_client import DaemonControl
+control = DaemonControl(pyro_timeout={timeout})
+
+class ConditionalRun(AbstractConditional):
+    def __init__(self, logger, function_id, message):
+        super(ConditionalRun, self).__init__(logger, function_id, message, timeout={timeout})
+
+        self.logger = logger
+        self.function_id = function_id
+        self.variables = {{}}
+        self.message = message
+        self.running = True
+
+    def conditional_code_run(self):
+""".format(timeout=timeout)
+
+        if cond_statement:
+            indented_code = textwrap.indent(cond_statement, ' ' * 8)
+        else:
+            indented_code = textwrap.indent("pass", ' ' * 8)
 
         cond_statement_run = pre_statement_run + indented_code
         cond_statement_run = cond_statement_replace(
             cond_statement_run, table_conditions_all, table_actions_all)
+
+        cond_statement_run += """
+
+    def function_status(self):
+"""
+        if cond_status:
+            cond_statement_run += textwrap.indent(cond_status, ' ' * 8)
+        else:
+            cond_statement_run += textwrap.indent("pass", ' ' * 8)
 
         assure_path_exists(PATH_PYTHON_CODE_USER)
         file_run = '{}/conditional_{}.py'.format(

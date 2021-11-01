@@ -4,10 +4,15 @@ import time
 
 from flask_babel import lazy_gettext
 
+from mycodo.databases.models import Conversion
 from mycodo.inputs.base_input import AbstractInput
+from mycodo.inputs.sensorutils import convert_from_x_to_y_unit
 from mycodo.utils.atlas_calibration import AtlasScientificCommand
 from mycodo.utils.atlas_calibration import setup_atlas_device
 from mycodo.utils.constraints_pass import constraints_pass_positive_value
+from mycodo.utils.database import db_retrieve_table_daemon
+from mycodo.utils.system_pi import get_measurement
+from mycodo.utils.system_pi import return_measurement_info
 from mycodo.utils.system_pi import str_is_float
 
 # Measurements
@@ -72,7 +77,95 @@ INPUT_INFORMATION = {
             'required': True,
             'constraints_pass': constraints_pass_positive_value,
             'name': "{}: {}".format(lazy_gettext('Temperature Compensation'), lazy_gettext('Max Age')),
-            'phrase': lazy_gettext('The maximum age (seconds) of the measurement to use for temperature compensation')
+            'phrase': lazy_gettext('The maximum age (seconds) of the measurement to use')
+        }
+    ],
+
+    'custom_actions': [
+        {
+            'type': 'message',
+            'default_value': """Calibration: a one-, two- or three-point calibration can be performed. It's a good idea to clear the calibration before calibrating. The first calibration must be the Mid point. The second must be the Low point. And the third must be the High point. You can perform a one-, two- or three-point calibration, but they must be performed in this order. Allow a minute or two after submerging your probe in a calibration solution for the measurements to equilibrate before calibrating to that solution. The EZO pH circuit default temperature compensation is set to 25 °C. If the temperature of the calibration solution is +/- 2 °C from 25 °C, consider setting the temperature compensation first. Note that if you have a Temperature Compensation Measurement selected from the Options, this will overwrite the manual Temperature Compensation set here, so be sure to disable this option if you would like to specify the temperature to compensate with."""
+        },
+        {
+            'id': 'compensation_temp_c',
+            'type': 'float',
+            'default_value': 25.0,
+            'name': 'Compensation Temperature (°C)',
+            'phrase': 'The temperature of the calibration solutions'
+        },
+        {
+            'id': 'compensation_temp_set',
+            'type': 'button',
+            'name': 'Set Temperature Compensation'
+        },
+        {
+            'type': 'new_line'
+        },
+        {
+            'id': 'clear_calibrate',
+            'type': 'button',
+            'name': lazy_gettext('Clear Calibration')
+        },
+        {
+            'type': 'new_line'
+        },
+        {
+            'id': 'mid_point_ph',
+            'type': 'float',
+            'default_value': 7.0,
+            'name': 'Mid Point pH',
+            'phrase': 'The pH of the mid point calibration solution'
+        },
+        {
+            'id': 'mid_calibrate',
+            'type': 'button',
+            'name': 'Calibrate Mid'
+        },
+        {
+            'type': 'new_line'
+        },
+        {
+            'id': 'low_point_ph',
+            'type': 'float',
+            'default_value': 4.0,
+            'name': 'Low Point pH',
+            'phrase': 'The pH of the low point calibration solution'
+        },
+        {
+            'id': 'low_calibrate',
+            'type': 'button',
+            'name': 'Calibrate Low'
+        },
+        {
+            'type': 'new_line'
+        },
+        {
+            'id': 'high_point_ph',
+            'type': 'float',
+            'default_value': 10.0,
+            'name': 'High Point pH',
+            'phrase': 'The pH of the high point calibration solution'
+        },
+        {
+            'id': 'high_calibrate',
+            'type': 'button',
+            'name': 'Calibrate High'
+        },
+        {
+            'type': 'message',
+            'default_value': """The I2C address can be changed. Enter a new address in the 0xYY format (e.g. 0x22, 0x50), then press Set I2C Address. Remember to deactivate and change the I2C address option after setting the new address."""
+        },
+        {
+            'id': 'new_i2c_address',
+            'type': 'text',
+            'default_value': '0x63',
+            'name': lazy_gettext('New I2C Address'),
+            'phrase': lazy_gettext('The new I2C to set the device to')
+        },
+        {
+            'id': 'set_i2c_address',
+            'type': 'button',
+            'name': lazy_gettext('Set I2C Address')
         }
     ]
 }
@@ -130,13 +223,33 @@ class InputModule(AbstractInput):
                 self.temperature_comp_meas_measurement_id,
                 max_age=self.max_age)
 
-            if last_measurement:
-                self.logger.debug("Latest temperature used to calibrate: {temp}".format(temp=last_measurement[1]))
-                ret_value, ret_msg = self.atlas_command.calibrate('temperature', set_amount=last_measurement[1])
+            if last_measurement and len(last_measurement) > 1:
+                device_measurement = get_measurement(
+                    self.temperature_comp_meas_measurement_id)
+                conversion = db_retrieve_table_daemon(
+                    Conversion, unique_id=device_measurement.conversion_id)
+                _, unit, _ = return_measurement_info(
+                    device_measurement, conversion)
+
+                if unit != "C":
+                    out_value = convert_from_x_to_y_unit(
+                        unit, "C", last_measurement[1])
+                else:
+                    out_value = last_measurement[1]
+
+                self.logger.debug(
+                    "Latest temperature used to calibrate: {temp}".format(
+                        temp=out_value))
+                ret_value, ret_msg = self.atlas_command.calibrate(
+                    'temperature', set_amount=out_value)
                 time.sleep(0.5)
-                self.logger.debug("Calibration returned: {val}, {msg}".format(val=ret_value, msg=ret_msg))
+                self.logger.debug(
+                    "Calibration returned: {val}, {msg}".format(
+                        val=ret_value, msg=ret_msg))
             else:
-                self.logger.error("Calibration measurement not found within the past {} seconds".format(self.max_age))
+                self.logger.error(
+                    "Calibration measurement not found within the past {} seconds".format(
+                        self.max_age))
 
         # Read sensor via FTDI or UART
         if self.interface in ['FTDI', 'UART']:
@@ -175,3 +288,66 @@ class InputModule(AbstractInput):
         self.value_set(0, ph)
 
         return self.return_dict
+
+    def compensation_temp_set(self, args_dict):
+        if 'compensation_temp_c' not in args_dict:
+            self.logger.error("Cannot set temperature compensation without temperature")
+            return
+        try:
+            write_cmd = "T,{:.2f}".format(args_dict['compensation_temp_c'])
+            self.logger.debug("Compensation command: {}".format(write_cmd))
+            ret_val = self.atlas_device.atlas_write(write_cmd)
+            self.logger.info("Command returned: {}".format(ret_val))
+        except:
+            self.logger.exception("Exception compensating temperature")
+
+    def calibrate(self, level, ph):
+        try:
+            if level == "clear":
+                write_cmd = "Cal,clear"
+            else:
+                write_cmd = "Cal,{},{:.2f}".format(level, ph)
+            self.logger.debug("Calibration command: {}".format(write_cmd))
+            ret_val = self.atlas_device.atlas_write(write_cmd)
+            self.logger.info("Command returned: {}".format(ret_val))
+            # Verify calibration saved
+            write_cmd = "Cal,?"
+            self.logger.info("Device Calibrated?: {}".format(
+                self.atlas_device.atlas_write(write_cmd)))
+        except:
+            self.logger.exception("Exception calibrating")
+
+    def clear_calibrate(self, args_dict):
+        self.calibrate('clear', None)
+
+    def mid_calibrate(self, args_dict):
+        if 'mid_point_ph' not in args_dict:
+            self.logger.error("Cannot calibrate without calibration solution pH")
+            return
+        self.calibrate('mid', args_dict['mid_point_ph'])
+
+    def low_calibrate(self, args_dict):
+        if 'low_point_ph' not in args_dict:
+            self.logger.error("Cannot calibrate without calibration solution pH")
+            return
+        self.calibrate('low', args_dict['low_point_ph'])
+
+    def high_calibrate(self, args_dict):
+        if 'high_point_ph' not in args_dict:
+            self.logger.error("Cannot calibrate without calibration solution pH")
+            return
+        self.calibrate('high', args_dict['high_point_ph'])
+
+    def set_i2c_address(self, args_dict):
+        if 'new_i2c_address' not in args_dict:
+            self.logger.error("Cannot set new I2C address without an I2C address")
+            return
+        try:
+            i2c_address = int(str(args_dict['new_i2c_address']), 16)
+            write_cmd = "I2C,{}".format(i2c_address)
+            self.logger.debug("I2C Change command: {}".format(write_cmd))
+            ret_val = self.atlas_device.atlas_write(write_cmd)
+            self.logger.info("Command returned: {}".format(ret_val))
+            self.atlas_device = None
+        except:
+            self.logger.exception("Exception changing I2C address")

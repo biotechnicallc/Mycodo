@@ -26,10 +26,6 @@ TIMER_START_update_swap_size=$SECONDS
 ${INSTALL_CMD} update-swap-size
 TIMER_TOTAL_update_swap_size=$((SECONDS - TIMER_START_update_swap_size))
 
-TIMER_START_setup_virtualenv=$SECONDS
-${INSTALL_CMD} setup-virtualenv
-TIMER_TOTAL_setup_virtualenv=$((SECONDS - TIMER_START_setup_virtualenv))
-
 TIMER_START_update_apt=$SECONDS
 ${INSTALL_CMD} update-apt
 TIMER_TOTAL_update_apt=$((SECONDS - TIMER_START_update_apt))
@@ -45,6 +41,10 @@ TIMER_TOTAL_web_server_update=$((SECONDS - TIMER_START_web_server_update))
 TIMER_START_update_logrotate=$SECONDS
 ${INSTALL_CMD} update-logrotate
 TIMER_TOTAL_update_logrotate=$((SECONDS - TIMER_START_update_logrotate))
+
+TIMER_START_setup_virtualenv=$SECONDS
+${INSTALL_CMD} setup-virtualenv
+TIMER_TOTAL_setup_virtualenv=$((SECONDS - TIMER_START_setup_virtualenv))
 
 TIMER_START_update_pip3=$SECONDS
 ${INSTALL_CMD} update-pip3

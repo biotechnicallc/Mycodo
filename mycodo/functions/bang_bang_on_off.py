@@ -26,7 +26,10 @@ FUNCTION_INFORMATION = {
         ' as when heating. Lower direction has the opposite behavior - it will try to'
         ' turn the output on in order to drive the input lower. The Both option will raise and lower.',
 
-    'options_enabled': [],
+    'options_disabled': [
+        'measurements_select',
+        'measurements_configure'
+    ],
 
     'custom_options': [
         {
@@ -140,7 +143,7 @@ class CustomModule(AbstractFunction):
             CustomController, unique_id=self.unique_id)
         self.setup_custom_options(
             FUNCTION_INFORMATION['custom_options'], custom_function)
-        
+
         if not testing:
             self.initialize_variables()
 

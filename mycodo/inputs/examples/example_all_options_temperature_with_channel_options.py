@@ -1,4 +1,5 @@
 # coding=utf-8
+from mycodo.config_translations import TRANSLATIONS
 from mycodo.databases.models import Conversion
 from mycodo.databases.models import InputChannel
 from mycodo.inputs.base_input import AbstractInput
@@ -124,6 +125,9 @@ INPUT_INFORMATION = {
         ('internal', 'pip-exists wiringpi', 'wiringpi'),
         ('internal', 'file-exists /usr/local/include/bcm2835.h', 'bcm2835')
     ],
+
+    # A message to be displayed on the dependency install page
+    'dependencies_message': 'Are you sure you want to install these dependencies? They require...',
 
     # Interface options: 'GPIO', 'I2C', 'UART', '1WIRE', 'BT', 'Mycodo', 'RPi'
     'interfaces': [  # List of strings
@@ -255,6 +259,14 @@ INPUT_INFORMATION = {
     ],
 
     'custom_channel_options': [
+        {
+            'id': 'name',
+            'type': 'text',
+            'default_value': '',
+            'required': False,
+            'name': TRANSLATIONS['name']['title'],
+            'phrase': TRANSLATIONS['name']['phrase']
+        },
         {
             'id': 'my_channel_option',
             'type': 'text',

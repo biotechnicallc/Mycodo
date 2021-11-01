@@ -62,7 +62,7 @@ WIDGET_INFORMATION = {
             'default_value': 120,
             'required': True,
             'constraints_pass': constraints_pass_positive_value,
-            'name': lazy_gettext('Measurement Max Age'),
+            'name': lazy_gettext('{} {}'.format(lazy_gettext('Measurement'), lazy_gettext('Max Age'))),
             'phrase': lazy_gettext('The maximum age (seconds) of the measurement')
         },
         {
@@ -80,6 +80,14 @@ WIDGET_INFORMATION = {
             'constraints_pass': constraints_pass_positive_value,
             'name': 'Value Font Size (em)',
             'phrase': 'The font size of the measurement'
+        },
+        {
+            'id': 'font_em_unit',
+            'type': 'float',
+            'default_value': 1.5,
+            'constraints_pass': constraints_pass_positive_value,
+            'name': 'Unit Font Size (em)',
+            'phrase': 'The font size of the unit'
         },
         {
             'id': 'font_em_timestamp',
@@ -145,8 +153,7 @@ WIDGET_INFORMATION = {
   
   {%- for each_input in input if each_input.unique_id == device_id and measurement_id in device_measurements_dict -%}
   
-    <span style="font-size: {{widget_options['font_em_value']}}em" id="value-{{chart_number}}"></span>
-    <span style="font-size: {{widget_options['font_em_value']}}em">
+    <span style="font-size: {{widget_options['font_em_value']}}em" id="value-{{each_widget.unique_id}}"></span><span style="font-size: {{widget_options['font_em_unit']}}em">
         {%- if dict_measure_units[measurement_id] in dict_units and
                dict_units[dict_measure_units[measurement_id]]['unit'] and
                widget_options['enable_unit'] -%}
@@ -180,15 +187,16 @@ WIDGET_INFORMATION = {
 
   {%- for each_math in math if each_math.unique_id == device_id and measurement_id in device_measurements_dict -%}
 
-  <span style="font-size: {{widget_options['font_em_value']}}em" id="value-{{chart_number}}"></span>
+    <span style="font-size: {{widget_options['font_em_value']}}em" id="value-{{each_widget.unique_id}}"></span><span style="font-size: {{widget_options['font_em_unit']}}em">
         {%- if dict_measure_units[measurement_id] in dict_units and
                dict_units[dict_measure_units[measurement_id]]['unit'] and
                widget_options['enable_unit'] -%}
           {{' ' + dict_units[dict_measure_units[measurement_id]]['unit']}}
         {%- endif -%}
+    </span>
 
         {%- if widget_options['enable_name'] or widget_options['enable_channel'] or widget_options['enable_measurement'] -%}
-  <br/><span style="font-size: {{widget_options['font_em_timestamp']}}em">
+    <br/><span style="font-size: {{widget_options['font_em_timestamp']}}em">
         {%- endif -%}
 
         {%- if widget_options['enable_name'] -%}
@@ -213,15 +221,16 @@ WIDGET_INFORMATION = {
   
   {%- for each_function in function if each_function.unique_id == device_id and measurement_id in device_measurements_dict -%}
 
-  <span style="font-size: {{widget_options['font_em_value']}}em" id="value-{{chart_number}}"></span>
+    <span style="font-size: {{widget_options['font_em_value']}}em" id="value-{{each_widget.unique_id}}"></span><span style="font-size: {{widget_options['font_em_unit']}}em">
         {%- if dict_measure_units[measurement_id] in dict_units and
                dict_units[dict_measure_units[measurement_id]]['unit'] and
                widget_options['enable_unit'] -%}
           {{' ' + dict_units[dict_measure_units[measurement_id]]['unit']}}
         {%- endif -%}
+    </span>
 
         {%- if widget_options['enable_name'] or widget_options['enable_channel'] or widget_options['enable_measurement'] -%}
-  <br/><span style="font-size: {{widget_options['font_em_timestamp']}}em">
+    <br/><span style="font-size: {{widget_options['font_em_timestamp']}}em">
         {%- endif -%}
 
         {%- if widget_options['enable_name'] -%}
@@ -246,15 +255,16 @@ WIDGET_INFORMATION = {
 
   {%- for each_output in output  if each_output.unique_id == device_id and measurement_id in device_measurements_dict -%}
 
-  <span style="font-size: {{widget_options['font_em_value']}}em" id="value-{{chart_number}}"></span>
+    <span style="font-size: {{widget_options['font_em_value']}}em" id="value-{{each_widget.unique_id}}"></span><span style="font-size: {{widget_options['font_em_unit']}}em">
         {%- if dict_measure_units[measurement_id] in dict_units and
                dict_units[dict_measure_units[measurement_id]]['unit'] and
                widget_options['enable_unit'] -%}
           {{' ' + dict_units[dict_measure_units[measurement_id]]['unit']}}
         {%- endif -%}
+    </span>
 
         {%- if widget_options['enable_name'] or widget_options['enable_channel'] or widget_options['enable_measurement'] -%}
-  <br/><span style="font-size: {{widget_options['font_em_timestamp']}}em">
+    <br/><span style="font-size: {{widget_options['font_em_timestamp']}}em">
         {%- endif -%}
 
         {%- if widget_options['enable_name'] -%}
@@ -279,15 +289,16 @@ WIDGET_INFORMATION = {
 
   {%- for each_pid in pid  if each_pid.unique_id == device_id and measurement_id in device_measurements_dict -%}
 
-  <span style="font-size: {{widget_options['font_em_value']}}em" id="value-{{chart_number}}"></span>
+    <span style="font-size: {{widget_options['font_em_value']}}em" id="value-{{each_widget.unique_id}}"></span><span style="font-size: {{widget_options['font_em_unit']}}em">
         {%- if dict_measure_units[measurement_id] in dict_units and
                dict_units[dict_measure_units[measurement_id]]['unit'] and
                widget_options['enable_unit'] -%}
           {{' ' + dict_units[dict_measure_units[measurement_id]]['unit']}}
         {%- endif -%}
+    </span>
 
         {%- if widget_options['enable_name'] or widget_options['enable_channel'] or widget_options['enable_measurement'] -%}
-  <br/><span style="font-size: {{widget_options['font_em_timestamp']}}em">
+    <br/><span style="font-size: {{widget_options['font_em_timestamp']}}em">
         {%- endif -%}
 
         {%- if widget_options['enable_name'] -%}
@@ -315,16 +326,14 @@ WIDGET_INFORMATION = {
   {%- endif -%}
 
   {%- if widget_options['enable_timestamp'] -%}
-  <br/><span style="font-size: {{widget_options['font_em_timestamp']}}em" id="timestamp-{{chart_number}}"></span>
+  <br/><span style="font-size: {{widget_options['font_em_timestamp']}}em" id="timestamp-{{each_widget.unique_id}}"></span>
   {%- endif -%}
   </div>
 """,
 
-    'widget_dashboard_js': """<!-- No JS content -->""",
-
-    'widget_dashboard_js_ready': """
+    'widget_dashboard_js': """
   // Retrieve the latest/last measurement for Measurement widget
-  function getLastDataMeasurement(chart_number,
+  function getLastDataMeasurement(widget_id,
                        unique_id,
                        measure_type,
                        measurement_id,
@@ -338,31 +347,46 @@ WIDGET_INFORMATION = {
     $.ajax(url, {
       success: function(data, responseText, jqXHR) {
         if (jqXHR.status === 204) {
-          document.getElementById('value-' + chart_number).innerHTML = 'NO DATA';
-          document.getElementById('timestamp-' + chart_number).innerHTML = 'MAX AGE EXCEEDED';
+          if (document.getElementById('value-' + widget_id)) {
+            document.getElementById('value-' + widget_id).innerHTML = 'NO DATA';
+          }
+          if (document.getElementById('timestamp-' + widget_id)) {
+            document.getElementById('timestamp-' + widget_id).innerHTML = 'MAX AGE EXCEEDED';
+          }
         }
         else {
           const formattedTime = epoch_to_timestamp(data[0]);
           const measurement = data[1];
-          document.getElementById('value-' + chart_number).innerHTML = measurement.toFixed(decimal_places);
-          const range_exists = document.getElementById("range_" + chart_number);
-          if (range_exists != null) {  // Update range slider value
-            document.getElementById("range_" + chart_number).value = measurement.toFixed(0);
-            document.getElementById("range_val_" + chart_number).innerHTML = measurement.toFixed(0);
+          if (document.getElementById('value-' + widget_id)) {
+            document.getElementById('value-' + widget_id).innerHTML = measurement.toFixed(decimal_places);
           }
-          document.getElementById('timestamp-' + chart_number).innerHTML = formattedTime;
+          const range_exists = document.getElementById("range_" + widget_id);
+          if (range_exists != null) {  // Update range slider value
+            if (document.getElementById("range_" + widget_id)) {
+              document.getElementById("range_" + widget_id).value = measurement.toFixed(0);
+            }
+            if (document.getElementById("range_val_" + widget_id)) {
+              document.getElementById("range_val_" + widget_id).innerHTML = measurement.toFixed(0);
+            }
+          }
+          if (document.getElementById('timestamp-' + widget_id)) {
+            document.getElementById('timestamp-' + widget_id).innerHTML = formattedTime;
+          }
         }
       },
       error: function(jqXHR, textStatus, errorThrown) {
-        document.getElementById('value-' + chart_number).innerHTML = 'NO DATA';
-        document.getElementById('timestamp-' + chart_number).innerHTML = '{{_('Error')}}';
+        if (document.getElementById('value-' + widget_id)) {
+          document.getElementById('value-' + widget_id).innerHTML = 'NO DATA';
+        }
+        if (document.getElementById('timestamp-' + widget_id)) {
+          document.getElementById('timestamp-' + widget_id).innerHTML = '{{_('Error')}}';
+        }
       }
     });
-  
   }
 
   // Repeat function for getLastData()
-  function repeatLastDataMeasurement(chart_number,
+  function repeatLastDataMeasurement(widget_id,
                           dev_id,
                           measure_type,
                           measurement_id,
@@ -370,7 +394,7 @@ WIDGET_INFORMATION = {
                           max_measure_age_sec,
                           decimal_places) {
     setInterval(function () {
-      getLastDataMeasurement(chart_number,
+      getLastDataMeasurement(widget_id,
                   dev_id,
                   measure_type,
                   measurement_id,
@@ -380,33 +404,35 @@ WIDGET_INFORMATION = {
   }
 """,
 
+    'widget_dashboard_js_ready': """<!-- No JS ready content -->""",
+
     'widget_dashboard_js_ready_end': """
   {%- set device_id = widget_options['measurement'].split(",")[0] -%}
   {%- set measurement_id = widget_options['measurement'].split(",")[1] -%}
   
   {% for each_input in input if each_input.unique_id == device_id %}
-  getLastDataMeasurement({{chart_number}}, '{{each_input.unique_id}}', 'input', '{{measurement_id}}', {{widget_options['measurement_max_age']}}, {{widget_options['decimal_places']}});
-  repeatLastDataMeasurement({{chart_number}}, '{{each_input.unique_id}}', 'input', '{{measurement_id}}', {{widget_options['refresh_seconds']}}, {{widget_options['measurement_max_age']}}, {{widget_options['decimal_places']}});
+  getLastDataMeasurement('{{each_widget.unique_id}}', '{{each_input.unique_id}}', 'input', '{{measurement_id}}', {{widget_options['measurement_max_age']}}, {{widget_options['decimal_places']}});
+  repeatLastDataMeasurement('{{each_widget.unique_id}}', '{{each_input.unique_id}}', 'input', '{{measurement_id}}', {{widget_options['refresh_seconds']}}, {{widget_options['measurement_max_age']}}, {{widget_options['decimal_places']}});
   {%- endfor -%}
 
   {% for each_math in math if each_math.unique_id == device_id %}
-  getLastDataMeasurement({{chart_number}}, '{{each_math.unique_id}}', 'math', '{{measurement_id}}', {{widget_options['measurement_max_age']}}, {{widget_options['decimal_places']}});
-  repeatLastDataMeasurement({{chart_number}}, '{{each_math.unique_id}}', 'math', '{{measurement_id}}', {{widget_options['refresh_seconds']}}, {{widget_options['measurement_max_age']}}, {{widget_options['decimal_places']}});
+  getLastDataMeasurement('{{each_widget.unique_id}}', '{{each_math.unique_id}}', 'math', '{{measurement_id}}', {{widget_options['measurement_max_age']}}, {{widget_options['decimal_places']}});
+  repeatLastDataMeasurement('{{each_widget.unique_id}}', '{{each_math.unique_id}}', 'math', '{{measurement_id}}', {{widget_options['refresh_seconds']}}, {{widget_options['measurement_max_age']}}, {{widget_options['decimal_places']}});
   {%- endfor -%}
   
   {% for each_function in function if each_function.unique_id == device_id %}
-  getLastDataMeasurement({{chart_number}}, '{{each_function.unique_id}}', 'function', '{{measurement_id}}', {{widget_options['measurement_max_age']}}, {{widget_options['decimal_places']}});
-  repeatLastDataMeasurement({{chart_number}}, '{{each_function.unique_id}}', 'function', '{{measurement_id}}', {{widget_options['refresh_seconds']}}, {{widget_options['measurement_max_age']}}, {{widget_options['decimal_places']}});
+  getLastDataMeasurement('{{each_widget.unique_id}}', '{{each_function.unique_id}}', 'function', '{{measurement_id}}', {{widget_options['measurement_max_age']}}, {{widget_options['decimal_places']}});
+  repeatLastDataMeasurement('{{each_widget.unique_id}}', '{{each_function.unique_id}}', 'function', '{{measurement_id}}', {{widget_options['refresh_seconds']}}, {{widget_options['measurement_max_age']}}, {{widget_options['decimal_places']}});
   {%- endfor -%}
 
   {% for each_output in output if each_output.unique_id == device_id %}
-  getLastDataMeasurement({{chart_number}}, '{{each_output.unique_id}}', 'output', '{{measurement_id}}', {{widget_options['measurement_max_age']}}, {{widget_options['decimal_places']}});
-  repeatLastDataMeasurement({{chart_number}}, '{{each_output.unique_id}}', 'output', '{{measurement_id}}', {{widget_options['refresh_seconds']}}, {{widget_options['measurement_max_age']}}, {{widget_options['decimal_places']}});
+  getLastDataMeasurement('{{each_widget.unique_id}}', '{{each_output.unique_id}}', 'output', '{{measurement_id}}', {{widget_options['measurement_max_age']}}, {{widget_options['decimal_places']}});
+  repeatLastDataMeasurement('{{each_widget.unique_id}}', '{{each_output.unique_id}}', 'output', '{{measurement_id}}', {{widget_options['refresh_seconds']}}, {{widget_options['measurement_max_age']}}, {{widget_options['decimal_places']}});
   {%- endfor -%}
 
   {% for each_pid in pid if each_pid.unique_id == device_id %}
-  getLastDataMeasurement({{chart_number}}, '{{each_pid.unique_id}}', 'pid', '{{measurement_id}}', {{widget_options['measurement_max_age']}}, {{widget_options['decimal_places']}});
-  repeatLastDataMeasurement({{chart_number}}, '{{each_pid.unique_id}}', 'pid', '{{measurement_id}}', {{widget_options['refresh_seconds']}}, {{widget_options['measurement_max_age']}}, {{widget_options['decimal_places']}});
+  getLastDataMeasurement('{{each_widget.unique_id}}', '{{each_pid.unique_id}}', 'pid', '{{measurement_id}}', {{widget_options['measurement_max_age']}}, {{widget_options['decimal_places']}});
+  repeatLastDataMeasurement('{{each_widget.unique_id}}', '{{each_pid.unique_id}}', 'pid', '{{measurement_id}}', {{widget_options['refresh_seconds']}}, {{widget_options['measurement_max_age']}}, {{widget_options['decimal_places']}});
   {%- endfor -%}
 """
 }

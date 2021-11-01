@@ -37,6 +37,7 @@ INPUT_INFORMATION = {
         'period',
         'pre_output'
     ],
+    'options_disabled': ['interface'],
 
     'dependencies_module': [
         ('pip-pypi', 'requests', 'requests==2.25.1'),
@@ -49,7 +50,7 @@ INPUT_INFORMATION = {
             'default_value': '192.168.0.100',
             'required': True,
             'name': lazy_gettext('IP Address'),
-            'phrase': lazy_gettext('The IP address of the device')
+            'phrase': 'The IP address of the device'
         }
     ]
 }

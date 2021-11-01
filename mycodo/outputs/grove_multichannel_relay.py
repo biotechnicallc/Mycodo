@@ -2,47 +2,12 @@
 #
 # grove_multichannel_relay.py - Output for the Grove Multichannel Relay
 #
-from flask import flash
 from flask_babel import lazy_gettext
 
 from mycodo.config_translations import TRANSLATIONS
 from mycodo.databases.models import OutputChannel
 from mycodo.outputs.base_output import AbstractOutput
 from mycodo.utils.database import db_retrieve_table_daemon
-
-
-def execute_at_modification(
-        mod_output,
-        request_form,
-        custom_options_dict_presave,
-        custom_options_channels_dict_presave,
-        custom_options_dict_postsave,
-        custom_options_channels_dict_postsave):
-    """
-    This function allows you to view and modify the output and channel settings when the user clicks
-    save on the user interface. Both the output and channel settings are passed to this function, as
-    dictionaries. Additionally, both the pre-saved and post-saved options are available, as it's
-    sometimes useful to know what settings changed and from what values. You can modify the post-saved
-    options and these will be stored in the database.
-    :param mod_output: The post-saved output database entry, minus the custom_options settings
-    :param request_form: The requests.form object the user submitted
-    :param custom_options_dict_presave: dict of pre-saved custom output options
-    :param custom_options_channels_dict_presave: dict of pre-saved custom output channel options
-    :param custom_options_dict_postsave: dict of post-saved custom output options
-    :param custom_options_channels_dict_postsave: dict of post-saved custom output channel options
-    :return:
-    """
-    allow_saving = True
-    success = []
-    error = []
-    for each_error in error:
-        flash(each_error, 'error')
-    for each_success in success:
-        flash(each_success, 'success')
-    return (allow_saving,
-            mod_output,
-            custom_options_dict_postsave,
-            custom_options_channels_dict_postsave)
 
 # Measurements
 measurements_dict = {
@@ -174,7 +139,7 @@ OUTPUT_INFORMATION = {
                 (1, 'On')
             ],
             'name': lazy_gettext('Startup State'),
-            'phrase': lazy_gettext('Set the state of the relay when Mycodo starts')
+            'phrase': 'Set the state of the relay when Mycodo starts'
         },
         {
             'id': 'state_shutdown',
@@ -185,7 +150,7 @@ OUTPUT_INFORMATION = {
                 (1, 'On')
             ],
             'name': lazy_gettext('Shutdown State'),
-            'phrase': lazy_gettext('Set the state of the relay when Mycodo shuts down')
+            'phrase': 'Set the state of the relay when Mycodo shuts down'
         },
         {
             'id': 'on_state',
@@ -196,22 +161,22 @@ OUTPUT_INFORMATION = {
                 (0, 'LOW')
             ],
             'name': lazy_gettext('On State'),
-            'phrase': lazy_gettext('The state of the GPIO that corresponds to an On state')
+            'phrase': 'The state of the GPIO that corresponds to an On state'
         },
         {
             'id': 'trigger_functions_startup',
             'type': 'bool',
             'default_value': False,
             'name': lazy_gettext('Trigger Functions at Startup'),
-            'phrase': lazy_gettext('Whether to trigger functions when the output switches at startup')
+            'phrase': 'Whether to trigger functions when the output switches at startup'
         },
         {
             'id': 'amps',
             'type': 'float',
             'default_value': 0.0,
             'required': True,
-            'name': lazy_gettext('Current (Amps)'),
-            'phrase': lazy_gettext('The current draw of the device being controlled')
+            'name': '{} ({})'.format(lazy_gettext('Current'), lazy_gettext('Amps')),
+            'phrase': 'The current draw of the device being controlled'
         }
     ]
 }
@@ -264,7 +229,12 @@ class OutputModule(AbstractOutput):
 
         for channel in channels_dict:
             if self.options_channels['trigger_functions_startup'][channel]:
-                self.check_triggers(self.unique_id, output_channel=channel)
+                try:
+                    self.check_triggers(self.unique_id, output_channel=channel)
+                except Exception as err:
+                    self.logger.error(
+                        "Could not check Trigger for channel {} of output {}: {}".format(
+                            channel, self.unique_id, err))
 
     def output_switch(self,
                       state,

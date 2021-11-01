@@ -47,7 +47,6 @@ from mycodo.utils.constraints_pass import constraints_pass_positive_value
 
 # Set to how many lines the LCD has
 lcd_lines = 4
-lcd_x_characters = 21
 
 
 def execute_at_creation(error, new_func, dict_functions=None):
@@ -75,6 +74,7 @@ def execute_at_creation(error, new_func, dict_functions=None):
 
 
 def execute_at_modification(
+        messages,
         mod_function,
         request_form,
         custom_options_dict_presave,
@@ -95,10 +95,6 @@ def execute_at_modification(
     :param custom_options_channels_dict_postsave: dict of post-saved custom output channel options
     :return:
     """
-    allow_saving = True
-    success = []
-    error = []
-
     try:
         dict_controllers = parse_function_information()
 
@@ -122,6 +118,7 @@ def execute_at_modification(
         if (custom_options_dict_postsave['number_line_sets'] >
                 custom_options_dict_presave['number_line_sets']):
 
+            page_refresh = True
             start_channel = channels.count()
 
             for index in range(start_channel, end_channel):
@@ -132,10 +129,10 @@ def execute_at_modification(
                 new_channel.function_id = mod_function.unique_id
                 new_channel.channel = index
 
-                error, custom_options = custom_channel_options_return_json(
-                    error, dict_controllers, request_form,
+                messages["error"], custom_options = custom_channel_options_return_json(
+                    messages["error"], dict_controllers, request_form,
                     mod_function.unique_id, index,
-                    device=mod_function.device, use_defaults=True)
+                    device=mod_function.device, use_defaults=False)
                 custom_options_dict = json.loads(custom_options)
                 custom_options_dict["name"] = new_channel.name
                 new_channel.custom_options = json.dumps(custom_options_dict)
@@ -146,19 +143,15 @@ def execute_at_modification(
         elif (custom_options_dict_postsave['number_line_sets'] <
                 custom_options_dict_presave['number_line_sets']):
 
+            page_refresh = True
             for index, each_channel in enumerate(channels.all()):
                 if index >= end_channel:
                     delete_entry_with_id(FunctionChannel, each_channel.unique_id)
 
     except Exception:
-        error.append("execute_at_modification() Error: {}".format(traceback.print_exc()))
-        allow_saving = False
+        messages["error"].append("execute_at_modification() Error: {}".format(traceback.print_exc()))
 
-    for each_error in error:
-        flash(each_error, 'error')
-    for each_success in success:
-        flash(each_success, 'success')
-    return (allow_saving,
+    return (messages,
             mod_function,
             custom_options_dict_postsave,
             custom_options_channels_dict_postsave)
@@ -166,15 +159,16 @@ def execute_at_modification(
 
 FUNCTION_INFORMATION = {
     'function_name_unique': 'display_ssd1306_oled_128x32_i2c',
-    'function_name': 'Display: SSD1306 OLED 128x32 (I2C)',
+    'function_name': 'Display: SSD1306 OLED 128x32 [4 Lines] (I2C)',
     'function_library': 'Adafruit-Circuitpython-SSD1306',
     'execute_at_creation': execute_at_creation,
     'execute_at_modification': execute_at_modification,
 
-    'message': 'This Function outputs to a 128x32 SSD1306 OLED display via I2C. Since this display can show 8 lines at a time, channels are added in sets of 8 when Number of Line Sets is modified. Every Period, the LCD will refresh and display the next 8 lines. Therefore, the first 8 lines that are displayed are channels 0 - 7, then 8 - 15, and so on. After all channels have been displayed, it will cycle back to the beginning.',
+    'message': 'This Function outputs to a 128x32 SSD1306 OLED display via I2C. This display Function will show 4 lines at a time, so channels are added in sets of 4 when Number of Line Sets is modified. Every Period, the LCD will refresh and display the next set of lines. Therefore, the first set of lines that are displayed are channels 0 - 3, then 4 - 7, and so on. After all channels have been displayed, it will cycle back to the beginning.',
 
-    'options_enabled': [
-        'custom_options'
+    'options_disabled': [
+        'measurements_select',
+        'measurements_configure'
     ],
 
     'dependencies_module': [
@@ -231,6 +225,38 @@ FUNCTION_INFORMATION = {
             'name': 'Reset Pin',
             'phrase': 'The pin (BCM numbering) connected to RST of the display'
         },
+        {
+            'id': 'characters_x',
+            'type': 'integer',
+            'default_value': 21,
+            'required': True,
+            'name': 'Characters Per Line',
+            'phrase': 'The maximum number of characters to display per line'
+        },
+        {
+            'id': 'use_non_default_font',
+            'type': 'bool',
+            'default_value': False,
+            'required': True,
+            'name': 'Use Non-Default Font',
+            'phrase': "Don't use the default font. Enable to specify the path to a font to use."
+        },
+        {
+            'id': 'non_default_font',
+            'type': 'text',
+            'default_value': '/usr/share/fonts/truetype/dejavu//DejaVuSans.ttf',
+            'name': 'Non-Default Font Path',
+            'phrase': 'The path to the non-default font to use'
+        },
+        {
+            'id': 'font_size',
+            'type': 'integer',
+            'default_value': 10,
+            'required': True,
+            'constraints_pass': constraints_pass_positive_value,
+            'name': 'Font Size (pt)',
+            'phrase': 'The size of the font, in points'
+        }
     ],
 
     'custom_channel_options': [
@@ -270,8 +296,8 @@ FUNCTION_INFORMATION = {
             'default_value': 360,
             'required': True,
             'constraints_pass': constraints_pass_positive_value,
-            'name': 'Measurement Max Age',
-            'phrase': 'The maximum allowed age of the measurement'
+            'name': lazy_gettext('Max Age'),
+            'phrase': lazy_gettext('The maximum age (seconds) of the measurement to use')
         },
         {
             'id': 'measure_decimal',
@@ -290,6 +316,14 @@ FUNCTION_INFORMATION = {
             'name': TRANSLATIONS['text']['title'],
             'phrase': "Text to display"
         },
+        {
+            'id': 'display_unit',
+            'type': 'bool',
+            'default_value': True,
+            'required': True,
+            'name': 'Display Unit',
+            'phrase': "Display the measurement unit (if available)"
+        }
     ]
 }
 
@@ -315,6 +349,10 @@ class CustomModule(AbstractFunction):
         self.i2c_bus = None
         self.number_line_sets = None
         self.pin_reset = None
+        self.characters_x = None
+        self.use_non_default_font = None
+        self.non_default_font = None
+        self.font_size = None
 
         # Set custom options
         custom_function = db_retrieve_table_daemon(
@@ -326,7 +364,7 @@ class CustomModule(AbstractFunction):
             self.initialize_variables()
 
     def initialize_variables(self):
-        from mycodo.devices.lcd_pioled_circuitpython import LCD_Pioled_Circuitpython
+        from mycodo.devices.lcd_pioled_circuitpython import PiOLEDCircuitpython
 
         try:
             function_channels = db_retrieve_table_daemon(
@@ -346,11 +384,17 @@ class CustomModule(AbstractFunction):
                 "interface": "I2C",
                 "i2c_address": self.i2c_address,
                 "i2c_bus": self.i2c_bus,
-                "x_characters": lcd_x_characters,
-                "lcd_type": "128x64_pioled_circuit_python"
+                "x_characters": self.characters_x,
+                "line_y_dimensions": self.line_y_dimensions,
+                "lcd_type": "128x32_pioled_circuit_python",
+                "font_size": self.font_size
             }
 
-            self.device = LCD_Pioled_Circuitpython(lcd_settings_dict=lcd_settings_dict)
+            font = None
+            if self.use_non_default_font:
+                font = self.non_default_font
+
+            self.device = PiOLEDCircuitpython(lcd_settings_dict=lcd_settings_dict, font=font)
             self.device.lcd_init()
 
             self.logger.debug("LCD Function started")
@@ -407,7 +451,9 @@ class CustomModule(AbstractFunction):
                             lines_display[current_line] = format_measurement_line(
                                 self.options_channels['select_measurement'][current_channel]['device_id'],
                                 self.options_channels['select_measurement'][current_channel]['measurement_id'],
-                                val_rounded, lcd_x_characters)
+                                val_rounded,
+                                self.characters_x,
+                                display_unit=self.options_channels['display_unit'][current_channel])
 
                     elif self.options_channels['line_display_type'][current_channel] == 'measurement_ts':
                         if measure_ts:

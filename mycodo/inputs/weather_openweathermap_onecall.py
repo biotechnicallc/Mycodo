@@ -59,7 +59,7 @@ INPUT_INFORMATION = {
     'input_name': 'OpenWeatherMap (Lat/Lon, Current/Future)',
     'measurements_name': 'Humidity/Temperature/Pressure/Wind',
     'measurements_dict': measurements_dict,
-    'url_additional': 'openweathermap.org',
+    'url_additional': 'https://openweathermap.org',
     'measurements_rescale': False,
 
     'message': 'Obtain a free API key at openweathermap.org. '
@@ -83,7 +83,7 @@ INPUT_INFORMATION = {
             'default_value': '',
             'required': True,
             'name': lazy_gettext('API Key'),
-            'phrase': lazy_gettext("The API Key for this service's API")
+            'phrase': "The API Key for this service's API"
         },
         {
             'id': 'latitude',

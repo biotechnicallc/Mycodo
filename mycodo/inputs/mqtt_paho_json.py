@@ -26,7 +26,7 @@ INPUT_INFORMATION = {
     'input_name_unique': 'MQTT_PAHO_JSON',
     'input_manufacturer': 'Mycodo',
     'input_name': 'MQTT Subscribe (JSON payload)',
-    'input_library': 'paho-mqtt',
+    'input_library': 'paho-mqtt, jmespath',
     'measurements_name': 'Variable measurements',
     'measurements_dict': measurements_dict,
     'channels_dict': channels_dict,
@@ -37,10 +37,15 @@ INPUT_INFORMATION = {
     'listener': True,
 
     'message': 'A single topic is subscribed to and the returned JSON payload contains one or '
-               'more key/value pairs. If the set JSON Key exists in the payload, the '
-               'corresponding value will be stored for that channel. Be sure you select and '
-               'save the Measurement Unit for each of channels. Once the unit has been saved, '
-               'you can convert to other units in the Convert Measurement section.',
+               'more key/value pairs. The given JSON Key is used as a JMESPATH expression to find the '
+               'corresponding value that will be stored for that channel. Be sure you select and '
+               'save the Measurement Unit for each channel. Once the unit has been saved, '
+               'you can convert to other units in the Convert Measurement section.'
+               ' Example expressions for jmespath (https://jmespath.org) include '
+               '<i>temperature</i>, <i>sensors[0].temperature</i>, and <i>bathroom.temperature</i> which refer to '
+               'the temperature as a direct key within the first entry of sensors or as a subkey '
+               'of bathroom, respectively. Jmespath elements and keys that contain special characters '
+               'have to be enclosed in double quotes, e.g. <i>"sensor-1".temperature</i>.',
 
     'options_enabled': [
         'measurements_select'
@@ -50,7 +55,9 @@ INPUT_INFORMATION = {
     'interfaces': ['Mycodo'],
 
     'dependencies_module': [
-        ('pip-pypi', 'paho', 'paho-mqtt==1.5.1')],
+        ('pip-pypi', 'paho', 'paho-mqtt==1.5.1'),
+        ('pip-pypi', 'jmespath', 'jmespath==0.10.0')
+    ],
 
     'custom_options': [
         {
@@ -74,8 +81,8 @@ INPUT_INFORMATION = {
             'type': 'text',
             'default_value': 'mqtt/test/input',
             'required': True,
-            'name': lazy_gettext('Topic'),
-            'phrase': lazy_gettext('The topic to subscribe to')
+            'name': 'Topic',
+            'phrase': 'The topic to subscribe to'
         },
         {
             'id': 'mqtt_keepalive',
@@ -84,17 +91,15 @@ INPUT_INFORMATION = {
             'required': True,
             'constraints_pass': constraints_pass_positive_value,
             'name': lazy_gettext('Keep Alive'),
-            'phrase': "{} {}".format(
-                lazy_gettext('Maximum amount of time between received signals.'),
-                lazy_gettext('Set to 0 to disable.'))
+            'phrase': 'Maximum amount of time between received signals. Set to 0 to disable.'
         },
         {
             'id': 'mqtt_clientid',
             'type': 'text',
             'default_value': 'mycodo_mqtt_client',
             'required': True,
-            'name': lazy_gettext('Client ID'),
-            'phrase': lazy_gettext('Unique client ID for connecting to the server')
+            'name': 'Client ID',
+            'phrase': 'Unique client ID for connecting to the server'
         },
         {
             'id': 'mqtt_login',
@@ -124,20 +129,26 @@ INPUT_INFORMATION = {
             'default_value': '',
             'required': False,
             'name': lazy_gettext('Password'),
-            'phrase': "{} {}".format(
-                lazy_gettext('Password for connecting to the server.'),
-                lazy_gettext('Leave blank to disable.'))
+            'phrase': 'Password for connecting to the server. Leave blank to disable.'
         }
     ],
 
     'custom_channel_options': [
         {
+            'id': 'name',
+            'type': 'text',
+            'default_value': '',
+            'required': False,
+            'name': TRANSLATIONS['name']['title'],
+            'phrase': TRANSLATIONS['name']['phrase']
+        },
+        {
             'id': 'json_name',
             'type': 'text',
             'default_value': '',
             'required': True,
-            'name': lazy_gettext('JSON Key'),
-            'phrase': 'JSON Key for the value to be stored'
+            'name': 'JSON Key',
+            'phrase': 'JMES Path expression to find value in JSON response'
         }
     ]
 }
@@ -150,6 +161,8 @@ class InputModule(AbstractInput):
         super(InputModule, self).__init__(input_dev, testing=testing, name=__name__)
 
         self.client = None
+        self.jmespath = None
+        self.options_channels = None
 
         self.mqtt_hostname = None
         self.mqtt_port = None
@@ -168,6 +181,9 @@ class InputModule(AbstractInput):
 
     def initialize_input(self):
         import paho.mqtt.client as mqtt
+        import jmespath
+
+        self.jmespath = jmespath
 
         input_channels = db_retrieve_table_daemon(
             InputChannel).filter(InputChannel.input_id == self.input_dev.unique_id).all()
@@ -218,64 +234,64 @@ class InputModule(AbstractInput):
     def subscribe(self):
         """ Subscribe to the proper MQTT channel to listen to """
         try:
-            self.client.subscribe(self.mqtt_channel)
-            self.logger.debug("Subscribed to MQTT channel '{}'".format(
+            self.logger.debug("Subscribing to MQTT topic '{}'".format(
                 self.mqtt_channel))
+            self.client.subscribe(self.mqtt_channel)
         except:
             self.logger.error("Could not subscribe to MQTT channel '{}'".format(
                 self.mqtt_channel))
 
     def on_connect(self, client, obj, flags, rc):
-        self.logger.debug("Connected to '{}', rc: {}".format(
+        self.logger.debug("Connected to '{}'. Return code: {}".format(
             self.mqtt_channel, rc))
 
     def on_subscribe(self, client, obj, mid, granted_qos):
-        self.logger.debug("Subscribing to mqtt topic: {}, {}, {}".format(
+        self.logger.debug("Subscribed to mqtt topic: {}, {}, {}".format(
             self.mqtt_channel, mid, granted_qos))
 
     def on_log(self, mqttc, obj, level, string):
         self.logger.info("Log: {}".format(string))
 
     def on_message(self, client, userdata, msg):
-        datetime_utc = datetime.datetime.utcnow()
-        payload = msg.payload.decode()
-        self.logger.debug("Message: Channel: {}, Value: {}".format(
-            msg.topic, payload))
-        measurement = {}
+        try:
+            payload = msg.payload.decode()
+            self.logger.debug(
+                "Received message: topic: {}, payload: {}".format(
+                    msg.topic, payload))
+        except Exception as exc:
+            self.logger.error(
+                "Payload could not be decoded: {}".format(exc))
+            return
 
         try:
             json_values = json.loads(payload)
-        except ValueError as e:
-            self.logger.error("Payload not JSON: {} ".format(
-                msg.payload.decode()))
+        except ValueError as err:
+            self.logger.error(
+                "Error parsing payload '{}' as JSON: {} ".format(
+                    msg.payload.decode(), err))
             return
 
-        for key in json_values:
-            for each_channel in self.channels_measurement:
-                if self.options_channels['json_name'][each_channel] == key:
+        datetime_utc = datetime.datetime.utcnow()
+        measurement = {}
+        for each_channel in self.channels_measurement:
+            json_name = self.options_channels['json_name'][each_channel]
+            self.logger.debug("Searching JSON for {}".format(json_name))
 
-                    self.logger.debug(
-                        "Match found. Key: {}, Value: {}".format(
-                            self.options_channels['json_name'][each_channel],
-                            json_values[key]))
-
-                    try:
-                        measurement[each_channel] = {}
-                        measurement[each_channel]['measurement'] = self.channels_measurement[each_channel].measurement
-                        measurement[each_channel]['unit'] = self.channels_measurement[each_channel].unit
-                        measurement[each_channel]['value'] = float(json_values[key])
-                        measurement[each_channel]['timestamp_utc'] = datetime_utc
-
-                        self.add_measurement_influxdb(each_channel, measurement)
-                    except Exception:
-                        try:
-                            self.logger.error(
-                                "Something happened in storing this measurement: {}".format(
-                                    float(json_values[key])))
-                        except:
-                            self.logger.error(
-                                "Value doesn't represent a float and could not decode payload")
-                        return
+            try:
+                jmesexpression = self.jmespath.compile(json_name)
+                value = jmesexpression.search(json_values)
+                self.logger.debug(
+                    "Found key: {}, value: {}".format(json_name, value))
+                measurement[each_channel] = {}
+                measurement[each_channel]['measurement'] = self.channels_measurement[each_channel].measurement
+                measurement[each_channel]['unit'] = self.channels_measurement[each_channel].unit
+                measurement[each_channel]['value'] = value
+                measurement[each_channel]['timestamp_utc'] = datetime_utc
+                self.add_measurement_influxdb(each_channel, measurement)
+            except Exception as err:
+                self.logger.error(
+                    "Error in JSON '{}' finding '{}': {}".format(
+                        json_values, json_name, err))
 
     def add_measurement_influxdb(self, channel, measurement):
         # Convert value/unit is conversion_id present and valid
@@ -305,7 +321,7 @@ class InputModule(AbstractInput):
                 use_same_timestamp=INPUT_INFORMATION['measurements_use_same_timestamp'])
 
     def on_disconnect(self, client, userdata, rc=0):
-        self.logger.debug("Disconnected result code {}".format(rc))
+        self.logger.debug("Disconnected. Return code: {}".format(rc))
 
     def stop_input(self):
         """ Called when Input is deactivated """

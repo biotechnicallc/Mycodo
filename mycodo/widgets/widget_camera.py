@@ -37,8 +37,11 @@ logger = logging.getLogger(__name__)
 def can_stream(custom_options_json):
     custom_options = json.loads(custom_options_json)
     camera = Camera.query.filter(Camera.unique_id == custom_options['camera_id']).first()
-    if (custom_options['camera_image_type'] == 'stream' and
-            CAMERA_INFO[camera.library]['capable_stream']):
+    if ((custom_options['camera_image_type'] == 'stream' and
+            CAMERA_INFO[camera.library]['capable_stream']) or
+
+            (custom_options['camera_image_type'] in ['new_img', 'tmp_img', 'timelapse'] and
+             CAMERA_INFO[camera.library]['capable_image'])):
         return True
 
 
@@ -57,7 +60,9 @@ def execute_at_modification(
         custom_options_json_presave,
         custom_options_json_postsave):
     allow_saving = True
+    page_refresh = True
     error = []
+
     try:
         if not can_stream(json.dumps(custom_options_json_postsave)):
             allow_saving = False
@@ -68,7 +73,7 @@ def execute_at_modification(
     for each_error in error:
         flash(each_error, "error")
 
-    return allow_saving, mod_widget, custom_options_json_postsave
+    return allow_saving, page_refresh, mod_widget, custom_options_json_postsave
 
 
 WIDGET_INFORMATION = {
@@ -106,8 +111,8 @@ WIDGET_INFORMATION = {
                 ('stream', lazy_gettext('Display Live Video Stream')),
                 ('timelapse', lazy_gettext('Display Latest Timelapse Image'))
             ],
-            'name': lazy_gettext('Image Display Type'),
-            'phrase': lazy_gettext('Select how to display the image')
+            'name': 'Image Display Type',
+            'phrase': 'Select how to display the image'
         },
         {
             'id': 'max_age',
@@ -140,9 +145,7 @@ WIDGET_INFORMATION = {
 
     'widget_dashboard_body': """<a id="{{each_widget.id}}-image-href" href="" target="_blank"><img id="{{each_widget.id}}-image-src" style="height: 100%; width: 100%" src=""></a>""",
 
-    'widget_dashboard_js': """<!-- No JS content -->""",
-
-    'widget_dashboard_js_ready': """
+    'widget_dashboard_js': """
   // Capture image and update the image
   function get_image_cam(dashboard_id, camera_unique_id, image_type, max_age) {
     let url = '';
@@ -209,6 +212,8 @@ WIDGET_INFORMATION = {
     }
   }
 """,
+
+    'widget_dashboard_js_ready': """<!-- No JS ready content -->""",
 
     'widget_dashboard_js_ready_end': """
 $(function() {

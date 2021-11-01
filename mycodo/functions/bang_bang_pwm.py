@@ -22,7 +22,10 @@ FUNCTION_INFORMATION = {
         ' as when heating. Lower direction has the opposite behavior - it will try to'
         ' turn the output on in order to drive the input lower. The Both option will raise and lower.',
 
-    'options_enabled': [],
+    'options_disabled': [
+        'measurements_select',
+        'measurements_configure'
+    ],
 
     'custom_options': [
         {
@@ -36,7 +39,7 @@ FUNCTION_INFORMATION = {
                 'Function'
             ],
             'name': lazy_gettext('Measurement'),
-            'phrase': lazy_gettext('Select a measurement the selected output will affect')
+            'phrase': 'Select a measurement the selected output will affect'
         },
         {
             'id': 'output',
@@ -47,7 +50,7 @@ FUNCTION_INFORMATION = {
                 'Output_Channels_Measurements',
             ],
             'name': lazy_gettext('Output'),
-            'phrase': lazy_gettext('Select an output to control that will affect the measurement')
+            'phrase': 'Select an output to control that will affect the measurement'
         },
         {
             'id': 'setpoint',
@@ -55,7 +58,7 @@ FUNCTION_INFORMATION = {
             'default_value': 50,
             'required': True,
             'name': lazy_gettext('Setpoint'),
-            'phrase': lazy_gettext('The desired setpoint')
+            'phrase': 'The desired setpoint'
         },
         {
             'id': 'hysteresis',
@@ -64,7 +67,7 @@ FUNCTION_INFORMATION = {
             'required': True,
             'constraints_pass': constraints_pass_positive_value,
             'name': lazy_gettext('Hysteresis'),
-            'phrase': lazy_gettext('The amount above and below the setpoint that defines the control band')
+            'phrase': 'The amount above and below the setpoint that defines the control band'
         },
         {
             'id': 'direction',

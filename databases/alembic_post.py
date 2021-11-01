@@ -58,6 +58,141 @@ if __name__ == "__main__":
         #         error.append(msg)
         #         print(msg)
 
+        elif each_revision == '6e394f2e8fec':
+            print("Executing post-alembic code for revision {}".format(
+                each_revision))
+            try:
+                from mycodo.databases.models import DeviceMeasurements
+                from mycodo.databases.models import Input
+                from mycodo.databases.models import InputChannel
+                from mycodo.utils.inputs import parse_input_information
+                from mycodo.mycodo_flask.utils.utils_general import custom_channel_options_return_json
+
+                dict_inputs = parse_input_information()
+
+                with session_scope(MYCODO_DB_PATH) as session:
+                    for each_input in session.query(Input).all():
+                        if each_input.device == "ATLAS_EC":
+                            # Check if only 1 channel exists
+                            measurements = session.query(DeviceMeasurements).filter(
+                                DeviceMeasurements.device_id == each_input.unique_id).count()
+                            if measurements > 1:
+                                continue
+
+                            # Add missing measurements
+                            if (each_input.device in dict_inputs and
+                                    'measurements_dict' in dict_inputs[each_input.device] and
+                                    dict_inputs[each_input.device]['measurements_dict']):
+                                for each_channel in dict_inputs[each_input.device]['measurements_dict']:
+                                    if each_channel == 0:
+                                        continue  # Channel 0 measurement already exists
+                                    measure_info = dict_inputs[each_input.device]['measurements_dict'][each_channel]
+                                    new_measurement = DeviceMeasurements()
+                                    if 'name' in measure_info:
+                                        new_measurement.name = measure_info['name']
+                                    new_measurement.device_id = each_input.unique_id
+                                    new_measurement.is_enabled = False
+                                    new_measurement.measurement = measure_info['measurement']
+                                    new_measurement.unit = measure_info['unit']
+                                    new_measurement.channel = each_channel
+                                    session.add(new_measurement)
+                                    session.commit()
+
+            except Exception:
+                msg = "ERROR: post-alembic revision {}: {}".format(
+                    each_revision, traceback.format_exc())
+                error.append(msg)
+                print(msg)
+
+        elif each_revision == 'bdc03b708ac6':
+            print("Executing post-alembic code for revision {}".format(
+                each_revision))
+            try:
+                from mycodo.databases.models import Input
+                from mycodo.databases.models import Output
+                from mycodo.databases.models import OutputChannel
+                from mycodo.databases.models import DisplayOrder
+                from mycodo.databases.models import CustomController
+                from mycodo.databases.models import Function
+                from mycodo.databases.models import Trigger
+                from mycodo.databases.models import PID
+                from mycodo.databases.models import Conditional
+
+                with session_scope(MYCODO_DB_PATH) as session:
+                    display_order = session.query(DisplayOrder).first()
+                    # Convert Function display order to positions
+                    if display_order and "," in display_order.function:
+                        position = 0
+                        for each_id in display_order.function.split(","):
+                            conditional = session.query(Conditional).filter(
+                                Conditional.unique_id == each_id).first()
+                            if conditional:
+                                conditional.position_y = position
+                                position += 1
+                            pid = session.query(PID).filter(
+                                PID.unique_id == each_id).first()
+                            if pid:
+                                pid.position_y = position
+                                position += 1
+                            trigger = session.query(Trigger).filter(
+                                Trigger.unique_id == each_id).first()
+                            if trigger:
+                                trigger.position_y = position
+                                position += 1
+                            function = session.query(Function).filter(
+                                Function.unique_id == each_id).first()
+                            if function:
+                                function.position_y = position
+                                position += 1
+                            custom = session.query(CustomController).filter(
+                                CustomController.unique_id == each_id).first()
+                            if custom:
+                                custom.position_y = position
+                                position += 1
+                            session.commit()
+
+                    # Convert Input display order to positions
+                    if display_order and "," in display_order.inputs:
+                        position = 0
+                        for each_id in display_order.inputs.split(","):
+                            input_dev = session.query(Input).filter(
+                                Input.unique_id == each_id).first()
+                            if input_dev:
+                                input_dev.position_y = position
+                                position += 1
+                                session.commit()
+
+                    # Convert Output display order to positions
+                    if display_order and "," in display_order.output:
+                        first = True
+                        last_position = 0
+                        last_size = 0
+                        for each_id in display_order.output.split(","):
+                            output = session.query(Output).filter(
+                                Output.unique_id == each_id).first()
+                            if output:
+                                channels = session.query(OutputChannel).filter(
+                                    OutputChannel.output_id == output.unique_id).count()
+                                if channels > 1:
+                                    output.size_y = channels + 1
+                                else:
+                                    output.size_y = 2
+
+                                if first:
+                                    output.position_y = 0
+                                    first = False
+                                else:
+                                    output.position_y = last_position + last_size
+                                last_position = output.position_y
+                                last_size = output.size_y
+                                session.commit()
+
+            except Exception:
+                msg = "ERROR: post-alembic revision {}: {}".format(
+                    each_revision, traceback.format_exc())
+                error.append(msg)
+                print(msg)
+
         elif each_revision == '110d2d00e91d':
             print("Executing post-alembic code for revision {}".format(
                 each_revision))
@@ -892,6 +1027,7 @@ if __name__ == "__main__":
                         save_conditional_code(
                             [],
                             each_cond.conditional_statement,
+                            each_cond.conditional_status,
                             each_cond.unique_is,
                             conditions,
                             actions)
@@ -927,7 +1063,7 @@ if __name__ == "__main__":
                 try:
                     from mycodo.config import INSTALL_DIRECTORY
                     import subprocess
-                    command = '{path}/env/bin/pip install -r {path}/install/requirements.txt'.format(
+                    command = '{path}/env/bin/python -m pip install -r {path}/install/requirements.txt'.format(
                         path=INSTALL_DIRECTORY)
                     cmd = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
                     cmd_out, cmd_err = cmd.communicate()
@@ -1011,6 +1147,7 @@ if __name__ == "__main__":
                         save_conditional_code(
                             [],
                             each_conditional.conditional_statement,
+                            each_conditional.conditional_status,
                             each_conditional.unique_is,
                             conditions,
                             actions)
@@ -1069,6 +1206,7 @@ if __name__ == "__main__":
                         save_conditional_code(
                             [],
                             each_conditional.conditional_statement,
+                            each_conditional.conditional_status,
                             each_conditional.unique_is,
                             conditions,
                             actions)

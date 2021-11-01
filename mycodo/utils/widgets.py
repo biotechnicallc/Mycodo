@@ -72,7 +72,7 @@ def parse_widget_information(exclude_custom=False):
             full_path = "{}/{}".format(real_path, each_file)
             widget_custom = load_module_from_file(full_path, 'widgets')
 
-            if not hasattr(widget_custom, 'WIDGET_INFORMATION'):
+            if not widget_custom or not hasattr(widget_custom, 'WIDGET_INFORMATION'):
                 continue
 
             # Populate dictionary of widget information
@@ -101,6 +101,7 @@ def parse_widget_information(exclude_custom=False):
 
             # Dependencies
             dict_widgets = dict_has_value(dict_widgets, widget_custom, 'dependencies_module')
+            dict_widgets = dict_has_value(dict_widgets, widget_custom, 'dependencies_message')
 
             # Which form options to display and whether each option is enabled
             dict_widgets = dict_has_value(dict_widgets, widget_custom, 'options_enabled')
@@ -109,6 +110,7 @@ def parse_widget_information(exclude_custom=False):
             # Misc
             dict_widgets = dict_has_value(dict_widgets, widget_custom, 'period')
 
+            dict_widgets = dict_has_value(dict_widgets, widget_custom, 'endpoints')
             dict_widgets = dict_has_value(dict_widgets, widget_custom, 'execute_at_creation')
             dict_widgets = dict_has_value(dict_widgets, widget_custom, 'execute_at_modification')
             dict_widgets = dict_has_value(dict_widgets, widget_custom, 'execute_at_deletion')

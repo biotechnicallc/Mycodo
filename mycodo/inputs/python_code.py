@@ -1,10 +1,11 @@
 # coding=utf-8
+import copy
 import importlib.util
+import os
 import textwrap
 
-import copy
-import os
 from flask import Markup
+from flask import current_app
 from flask import flash
 
 from mycodo.config import PATH_PYTHON_CODE_USER
@@ -66,6 +67,7 @@ def execute_at_creation(error, new_input, dict_inputs=None):
     return error, new_input
 
 def execute_at_modification(
+        messages,
         mod_input,
         request_form,
         custom_options_dict_presave,
@@ -74,6 +76,7 @@ def execute_at_modification(
         custom_options_channels_dict_postsave):
     """
     Function to run when the Input is saved to evaluate the Python 3 code using pylint3
+    :param messages: dict of info, warning, error, success messages as well as other variables
     :param mod_input: The WTForms object containing the form data submitted by the web GUI
     :param request_form: The custom_options form input data (if it exists)
     :param custom_options_dict_presave:
@@ -82,14 +85,17 @@ def execute_at_modification(
     :param custom_options_channels_dict_postsave:
     :return: tuple of (all_passed, error, mod_input) variables
     """
-    allow_saving = True
-    error = []
+    messages["page_refresh"] = True
+    pylint_message = None
+
+    if current_app.config['TESTING']:
+        return (messages,
+                mod_input,
+                custom_options_dict_postsave,
+                custom_options_channels_dict_postsave)
 
     try:
         input_python_code_run, file_run = generate_code(mod_input)
-
-        if len(input_python_code_run.splitlines()) > 999:
-            error.append("Too many lines in code. Reduce code to less than 1000 lines.")
 
         lines_code = ''
         for line_num, each_line in enumerate(input_python_code_run.splitlines(), 1):
@@ -110,8 +116,7 @@ def execute_at_modification(
                    'pylint3 -d I,W0621,C0103,C0111,C0301,C0327,C0410,C0413 {path}'.format(
                        path=file_run)
         cmd_out, cmd_error, cmd_status = cmd_output(cmd_test)
-        # flash('Pylint command: {}'.format(cmd_test), 'success')
-        message = Markup(
+        pylint_message = Markup(
             '<pre>\n\n'
             'Full Python Code Input code:\n\n{code}\n\n'
             'Python Code Input code analysis:\n\n{report}'
@@ -119,22 +124,17 @@ def execute_at_modification(
                 code=lines_code, report=cmd_out.decode("utf-8")))
     except Exception as err:
         cmd_status = None
-        message = "Error running pylint: {}".format(err)
-        error.append(message)
+        messages["error"].append("Error running pylint: {}".format(err))
 
     if cmd_status:
-        flash("pylint returned with status: {}".format(cmd_status), 'warning')
+        messages["warning"].append("pylint returned with status: {}".format(cmd_status))
 
-    if message:
-        flash("Review your code for issues and test your Input "
-              "before putting it into a production environment.", 'success')
-        flash(message, 'info')
+    if pylint_message:
+        messages["info"].append("Review your code for issues and test your Input "
+              "before putting it into a production environment.")
+        messages["return_text"].append(pylint_message)
 
-    if error:
-        for each_error in error:
-            flash(each_error, 'error')
-
-    return (allow_saving,
+    return (messages,
             mod_input,
             custom_options_dict_postsave,
             custom_options_channels_dict_postsave)
@@ -152,6 +152,8 @@ INPUT_INFORMATION = {
     'measurements_dict': measurements_dict,
     'measurements_variable_amount': True,
     'channel_quantity_same_as_measurements': False,
+    'execute_at_creation': execute_at_creation,
+    'execute_at_modification': execute_at_modification,
 
     'message': 'All channels require a Measurement Unit to be selected and saved in order to store values to the '
                'database.',
@@ -163,9 +165,6 @@ INPUT_INFORMATION = {
         'pre_output'
     ],
     'options_disabled': ['interface'],
-
-    'execute_at_creation': execute_at_creation,
-    'execute_at_modification': execute_at_modification,
 
     'interfaces': ['Mycodo'],
     'cmd_command': """import random  # Import any external libraries

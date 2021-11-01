@@ -1,7 +1,11 @@
 site_name: Mycodo
+site_url: https://kizniche.github.io/Mycodo
+site_author: Kyle T. Gabriel
 site_description: Documentation for Mycodo
 repo_name: 'kizniche/Mycodo'
 repo_url: 'https://github.com/kizniche/Mycodo'
+extra:
+    version: 8.12.0
 
 plugins:
   - search:
@@ -9,18 +13,35 @@ plugins:
         - en
   - minify:
       minify_html: true
+  - with-pdf:
+      custom_template_path: docs/custom_pdf
+      cover_title: Mycodo
+      cover_subtitle: Environmental monitoring and regulation system
+      cover_logo: images/logo.png
+      copyright: Copyright © 2021
+      output_path: ../docs/mycodo-manual.pdf
 
 theme:
   name: material
   language: 'en'
   logo: images/favicon.png
   favicon: images/favicon.png
-  palette:
-    primary: 'blue'
-    accent: 'indigo'
-    scheme: preference
   features:
-    - tabs
+    - navigation.tabs
+    - navigation.top
+  palette:
+    - scheme: preference
+      primary: blue
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - scheme: slate
+      primary: red
+      accent: red
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
   font:
     text: Barlow
     code: Roboto Mono
@@ -48,6 +69,7 @@ nav:
     - Maths.md
     - Outputs.md
     - Functions.md
+    - Calibration.md
     - Methods.md
     - LCDs.md
     - Alerts.md

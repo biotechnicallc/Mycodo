@@ -31,7 +31,7 @@ from mycodo.databases.models import User
 from mycodo.databases.models import populate_db
 
 
-@pytest.yield_fixture()
+@pytest.fixture()
 def app():
     """ creates a flask instance """
     _app = create_app(config=TestConfig)
@@ -51,7 +51,7 @@ def testapp(app):
     return TestApp(app)
 
 
-@pytest.yield_fixture()
+@pytest.fixture()
 def tmp_file():
     """
     make a tmp file in an empty tmp dir and
@@ -110,7 +110,7 @@ def login_user(app, username, password):
     session for the user login status
     :returns: None
     """
-    res = app.get('/login')
+    res = app.get('/login_password')
     form = res.forms['login_form']
     form['username'] = username
     form['password'] = password

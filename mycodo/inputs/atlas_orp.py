@@ -4,10 +4,15 @@ import time
 
 from flask_babel import lazy_gettext
 
+from mycodo.databases.models import Conversion
 from mycodo.inputs.base_input import AbstractInput
+from mycodo.inputs.sensorutils import convert_from_x_to_y_unit
 from mycodo.utils.atlas_calibration import AtlasScientificCommand
 from mycodo.utils.atlas_calibration import setup_atlas_device
 from mycodo.utils.constraints_pass import constraints_pass_positive_value
+from mycodo.utils.database import db_retrieve_table_daemon
+from mycodo.utils.system_pi import get_measurement
+from mycodo.utils.system_pi import return_measurement_info
 from mycodo.utils.system_pi import str_is_float
 
 # Measurements
@@ -70,7 +75,47 @@ INPUT_INFORMATION = {
             'required': True,
             'constraints_pass': constraints_pass_positive_value,
             'name': "{}: {}".format(lazy_gettext('Temperature Compensation'), lazy_gettext('Max Age')),
-            'phrase': lazy_gettext('The maximum age (seconds) of the measurement to use for temperature compensation')
+            'phrase': lazy_gettext('The maximum age (seconds) of the measurement to use')
+        }
+    ],
+
+    'custom_actions': [
+        {
+            'type': 'message',
+            'default_value': """A one-point calibration can be performed. Enter the solution's mV, set the probe in the solution, then press Calibrate. You can also clear the currently-saved calibration by pressing Clear Calibration."""
+        },
+        {
+            'id': 'solution_mV',
+            'type': 'integer',
+            'default_value': 225,
+            'name': 'Calibration Solution mV',
+            'phrase': 'The value of the calibration solution, in mV'
+        },
+        {
+            'id': 'calibrate',
+            'type': 'button',
+            'name': lazy_gettext('Calibrate')
+        },
+        {
+            'id': 'calibrate_clear',
+            'type': 'button',
+            'name': lazy_gettext('Clear Calibration')
+        },
+        {
+            'type': 'message',
+            'default_value': """The I2C address can be changed. Enter a new address in the 0xYY format (e.g. 0x22, 0x50), then press Set I2C Address. Remember to deactivate and change the I2C address option after setting the new address."""
+        },
+        {
+            'id': 'new_i2c_address',
+            'type': 'text',
+            'default_value': '0x62',
+            'name': lazy_gettext('New I2C Address'),
+            'phrase': lazy_gettext('The new I2C to set the device to')
+        },
+        {
+            'id': 'set_i2c_address',
+            'type': 'button',
+            'name': lazy_gettext('Set I2C Address')
         }
     ]
 }
@@ -128,13 +173,32 @@ class InputModule(AbstractInput):
                 self.temperature_comp_meas_measurement_id,
                 max_age=self.max_age)
 
-            if last_measurement:
-                self.logger.debug("Latest temperature used to calibrate: {temp}".format(temp=last_measurement[1]))
-                ret_value, ret_msg = self.atlas_command.calibrate('temperature', set_amount=last_measurement[1])
+            if last_measurement and len(last_measurement) > 1:
+                device_measurement = get_measurement(
+                    self.temperature_comp_meas_measurement_id)
+                conversion = db_retrieve_table_daemon(
+                    Conversion, unique_id=device_measurement.conversion_id)
+                _, unit, _ = return_measurement_info(
+                    device_measurement, conversion)
+
+                if unit != "C":
+                    out_value = convert_from_x_to_y_unit(
+                        unit, "C", last_measurement[1])
+                else:
+                    out_value = last_measurement[1]
+
+                self.logger.debug(
+                    "Latest temperature used to calibrate: {temp}".format(
+                        temp=out_value))
+                ret_value, ret_msg = self.atlas_command.calibrate(
+                    'temperature', set_amount=out_value)
                 time.sleep(0.5)
-                self.logger.debug("Calibration returned: {val}, {msg}".format(val=ret_value, msg=ret_msg))
+                self.logger.debug("Calibration returned: {val}, {msg}".format(
+                    val=ret_value, msg=ret_msg))
             else:
-                self.logger.error("Calibration measurement not found within the past {} seconds".format(self.max_age))
+                self.logger.error(
+                    "Calibration measurement not found within the past {} seconds".format(
+                        self.max_age))
 
         # Read sensor via FTDI or UART
         if self.interface in ['FTDI', 'UART']:
@@ -168,3 +232,41 @@ class InputModule(AbstractInput):
         self.value_set(0, orp)
 
         return self.return_dict
+
+    def calibrate(self, args_dict):
+        if 'solution_mV' not in args_dict:
+            self.logger.error("Cannot calibrate without Solution mV")
+            return
+        try:
+            write_cmd = "Cal,{}".format(args_dict['solution_mV'])
+            self.logger.debug("Command to send: {}".format(write_cmd))
+            ret_val = self.atlas_device.atlas_write(write_cmd)
+            self.logger.info("Command returned: {}".format(ret_val))
+            # Verify calibration saved
+            write_cmd = "Cal,?"
+            self.logger.info("Device Calibrated?: {}".format(
+                self.atlas_device.atlas_write(write_cmd)))
+        except:
+            self.logger.exception("Exception calibrating sensor")
+
+    def calibrate_clear(self, args_dict):
+        try:
+            write_cmd = "Cal,clear"
+            self.logger.debug("Calibration command: {}".format(write_cmd))
+            ret_val = self.atlas_device.atlas_write(write_cmd)
+            self.logger.info("Command returned: {}".format(ret_val))
+        except:
+            self.logger.exception("Exception clearing calibration")
+
+    def set_i2c_address(self, args_dict):
+        if 'new_i2c_address' not in args_dict:
+            self.logger.error("Cannot set new I2C address without an I2C address")
+            return
+        try:
+            i2c_address = int(str(args_dict['new_i2c_address']), 16)
+            write_cmd = "I2C,{}".format(i2c_address)
+            self.logger.debug("I2C Change command: {}".format(write_cmd))
+            ret_val = self.atlas_device.atlas_write(write_cmd)
+            self.logger.info("Command returned: {}".format(ret_val))
+        except:
+            self.logger.exception("Exception changing I2C address")

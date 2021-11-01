@@ -108,7 +108,7 @@ def parse_input_information(exclude_custom=False):
             full_path = "{}/{}".format(real_path, each_file)
             input_custom = load_module_from_file(full_path, 'inputs')
 
-            if not hasattr(input_custom, 'INPUT_INFORMATION'):
+            if not input_custom or not hasattr(input_custom, 'INPUT_INFORMATION'):
                 continue
 
             # Populate dictionary of input information
@@ -141,6 +141,7 @@ def parse_input_information(exclude_custom=False):
 
             # Dependencies
             dict_inputs = dict_has_value(dict_inputs, input_custom, 'dependencies_module')
+            dict_inputs = dict_has_value(dict_inputs, input_custom, 'dependencies_message')
 
             dict_inputs = dict_has_value(dict_inputs, input_custom, 'enable_channel_unit_select')
 

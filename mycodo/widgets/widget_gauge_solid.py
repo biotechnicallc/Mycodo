@@ -63,6 +63,7 @@ def execute_at_modification(
         custom_options_json_presave,
         custom_options_json_postsave):
     allow_saving = True
+    page_refresh = True
     error = []
 
     sorted_colors, error = custom_colors_gauge(request_form, error)
@@ -72,7 +73,7 @@ def execute_at_modification(
         current_colors=sorted_colors)
 
     custom_options_json_postsave['range_colors'] = sorted_colors
-    return allow_saving, mod_widget, custom_options_json_postsave
+    return allow_saving, page_refresh, mod_widget, custom_options_json_postsave
 
 
 def generate_page_variables(widget_unique_id, widget_options):
@@ -119,18 +120,47 @@ def generate_page_variables(widget_unique_id, widget_options):
 
 WIDGET_INFORMATION = {
     'widget_name_unique': 'widget_gauge_solid',
-    'widget_name': 'Gauge (Solid)',
-    'widget_library': '',
+    'widget_name': 'Gauge (Solid) [Highcharts]',
+    'widget_library': 'Highcharts',
     'no_class': True,
 
     'message': 'Displays a solid gauge. Be sure to set the Maximum option to the last Stop value for the gauge to display properly.',
+
+    'dependencies_module': [
+        ('apt', 'unzip', 'unzip'),
+        ('bash-commands',
+        [
+            '/var/mycodo-root/mycodo/mycodo_flask/static/js/user_js/highstock-9.1.2.js',
+            '/var/mycodo-root/mycodo/mycodo_flask/static/js/user_js/highcharts-more-9.1.2.js',
+            '/var/mycodo-root/mycodo/mycodo_flask/static/js/user_js/solid-gauge-9.1.2.js'
+        ],
+        [
+            'rm -rf Highcharts-9.1.2.zip',
+            'wget https://code.highcharts.com/zips/Highcharts-9.1.2.zip',
+            'unzip Highcharts-9.1.2.zip -d Highcharts-9.1.2',
+            'cp -rf Highcharts-9.1.2/code/highstock.js /var/mycodo-root/mycodo/mycodo_flask/static/js/user_js/highstock-9.1.2.js',
+            'cp -rf Highcharts-9.1.2/code/highstock.js.map /var/mycodo-root/mycodo/mycodo_flask/static/js/user_js/highstock.js.map',
+            'cp -rf Highcharts-9.1.2/code/highcharts-more.js /var/mycodo-root/mycodo/mycodo_flask/static/js/user_js/highcharts-more-9.1.2.js',
+            'cp -rf Highcharts-9.1.2/code/highcharts-more.js.map /var/mycodo-root/mycodo/mycodo_flask/static/js/user_js/highcharts-more.js.map',
+            'cp -rf Highcharts-9.1.2/code/modules/solid-gauge.js /var/mycodo-root/mycodo/mycodo_flask/static/js/user_js/solid-gauge-9.1.2.js',
+            'cp -rf Highcharts-9.1.2/code/modules/solid-gauge.js.map /var/mycodo-root/mycodo/mycodo_flask/static/js/user_js/solid-gauge.js.map',
+            'rm -rf Highcharts-9.1.2.zip',
+            'rm -rf Highcharts-9.1.2'
+        ])
+    ],
+
+    'dependencies_message': 'Highcharts is free to use for open source, personal use. However, '
+                            'if you are using this software as a part of a commercial product, '
+                            'you or the manufacturer may be required to obtain a commercial '
+                            'license to use it. Contact Highcharts for the most accurate '
+                            'information, at https://shop.highsoft.com',
 
     'execute_at_creation': execute_at_creation,
     'execute_at_modification': execute_at_modification,
     'generate_page_variables': generate_page_variables,
 
-    'widget_width': 6,
-    'widget_height': 5,
+    'widget_width': 4,
+    'widget_height': 8,
 
     'custom_options': [
         {
@@ -152,7 +182,7 @@ WIDGET_INFORMATION = {
             'default_value': 120,
             'required': True,
             'constraints_pass': constraints_pass_positive_value,
-            'name': lazy_gettext('Measurement Max Age'),
+            'name': lazy_gettext('{} {}'.format(lazy_gettext('Measurement'), lazy_gettext('Max Age'))),
             'phrase': lazy_gettext('The maximum age (seconds) of the measurement')
         },
         {
@@ -162,6 +192,13 @@ WIDGET_INFORMATION = {
             'constraints_pass': constraints_pass_positive_value,
             'name': 'Widget Refresh (seconds)',
             'phrase': 'The period of time between refreshing the widget'
+        },
+        {
+            'id': 'decimal_places',
+            'type': 'integer',
+            'default_value': 1,
+            'name': 'Decimal Places',
+            'phrase': 'The number of digits to display after the decimal'
         },
         {
             'id': 'min',
@@ -186,7 +223,17 @@ WIDGET_INFORMATION = {
         }
     ],
 
-    'widget_dashboard_head': """<script type="text/javascript" src="/static/js/modules/solid-gauge.js"></script>""",
+    'widget_dashboard_head': """{% if "highstock" not in dashboard_dict %}
+  <script src="/static/js/user_js/highstock-9.1.2.js"></script>
+  {% set _dummy = dashboard_dict.update({"highstock": 1}) %}
+{% endif %}
+<script src="/static/js/user_js/highcharts-more-9.1.2.js"></script>
+<script src="/static/js/user_js/solid-gauge-9.1.2.js"></script>
+
+{% if current_user.theme in dark_themes %}
+  <script type="text/javascript" src="/static/js/dark-unica-custom.js"></script>
+{% endif %}
+""",
 
     'widget_dashboard_title_bar': """<span style="padding-right: 0.5em; font-size: {{each_widget.font_em_name}}em">{{each_widget.name}}</span>""",
 
@@ -212,46 +259,40 @@ WIDGET_INFORMATION = {
             {% endfor %}
 """,
 
-    'widget_dashboard_js': """<!-- No JS content -->""",
-
-    'widget_dashboard_js_ready': """
-  function getLastDataGaugeSolid(chart_number,
+    'widget_dashboard_js': """
+  function getLastDataGaugeSolid(widget_id,
                        unique_id,
                        measure_type,
                        measurement_id,
                        max_measure_age_sec) {
-    if (decimal_places === null) {
-      decimal_places = 1;
-    }
-
     const url = '/last/' + unique_id + '/' + measure_type + '/' + measurement_id + '/' + max_measure_age_sec.toString();
     $.ajax(url, {
       success: function(data, responseText, jqXHR) {
         if (jqXHR.status === 204) {
-          chart[chart_number].series[0].points[0].update(null);
+          widget[widget_id].series[0].points[0].update(null);
         }
         else {
           const formattedTime = epoch_to_timestamp(data[0]);
           const measurement = data[1];
-          chart[chart_number].series[0].points[0].update(measurement);
-          //document.getElementById('timestamp-' + chart_number).innerHTML = formattedTime;
+          widget[widget_id].series[0].points[0].update(measurement);
+          //document.getElementById('timestamp-' + widget_id).innerHTML = formattedTime;
         }
       },
       error: function(jqXHR, textStatus, errorThrown) {
-        chart[chart_number].series[0].points[0].update(null);
+        widget[widget_id].series[0].points[0].update(null);
       }
     });
   }
 
   // Repeat function for getLastDataGaugeSolid()
-  function repeatLastDataGaugeSolid(chart_number,
+  function repeatLastDataGaugeSolid(widget_id,
                           dev_id,
                           measure_type,
                           measurement_id,
                           period_sec,
                           max_measure_age_sec) {
     setInterval(function () {
-      getLastDataGaugeSolid(chart_number,
+      getLastDataGaugeSolid(widget_id,
                   dev_id,
                   measure_type,
                   measurement_id,
@@ -260,34 +301,36 @@ WIDGET_INFORMATION = {
   }
 """,
 
+    'widget_dashboard_js_ready': """<!-- No JS ready content -->""",
+
     'widget_dashboard_js_ready_end': """
 {%- set device_id = widget_options['measurement'].split(",")[0] -%}
 {%- set measurement_id = widget_options['measurement'].split(",")[1] -%}
 
-  chart[{{chart_number}}] = new Highcharts.chart({
+  widget['{{each_widget.unique_id}}'] = new Highcharts.chart({
     chart: {
       renderTo: 'container-gauge-{{each_widget.unique_id}}',
       type: 'solidgauge',
       events: {
         load: function () {
           {% for each_input in input if each_input.unique_id == device_id %}
-          getLastDataGaugeSolid({{chart_number}}, '{{device_id}}', 'input', '{{measurement_id}}', {{widget_options['max_measure_age']}});
-          repeatLastDataGaugeSolid({{chart_number}}, '{{device_id}}', 'input', '{{measurement_id}}', {{widget_options['refresh_seconds']}}, {{widget_options['max_measure_age']}});
+          getLastDataGaugeSolid('{{each_widget.unique_id}}', '{{device_id}}', 'input', '{{measurement_id}}', {{widget_options['max_measure_age']}});
+          repeatLastDataGaugeSolid('{{each_widget.unique_id}}', '{{device_id}}', 'input', '{{measurement_id}}', {{widget_options['refresh_seconds']}}, {{widget_options['max_measure_age']}});
           {%- endfor -%}
 
           {% for each_math in math if each_math.unique_id == device_id %}
-          getLastDataGaugeSolid({{chart_number}}, '{{device_id}}', 'math', '{{measurement_id}}', {{widget_options['max_measure_age']}});
-          repeatLastDataGaugeSolid({{chart_number}}, '{{device_id}}', 'math', '{{measurement_id}}', {{widget_options['refresh_seconds']}}, {{widget_options['max_measure_age']}});
+          getLastDataGaugeSolid('{{each_widget.unique_id}}', '{{device_id}}', 'math', '{{measurement_id}}', {{widget_options['max_measure_age']}});
+          repeatLastDataGaugeSolid('{{each_widget.unique_id}}', '{{device_id}}', 'math', '{{measurement_id}}', {{widget_options['refresh_seconds']}}, {{widget_options['max_measure_age']}});
           {%- endfor -%}
           
           {% for each_function in function if each_function.unique_id == device_id %}
-          getLastDataGaugeSolid({{chart_number}}, '{{device_id}}', 'function', '{{measurement_id}}', {{widget_options['max_measure_age']}});
-          repeatLastDataGaugeSolid({{chart_number}}, '{{device_id}}', 'function', '{{measurement_id}}', {{widget_options['refresh_seconds']}}, {{widget_options['max_measure_age']}});
+          getLastDataGaugeSolid('{{each_widget.unique_id}}', '{{device_id}}', 'function', '{{measurement_id}}', {{widget_options['max_measure_age']}});
+          repeatLastDataGaugeSolid('{{each_widget.unique_id}}', '{{device_id}}', 'function', '{{measurement_id}}', {{widget_options['refresh_seconds']}}, {{widget_options['max_measure_age']}});
           {%- endfor -%}
 
           {%- for each_pid in pid  if each_pid.unique_id == device_id %}
-          getLastDataGaugeSolid({{chart_number}}, '{{device_id}}', 'pid', '{{measurement_id}}', {{widget_options['max_measure_age']}});
-          repeatLastDataGaugeSolid({{chart_number}}, '{{device_id}}', 'pid', '{{measurement_id}}', {{widget_options['refresh_seconds']}}, {{widget_options['max_measure_age']}});
+          getLastDataGaugeSolid('{{each_widget.unique_id}}', '{{device_id}}', 'pid', '{{measurement_id}}', {{widget_options['max_measure_age']}});
+          repeatLastDataGaugeSolid('{{each_widget.unique_id}}', '{{device_id}}', 'pid', '{{measurement_id}}', {{widget_options['refresh_seconds']}}, {{widget_options['max_measure_age']}});
           {%- endfor -%}
         }
       },
@@ -400,7 +443,7 @@ WIDGET_INFORMATION = {
       data: [null],
       dataLabels: {
         format: '<div style="text-align:center"><span style="font-size:25px;color:' +
-          ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{point.y:,.1f}</span><br/>' +
+          ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{point.y:,.{{widget_options['decimal_places']}}f}</span><br/>' +
            '<span style="font-size:12px;color:silver">{{measure_unit}}</span></div>'
       },
       tooltip: {
