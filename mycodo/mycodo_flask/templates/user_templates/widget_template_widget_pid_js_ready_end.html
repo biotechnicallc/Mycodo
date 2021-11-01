@@ -1,0 +1,39 @@
+
+  {%- for each_pid in pid if each_pid.unique_id == widget_options['pid'] and each_pid.measurement.split(',')|length == 2 %}
+
+  getLastDataPID('{{each_widget.unique_id}}', '{{widget_options['pid']}}', {{widget_options['max_measure_age']}}, {{widget_options['decimal_places']}}, '
+
+      {%- set measurement_id = each_pid.measurement.split(',')[1] -%}
+      {%- set device_measurement = table_device_measurements.query.filter(table_device_measurements.unique_id == measurement_id).first() -%}
+
+      {%- if device_measurement -%}
+        {%- if device_measurement.conversion_id -%}
+          {{dict_units[table_conversion.query.filter(table_conversion.unique_id == device_measurement.conversion_id).first().convert_unit_to]['unit']}}
+        {%- elif device_measurement.rescaled_unit -%}
+          {{dict_units[device_measurement.rescaled_unit]['unit']}}
+        {%- else -%}
+          {{dict_units[device_measurement.unit]['unit']}}
+        {%- endif -%}
+      {%- endif -%}
+      ');
+
+  repeatLastDataPID('{{each_widget.unique_id}}', '{{widget_options['pid']}}', {{widget_options['refresh_seconds']}}, {{widget_options['max_measure_age']}}, {{widget_options['decimal_places']}}, '
+
+      {%- set measurement_id = each_pid.measurement.split(',')[1] -%}
+      {%- set device_measurement = table_device_measurements.query.filter(table_device_measurements.unique_id == measurement_id).first() -%}
+
+      {%- if device_measurement -%}
+        {%- if device_measurement.conversion_id -%}
+          {{dict_units[table_conversion.query.filter(table_conversion.unique_id == device_measurement.conversion_id).first().convert_unit_to]['unit']}}
+        {%- elif device_measurement.rescaled_unit -%}
+          {{dict_units[device_measurement.rescaled_unit]['unit']}}
+        {%- else -%}
+          {{dict_units[device_measurement.unit]['unit']}}
+        {%- endif -%}
+      {%- endif -%}
+      ');
+
+    {% else %}
+
+    getLastDataPID('{{each_widget.unique_id}}', '{{widget_options['pid']}}', {{widget_options['max_measure_age']}}, {{widget_options['decimal_places']}}, '');
+  {%- endfor -%}

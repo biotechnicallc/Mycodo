@@ -1,0 +1,111 @@
+{% extends "layout.html" %}
+{% set active_page = "current_recipe" %}
+{% block title %} - {{_('Current Recipe')}}{% endblock %}
+
+{% block head %}
+{% endblock %}
+{% block body %}
+<div class = "container">
+   <p ><h4>{{_(' Current Recipe')}}</h4>Pineapple</p>
+    <div class="row" style = "position:relative; max-height: fit-content;">
+        <div class="column" style="position: relative; left: 0px;  width : 50% ; height : 50% ;">
+            <img src="https://www.plantgrower.org/uploads/6/5/5/4/65545169/published/pineapple.jpg?1516498929" alt="" /> 
+        </div>
+        <div class="column" style=" position: relative; right: 0px; width : 50%; height : 50% ;padding-right: 5%;">
+            <p style = "font-weight:bold;">Inputs</p>
+            <div style = "height : 100px ; overflow-y:scroll; overflow-x:hidden;">
+                {% if not inputs %}
+                    {{_('No inputs available')}}
+                {% endif %}
+                
+                {% for each_input in inputs -%}
+                {%- if each_input -%}
+                <div style="padding: 0.5em; margin-bottom: 0.7em; border: 1px solid #ddd; border-radius: 5px;">
+                    {% if each_input.interface == 'I2C' %}
+                       {{_('Name : ')}}{{each_input.name}}{{_(' , I2C_Address : ')}}{{each_input.i2c_location}}
+                    {% elif each_input.interface == 'UART' %}
+                       {{_('Name : ')}}{{each_input.name}}{{_(' , UART_tty : ')}}{{each_input.uart_location}}
+                    {%- endif -%}
+                </div>
+                {%- endif -%}
+                {% endfor %}
+            </div>
+            <p style = "font-weight:bold;">Outputs</p>
+            <div style = "height : 100px ; overflow-y:scroll; overflow-x:hidden;">
+                {% if not outputs %}
+                    {{_('No outputs available')}}
+                {% endif %}
+                {% for each_output in outputs -%}
+                    {%- if each_output -%}
+                    <div style="padding: 0.5em; margin-bottom: 0.7em; border: 1px solid #ddd; border-radius: 5px;">
+                        {% if each_output.interface == 'I2C' %}
+                            {{_('Name : ')}}{{each_output.name}}{{_(' , I2C_Address : ')}}{{each_output.i2c_location}}
+                        {% elif each_output.interface == 'UART' %}
+                            {{_('Name : ')}}{{each_output.name}}{{_(' , UART_tty : ')}}{{each_output.uart_location}}
+                        {%- endif -%}
+                    </div>
+                    {%- endif -%}
+                {% endfor %}
+            </div>
+            <p style = "font-weight:bold;">Functions</p>
+            <div style = "height : 100px ; overflow-y:scroll; overflow-x:hidden;">
+                {% if not functions %}
+                 {{_('No functions available')}}
+                {% endif %}
+                
+                {% for each_function in functions -%}
+                {%- if each_function -%}
+                <div style="padding: 0.5em; margin-bottom: 0.7em; border: 1px solid #ddd; border-radius: 5px;">
+                    {{each_function.name}}
+                </div>
+                {%- endif -%}
+                {% endfor %}
+            </div>  
+        </div>
+    </div>
+    <div style = "position:relative; padding-top: 40px;">
+        <p style = "font-weight:bold;">Schedule</p>
+        <div style = "height : fit-content">
+            {% if not schedules %}
+             {{_('No schedules available')}}
+
+             {% else %}
+             <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        {% for each_week in weeks -%}
+                            <th>{{each_week}}</th>
+                        {% endfor %} 
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for each_scheduler in data -%}
+                    <tr>
+                        {% for item in each_scheduler -%}
+                        <td>{{item}}</td>
+                        {% endfor %} 
+                    </tr>
+                    {% endfor %}  
+                </tbody>
+              </table>
+            {% endif %}
+        </div> 
+    </div>
+</div>
+
+<script type="text/javascript">
+(function() {
+
+var img = document.getElementById('container').firstChild;
+img.onload = function() {
+    if(img.height > img.width) {
+        img.height = '50px';
+        img.width = '50px';
+    }
+};
+
+}());
+</script>
+
+{% endblock -%}
