@@ -63,6 +63,8 @@
           {% include 'pages/method_options/build_duration.html' %}
         {%- elif method.method_type == "Date" -%}
           {% include 'pages/method_options/build_date.html' %}
+        {%- elif method.method_type == "Weekly" -%}
+          {% include 'pages/method_options/build_weekly.html' %}
         {%- elif method.method_type == "Daily" -%}
           {% include 'pages/method_options/build_daily.html' %}
         {%- elif method.method_type == "DailySine" -%}
@@ -147,6 +149,20 @@
               {{form_mod_method.time_end(class_='form-control', value=each_method.time_end)}}
             </div>
           </div>
+
+          {% elif method.method_type == "Weekly" -%}
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              {{form_mod_method.time_start.label(class_='control-label')}}
+              <div>
+                {{form_mod_method.time_start(class_='form-control', value=each_method.time_start)}}
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              {{form_mod_method.time_end.label(class_='control-label')}}
+              <div>
+                {{form_mod_method.time_end(class_='form-control', value=each_method.time_end)}}
+              </div>
+            </div>
 
           {% elif method.method_type == "Daily" -%}
 
@@ -281,7 +297,7 @@
         {% if method.method_type == "Duration" -%}
           headerFormat: '<span style="font-size: 10px">{point.key} Seconds</span><br/>',
         {%- endif -%}
-        {% if method.method_type == "Date" -%}
+        {% if method.method_type in ["Date","Weekly"] -%}
           xDateFormat: '%a, %b %e, %Y %H:%M:%S',
         {% elif method.method_type in ["Daily", "DailySine", "DailyBezier"] -%}
           xDateFormat: '%H:%M:%S',
@@ -301,7 +317,7 @@
         enabled: false
       },
       xAxis: {
-        type: '{%- if method.method_type == "Duration" -%}linear{%- elif method.method_type in ["Date", "Daily", "DailySine", "DailyBezier"] -%}datetime{%- endif -%}',
+        type: '{%- if method.method_type == "Duration" -%}linear{%- elif method.method_type in ["Date","Weekly", "Daily", "DailySine", "DailyBezier"] -%}datetime{%- endif -%}',
         ordinal: false
       },
       yAxis: [

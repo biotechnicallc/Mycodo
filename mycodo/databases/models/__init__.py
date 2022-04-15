@@ -64,7 +64,15 @@ from .remote import Remote
 from .role import Role
 from .smtp import SMTP
 from .user import User
-
+from .recipes import Recipes
+from .saved_input import Saved_Input
+from .saved_output import Saved_Output
+from .saved_function import Saved_Function
+from .saved_controller import Saved_Controller
+from .input import InputSchema
+from .output import OutputSchema
+from .controller import FunctionSchema
+from .saved_output import SavedOutputSchema
 
 def alembic_upgrade_db():
     """Upgrade sqlite3 database with alembic"""

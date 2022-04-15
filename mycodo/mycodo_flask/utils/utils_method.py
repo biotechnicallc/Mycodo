@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 import logging
+import datetime as dt
 from datetime import datetime
 
 from flask import flash
 from flask import url_for
 from flask_babel import gettext
+
+from mycodo.config import SCHEDULE_WEEKS
+from mycodo.databases.models import Recipes
 
 from mycodo.config_translations import TRANSLATIONS
 from mycodo.databases.models import DisplayOrder
@@ -37,6 +41,27 @@ def is_positive_integer(number_string):
 
 def validate_method_data(form_data, this_method):
     if this_method.method_type == 'Date':
+        if (not form_data.time_start.data or
+                not form_data.time_end.data or
+                form_data.setpoint_start.data == ''):
+            flash(gettext("Required: Start date/time, end date/time, "
+                          "start setpoint"), "error")
+            return 1
+        try:
+            start_time = datetime.strptime(form_data.time_start.data,
+                                           '%Y-%m-%d %H:%M:%S')
+            end_time = datetime.strptime(form_data.time_end.data,
+                                         '%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            flash(gettext("Invalid Date/Time format. Correct format: "
+                          "MM/DD/YYYY HH:MM:SS"), "error")
+            return 1
+        if end_time <= start_time:
+            flash(gettext("The end time/date must be after the start "
+                          "time/date."), "error")
+            return 1
+
+    elif this_method.method_type == 'Weekly':
         if (not form_data.time_start.data or
                 not form_data.time_end.data or
                 form_data.setpoint_start.data == ''):
@@ -132,7 +157,7 @@ def method_create(form_create_method):
         db.session.commit()
 
         # Add new method data line id to method_data display order
-        if new_method.method_type in ['DailyBezier', 'DailySine']:
+        if new_method.method_type in ['DailyBezier', 'DailySine', 'Weekly']:
             # For tables that require only one entry to configure,
             # create that single entry now with default values
             new_method_data = MethodData()
@@ -143,9 +168,11 @@ def method_create(form_create_method):
                 new_method_data.frequency = 1.0
                 new_method_data.shift_angle = 0
                 new_method_data.shift_y = 1.0
+
+                db.session.add(new_method_data)
+                db.session.commit()
+
             elif new_method.method_type == 'DailyBezier':
-                new_method_data = MethodData()
-                new_method_data.method_id = new_method.unique_id
                 new_method_data.shift_angle = 0.0
                 new_method_data.x0 = 20.0
                 new_method_data.y0 = 20.0
@@ -156,8 +183,43 @@ def method_create(form_create_method):
                 new_method_data.x3 = 0.0
                 new_method_data.y3 = 20.0
 
-            db.session.add(new_method_data)
-            db.session.commit()
+                db.session.add(new_method_data)
+                db.session.commit()
+            
+            elif new_method.method_type == 'Weekly':
+                current_recipe = Recipes.query.filter(Recipes.current == True).first()
+                start_date = current_recipe.start_date
+                end_date = current_recipe.end_date
+                _end = None
+
+                weeks = (end_date - start_date).days//7
+                for week in range(weeks):
+                    new_method_data = MethodData()
+                    new_method_data.method_id = new_method.unique_id
+
+                    _start = start_date + dt.timedelta(days=7*week, hours=0)
+                    new_method_data.time_start = _start
+                    _end = _start + dt.timedelta(days=7, hours=0)
+
+                    new_method_data.time_end = _end
+                    new_method_data.setpoint_start = 10
+                    new_method_data.setpoint_end = 10
+
+                    db.session.add(new_method_data)
+                    db.session.commit()
+                other_days = (end_date - _end).days
+                if other_days > 0:
+                    new_method_data = MethodData()
+                    new_method_data.method_id = new_method.unique_id
+
+                    new_method_data.time_start = _end
+                    new_method_data.time_end = end_date
+                    new_method_data.setpoint_start = 10
+                    new_method_data.setpoint_end = 10
+
+                    db.session.add(new_method_data)
+                    db.session.commit()
+
 
             display_order = csv_to_list_of_str(new_method.method_order)
             method = Method.query.filter(
@@ -231,6 +293,15 @@ def method_add(form_add_method):
             end_time = datetime.strptime(
                 form_add_method.time_end.data,
                 '%Y-%m-%d %H:%M:%S')
+
+        elif method.method_type == 'Weekly':
+            start_time = datetime.strptime(
+                form_add_method.time_start.data,
+                '%Y-%m-%d %H:%M:%S')
+            end_time = datetime.strptime(
+                form_add_method.time_end.data,
+                '%Y-%m-%d %H:%M:%S')
+
         elif method.method_type == 'Daily':
             start_time = datetime.strptime(
                 form_add_method.daily_time_start.data,
@@ -239,7 +310,7 @@ def method_add(form_add_method):
                 form_add_method.daily_time_end.data,
                 '%H:%M:%S')
 
-        if method.method_type in ['Date', 'Daily']:
+        if method.method_type in ['Date','Weekly', 'Daily']:
             # Check if the start time comes after the last entry's end time
             display_order = csv_to_list_of_str(method.method_order)
             if display_order:
@@ -253,6 +324,12 @@ def method_add(form_add_method):
                     last_method_end_time = datetime.strptime(
                         last_method.time_end,
                         '%Y-%m-%d %H:%M:%S')
+
+                elif method.method_type == 'Weekly':
+                    last_method_end_time = datetime.strptime(
+                        last_method.time_end,
+                        '%Y-%m-%d %H:%M:%S')
+
                 elif method.method_type == 'Daily':
                     last_method_end_time = datetime.strptime(
                         last_method.time_end,
@@ -275,6 +352,12 @@ def method_add(form_add_method):
         add_method_data.method_id = form_add_method.method_id.data
 
         if method.method_type == 'Date':
+            add_method_data.time_start = start_time.strftime(
+                '%Y-%m-%d %H:%M:%S')
+            add_method_data.time_end = end_time.strftime(
+                '%Y-%m-%d %H:%M:%S')
+
+        elif method.method_type == 'Weekly':
             add_method_data.time_start = start_time.strftime(
                 '%Y-%m-%d %H:%M:%S')
             add_method_data.time_end = end_time.strftime(
@@ -310,6 +393,12 @@ def method_add(form_add_method):
             flash(gettext("Added duration to method from %(st)s to "
                           "%(end)s", st=start_time, end=end_time),
                   "success")
+
+        elif method.method_type == 'Date':
+            flash(gettext("Added duration to method from %(st)s to "
+                          "%(end)s", st=start_time, end=end_time),
+                  "success")
+
         elif method.method_type == 'Daily':
             flash(gettext("Added duration to method from %(st)s to "
                           "%(end)s",
@@ -363,6 +452,47 @@ def method_mod(form_mod_method):
             return 1
 
         if method.method_type == 'Date':
+            start_time = datetime.strptime(form_mod_method.time_start.data, '%Y-%m-%d %H:%M:%S')
+            end_time = datetime.strptime(form_mod_method.time_end.data, '%Y-%m-%d %H:%M:%S')
+
+            # Ensure the start time comes after the previous entry's end time
+            # and the end time comes before the next entry's start time
+            # method_id_set is the id given to all method entries, 'method_id', not 'id'
+            previous_method = None
+            next_method = None
+            for index, each_order in enumerate(display_order):
+                if each_order == method_data.unique_id:
+                    if len(display_order) > 1 and index > 0:
+                        previous_method = MethodData.query.filter(
+                            MethodData.unique_id == display_order[index-1]).first()
+                    if len(display_order) > index+1:
+                        next_method = MethodData.query.filter(
+                            MethodData.unique_id == display_order[index+1]).first()
+
+            if previous_method is not None and previous_method.time_end is not None:
+                previous_end_time = datetime.strptime(
+                    previous_method.time_end, '%Y-%m-%d %H:%M:%S')
+                if previous_end_time is not None and start_time < previous_end_time:
+                    error.append(
+                        gettext("The entry start time (%(st)s) cannot "
+                                "overlap the previous entry's end time "
+                                "(%(et)s)",
+                                st=start_time, et=previous_end_time))
+
+            if next_method is not None and next_method.time_start is not None:
+                next_start_time = datetime.strptime(
+                    next_method.time_start, '%Y-%m-%d %H:%M:%S')
+                if next_start_time is not None and end_time > next_start_time:
+                    error.append(
+                        gettext("The entry end time (%(et)s) cannot "
+                                "overlap the next entry's start time "
+                                "(%(st)s)",
+                                et=end_time, st=next_start_time))
+
+            method_data.time_start = start_time.strftime('%Y-%m-%d %H:%M:%S')
+            method_data.time_end = end_time.strftime('%Y-%m-%d %H:%M:%S')
+
+        elif method.method_type == 'Weekly':
             start_time = datetime.strptime(form_mod_method.time_start.data, '%Y-%m-%d %H:%M:%S')
             end_time = datetime.strptime(form_mod_method.time_end.data, '%Y-%m-%d %H:%M:%S')
 

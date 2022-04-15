@@ -15,6 +15,7 @@ from flask import url_for
 from flask_babel import gettext
 
 from mycodo.config import METHOD_INFO
+from mycodo.config import SCHEDULE_WEEKS
 from mycodo.config_translations import TRANSLATIONS
 from mycodo.databases.models import DisplayOrder
 from mycodo.databases.models import Method
@@ -145,7 +146,7 @@ def method_builder(method_id):
                                form_add_method=form_add_method,
                                form_mod_method=form_mod_method)
 
-    if method.method_type in ['Date', 'Duration', 'Daily',
+    if method.method_type in ['Date','Weekly','Duration', 'Daily',
                               'DailySine', 'DailyBezier']:
 
         # Retrieve the order to display method data lines
@@ -173,7 +174,7 @@ def method_builder(method_id):
 
         last_end_time = ''
         last_setpoint = ''
-        if method.method_type in ['Daily', 'Date', 'Duration']:
+        if method.method_type in ['Daily', 'Date','Weekly','Duration']:
             method_data = method_data.all()
 
             # Get last entry end time and setpoint to populate the form
@@ -214,8 +215,6 @@ def method_builder(method_id):
                                form_create_method=form_create_method,
                                form_add_method=form_add_method,
                                form_mod_method=form_mod_method)
-
-    return redirect('/method')
 
 
 @blueprint.route('/method-delete/<method_id>')

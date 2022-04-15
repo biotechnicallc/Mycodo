@@ -1,0 +1,265 @@
+{% extends "layout.html" %}
+{% set active_page = "saved_recipes" %}
+{% block title %} - {{_('Saved Recipes')}}{% endblock %}
+
+{% block head %}
+{% endblock %}
+{% block body %}
+<div class = "container">
+  <h1>Saved Recipes</h1>
+  <p>Select image to view recipe configurations or to use recipe:</p>
+  <div class = "grid-container">
+    {% if not recipes %}
+        {{_('No saved recipes available')}}
+    {% endif %}
+    
+    {% for each_recipe in recipes -%}
+    {%- if each_recipe -%}
+    <div class="grid-item" >
+         {%- if each_recipe.current == 1 -%}
+          <p style = "float: left;text-decoration: solid;color:rgb(0, 246, 94); font-size: 15px;">current</p>
+        {%- endif -%}
+        <button id =  {{each_recipe.recipe_id}} class = "grid-button" onClick="reply_click(this.id)" type="button" >View</button>
+        <img class = "grid-image" src="/static/images/{{each_recipe.icon}}" alt="" /> 
+        {{each_recipe.name}}
+      <div>
+        <a style = "float: left;" id= {{each_recipe.recipe_id}} onClick="change_image(this.id)" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cog" style="font-size: 1em;"></i></a>
+      </div>
+    </div>
+    {%- endif -%}
+    {% endfor %}
+  </div>
+
+  {% for each_recipe in recipes -%}
+  {%- if each_recipe -%}
+    <!-- The Modal -->
+    <div id="settingModal{{each_recipe.recipe_id}}" class="modal" style = "width : 40%;">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <div class="modal-header">
+          <p style = "float: left; font-weight:bold;">{{_('Recipe Name : ')}}{{each_recipe.name}}</p>
+          <span class = close id="closeimg{{each_recipe.recipe_id}}">close</span>
+        </div>
+
+        <div style = "padding-top: 10px;" >
+          <form enctype="multipart/form-data" action="/change_settings" method="post">
+              <input id="request_id" name=request_src type="hidden" value ="saved" />
+              <input id="recipe_id" name=recipe_id type="hidden" value ={{each_recipe.recipe_id}} />
+              <p style = "margin-left:5px; font-weight:bold;">{{_('Recipe Name')}}</p>
+              <input id="recipe-name" name=recipe_name type="text"/>
+              <p style = "margin-left:5px; font-weight:bold;">{{_('Recipe Icon')}}</p>
+              <input id="image-file" name=file type="file"/>
+              <input style = "float: right;" id = "image_change" value="{{_('Save Changes')}}" class="btn btn-primary" type="submit"/>
+          </form>
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+  {% endfor %}
+    
+
+  {% for each_recipe in recipes -%}
+    {%- if each_recipe -%}
+    <!-- The Modal -->
+    <div id="myModal{{each_recipe.recipe_id}}" class="modal" style = "width : 80%;">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <p style = "margin-left:20px; font-weight:bold;">{{_('Recipe Name : ')}}{{each_recipe.name}}</p>
+        <div class="modal-header">
+           <!-- <input style = "float: left;" id = "{{each_recipe.recipe_id}}" onclick="export_recipe(this.id,'recipe_export');" name="recipe_export" value="{{_('Export Recipe')}}" class="btn btn-primary" type="button"/>
+       -->
+          <form enctype="multipart/form-data" action="/export_recipe" method="get">
+            <input id="export_id" name=recipe_id type="hidden" value ={{each_recipe.recipe_id}} />
+            <input id="export_icon" name=recipe_icon type="hidden" value ={{each_recipe.icon}} />
+            <input style = "float: left;" id = "recipe_export" value="{{_('Export Recipe')}}" class="btn btn-primary" type="submit"/>
+          </form>
+          <form enctype="multipart/form-data" action="/use_recipe" method="get">
+            <input id="recipe_id" name=recipe_id type="hidden" value ={{each_recipe.recipe_id}} />
+            <input style = "float: left;" id = "recipe_use" value="{{_('Use Recipe')}}" class="btn btn-primary" type="submit"/>
+          </form>
+        <span class = close id="close{{each_recipe.recipe_id}}">close</span>
+        </div>
+        <div class="modal-body" style = "max-height: 600px; min-height:100px; overflow-y:auto; overflow-x:auto;">
+        <div>
+          <div class = "grid-container-modal">
+            <div class="grid-item-modal">
+              <p style = "font-weight:bold;">Inputs</p>
+              <div style = "height : 100px ; overflow-y:auto; overflow-x:hidden;">
+                {% if not inputs %}
+                  {{_('No inputs available')}}
+                {% endif %}
+
+                {% for each_input in inputs -%}
+                {%- if each_input.recipe_id == each_recipe.recipe_id -%}
+                <div style="padding: 0.5em; margin-bottom: 0.7em; border: 1px solid #ddd; border-radius: 5px;">
+                  {% if each_input.interface == 'I2C' %}
+                      {{_('Name : ')}}{{each_input.name}}{{_(' , I2C_Address : ')}}{{each_input.i2c_location}}
+                  {% elif each_input.interface == 'UART' %}
+                      {{_('Name : ')}}{{each_input.name}}{{_(' , UART_tty : ')}}{{each_input.uart_location}}
+                  {%- endif -%}
+                </div>
+                {%- endif -%}
+                {% endfor %}
+              </div>
+            </div>
+            
+            <div class="grid-item-modal">
+              <p style = "font-weight:bold;">Outputs</p>
+              <div style = "height : 100px ; overflow-y:auto; overflow-x:hidden;">
+                {% for each_output in outputs -%}
+                {%- if each_output.recipe_id == each_recipe.recipe_id -%}
+                <div style="padding: 0.5em; margin-bottom: 0.7em; border: 1px solid #ddd; border-radius: 5px;">
+                    {% if each_output.interface == 'I2C' %}
+                        {{_('Name : ')}}{{each_output.name}}{{_(' , I2C_Address : ')}}{{each_output.i2c_location}}
+                    {% elif each_output.interface == 'UART' %}
+                        {{_('Name : ')}}{{each_output.name}}{{_(' , UART_tty : ')}}{{each_output.uart_location}}
+                    {%- endif -%}
+                </div>
+                {%- endif -%}
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="grid-item-modal">
+              <p style = "font-weight:bold;">Functions</p>
+              <div style = "height : 100px ; overflow-y:auto; overflow-x:hidden;">
+                {% for each_function in functions -%}
+                {%- if each_function.recipe_id == each_recipe.recipe_id -%}
+                  <div style="padding: 0.5em; margin-bottom: 0.7em; border: 1px solid #ddd; border-radius: 5px;">
+                    {{each_function.name}}
+                  </div>
+                {%- endif -%}
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <div style = "position:relative; padding-top: 10px;">
+            <p style = "font-weight:bold;">Schedule</p>
+            {% if not schedules %}
+            {{_('No schedules available')}}
+
+            {% else %}
+            <table class="styled-table">
+              <thead>
+                  <tr>
+                      <th>Recipe Id</th>
+                      <th>Name</th>
+                      {% for each_week in weeks -%}
+                          <th>{{each_week}}</th>
+                      {% endfor %} 
+                  </tr>
+              </thead>
+              <tbody>
+                {% for each_scheduler in data -%}
+                  {% for each_key in each_scheduler -%}
+                    {% if each_key == each_recipe.recipe_id%}
+                      <tr>
+                      {% for item in each_scheduler -%}
+                      <td>{{item}}</td>
+                      {% endfor %} 
+                    </tr>
+                    {% endif %}
+                  {% endfor %} 
+                {% endfor %}  
+            </tbody>
+            </table>
+            {% endif %}
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+  {% endfor %}
+  <div style = "padding-top: 10px;" >
+  <form enctype="multipart/form-data" action="/import_recipe" method="post">
+      <input id="image-file" name=file type="file" accept=".zip"/>
+      <input style = "float: left;" id = "recipe_import" value="{{_('Import Recipe')}}" class="btn btn-primary" type="submit"/>
+  </form>
+  </div>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var img = document.getElementById('container').firstChild;
+    img.onload = function() {
+        if(img.height > img.width) {
+            img.height = '50px';
+            img.width = '50px';
+        }
+    };
+}());
+</script>
+
+<script>
+  function export_recipe(recipe_id,action)  
+  {   
+      $.ajax({
+      type: "POST",
+      url: "/export_recipe",
+      contentType: 'application/json;charset=UTF-8',
+      data: JSON.stringify({'recipe_id':String(recipe_id),'action':action}),
+      error : function(e){
+          console.log(e);
+      },
+      success: function(data){
+          console.log(data);
+      }
+  });
+}
+</script>
+
+<script type="text/javascript">
+  function change_image(clicked_id)
+    {
+      // Get the modal
+      var modal = document.getElementById("settingModal"+clicked_id);
+      // Get the button that opens the modal
+      var btn = document.getElementById("view");
+      // Get the <span> element that closes the modal
+      var span = document.getElementById("closeimg"+clicked_id);
+      modal.style.display = "block";
+
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function() {
+        modal.style.display = "none";
+      }
+    }
+    // When the user clicks the button, open the modal 
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+</script>
+
+
+
+<script type="text/javascript">
+    function reply_click(clicked_id)
+    {
+      // Get the modal
+      var modal = document.getElementById("myModal"+clicked_id);
+      // Get the button that opens the modal
+      var btn = document.getElementById("view");
+      // Get the <span> element that closes the modal
+      var span = document.getElementById("close"+clicked_id);
+      modal.style.display = "block";
+
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function() {
+        modal.style.display = "none";
+      }
+    }
+    // When the user clicks the button, open the modal 
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+</script>
+
+{% endblock -%}

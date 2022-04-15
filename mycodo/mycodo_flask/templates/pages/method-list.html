@@ -151,7 +151,7 @@
             enabled: false
           },
           xAxis: {
-            type: '{%- if each_method.method_type == "Duration" -%}linear{%- elif each_method.method_type in ["Date", "Daily", "DailySine", "DailyBezier"] -%}datetime{%- endif -%}',
+            type: '{%- if each_method.method_type == "Duration" -%}linear{%- elif each_method.method_type in ["Date","Weekly","Daily", "DailySine", "DailyBezier"] -%}datetime{%- endif -%}',
             ordinal: false
           },
           yAxis: [

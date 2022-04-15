@@ -75,13 +75,14 @@ class AtlasScientificI2C(AbstractBaseAtlasScientific):
         """ Read a specified number of bytes from I2C, then parse and display the result """
         res = self.file_read.read(num_of_bytes)  # read from the board
         if res[0] == 1:  # if the response isn't an error
-            response = list(filter(lambda x: x != '\x00', res.decode()))  # remove the null characters
+            data = list(res)
+            response = list(filter(lambda x: x != 255 and x != 0, data))  # remove the null characters
             # change MSB to 0 for all received characters except the first and get a list of characters
-            char_list = map(lambda x: chr(ord(x) & ~0x80), list(response[1:]))
+            char_list = map(lambda x: chr(x & ~0x80), list(response[1:]))
             # NOTE: having to change the MSB to 0 is a glitch in the raspberry pi, and you shouldn't have to do this!
             return "success", ''.join(char_list)  # convert the char list to a string and returns it
         else:
-            return "error", str(res[0])
+            return "error", str(res)
 
     def query(self, query_str):
         """ Send command to board and read response """
@@ -100,6 +101,7 @@ class AtlasScientificI2C(AbstractBaseAtlasScientific):
                 time.sleep(self.short_timeout)
 
             return self.read()
+           
         except Exception as err:
             self.logger.debug(
                 "{cls} raised an exception when taking a reading: "

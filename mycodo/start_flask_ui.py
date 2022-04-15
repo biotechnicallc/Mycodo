@@ -19,7 +19,7 @@ if ENABLE_FLASK_PROFILER:
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Mycodo Flask HTTP server.")
+    parser = argparse.ArgumentParser(description="MacroponicsLLC Flask HTTP server.")
 
     options = parser.add_argument_group('Options')
     options.add_argument('-d', '--debug', action='store_true',

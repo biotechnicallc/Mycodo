@@ -171,6 +171,7 @@
   max-width: 60%;
   max-height: 60%;
 }
+
 .styled-table {
   border-collapse: collapse;
   margin: 25px 0;
@@ -205,4 +206,82 @@
 .styled-table tbody td:nth-of-type(1) {  
   background-color:  #009879;
   color: #ffffff;
+}
+
+.grid-container {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: auto auto auto;
+  background-color: #2196F3;
+  padding: 10px;
+}
+
+.grid-item {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 10px;
+  font-size: 30px;
+  text-align: center;
+}
+
+.grid-image{
+  background-color: transparent;
+  width:150px;
+  height:150px;
+  object-fit: contain;
+}
+
+.grid-button {
+  background-color: #2196F3;
+  width: 40px;
+  color: #ffffff;
+  font-size: 8pt;
+  font-family: tahoma;
+  float: right;
+  top:0px;
+  right:0px;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.grid-container-modal {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: auto auto;
+  background-color: #91b7dd;
+  padding: 10px;
+}
+
+.grid-item-modal {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  font-size: 20px;
+  text-align: center;
+}
+
+.grid-container-current {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: auto auto;
+  background-color: #91b7dd;
+  padding: 10px;
+}
+.grid-item-current {
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  font-size: 20px;
+  text-align: center;
+}
+.grid-image-current{
+  background-color: transparent;
+  width:300px;
+  height:300px;
+  object-fit: contain;
 }

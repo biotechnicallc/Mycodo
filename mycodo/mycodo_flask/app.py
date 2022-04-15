@@ -18,7 +18,6 @@ from flask_limiter import Limiter
 from flask_login import current_user
 from flask_session import Session
 from flask_talisman import Talisman
-
 from mycodo.config import LANGUAGES
 from mycodo.config import ProdConfig
 from mycodo.databases.models import Misc
@@ -34,6 +33,7 @@ from mycodo.mycodo_flask import routes_input
 from mycodo.mycodo_flask import routes_method
 from mycodo.mycodo_flask import routes_output
 from mycodo.mycodo_flask import routes_page
+from mycodo.mycodo_flask import routes_recipe
 from mycodo.mycodo_flask import routes_password_reset
 from mycodo.mycodo_flask import routes_remote_admin
 from mycodo.mycodo_flask import routes_settings
@@ -114,7 +114,7 @@ def register_blueprints(app):
     app.register_blueprint(routes_remote_admin.blueprint)  # register remote admin views
     app.register_blueprint(routes_settings.blueprint)  # register settings views
     app.register_blueprint(routes_static.blueprint)  # register static routes
-
+    app.register_blueprint(routes_recipe.blueprint)  # register recipes views
 
 def extension_babel(app):
     babel = Babel(app)

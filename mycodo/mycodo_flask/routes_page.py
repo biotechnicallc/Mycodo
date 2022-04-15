@@ -65,6 +65,7 @@ from mycodo.databases.models import OutputChannel
 from mycodo.databases.models import PID
 from mycodo.databases.models import Unit
 from mycodo.databases.models import Widget
+from mycodo.databases.models import Recipes
 from mycodo.devices.camera import camera_record
 from mycodo.mycodo_client import DaemonControl
 from mycodo.mycodo_client import daemon_active
@@ -1167,32 +1168,33 @@ def page_usage_reports():
                            report_location=report_location,
                            reports=reports)
 
-@blueprint.route('/current_recipe')
-@flask_login.login_required
-def page_current_recipe():
-    function = CustomController.query.all()
-    device_measurements = DeviceMeasurements.query.all()
-    input_dev = Input.query.all()
-    output = Output.query.all()
-    math = Math.query.all()
-    scheduler = CustomController.query.filter(CustomController.device == 'Scheduler').all()
-    weeks = []
-    data = []
+# @blueprint.route('/current_recipe')
+# @flask_login.login_required
+# def page_current_recipe():
+#     function = CustomController.query.all()
+#     device_measurements = DeviceMeasurements.query.all()
+#     input_dev = Input.query.all()
+#     output = Output.query.all()
+#     math = Math.query.all()
+#     scheduler = CustomController.query.filter(CustomController.device == 'Scheduler').all()
+#     weeks = []
+#     data = []
 
-    for schedule in scheduler:
-        weeks_ = list(json.loads(schedule.custom_options).keys())[2:]
-        data_ = list(json.loads(schedule.custom_options).values())[2:]
-        data_.insert(0,schedule.name)
-        if(len(weeks_) > len(weeks)):
-            weeks = list(weeks_)
-        data.append(data_)
+#     for schedule in scheduler:
+#         weeks_ = list(json.loads(schedule.custom_options).keys())[2:]
+#         data_ = list(json.loads(schedule.custom_options).values())[2:]
+#         data_.insert(0,schedule.name)
+#         if(len(weeks_) > len(weeks)):
+#             weeks = list(weeks_)
+#         data.append(data_)
     
-    return render_template('pages/current_recipe.html',inputs = input_dev,outputs = output ,functions = function,schedules = scheduler ,weeks = weeks ,data = data)
+#     return render_template('pages/current_recipe.html',inputs = input_dev,outputs = output ,functions = function,schedules = scheduler ,weeks = weeks ,data = data)
 
-@blueprint.route('/saved_recipes')
-@flask_login.login_required
-def page_saved_recipes():
-    return render_template('pages/saved_recipes.html')
+# @blueprint.route('/saved_recipes')
+# @flask_login.login_required
+# def page_saved_recipes():
+#     recipes = Recipes.query.all()
+#     return render_template('pages/saved_recipes.html',recipes = recipes)
 
 def dict_custom_colors():
     """

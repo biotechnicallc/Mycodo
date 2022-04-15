@@ -346,6 +346,10 @@ METHOD_INFO = {
         'name': lazy_gettext('Time/Date'),
         'dependencies_module': METHOD_DEP_BASE
     },
+    'Weekly': {
+        'name': lazy_gettext('Weekly/Schedule'),
+        'dependencies_module': METHOD_DEP_BASE
+    },
     'Duration': {
         'name': lazy_gettext('Duration'),
         'dependencies_module': METHOD_DEP_BASE
@@ -374,6 +378,7 @@ METHOD_INFO = {
 # Method form dropdown
 METHODS = [
     ('Date', METHOD_INFO['Date']['name']),
+    ('Weekly', METHOD_INFO['Weekly']['name']),
     ('Duration', METHOD_INFO['Duration']['name']),
     ('Daily', METHOD_INFO['Daily']['name']),
     ('DailySine', METHOD_INFO['DailySine']['name']),
@@ -910,6 +915,10 @@ DATABASE_PATH = os.path.join(INSTALL_DIRECTORY, 'databases')
 ALEMBIC_UPGRADE_POST = os.path.join(DATABASE_PATH, 'alembic_post_upgrade_versions')
 SQL_DATABASE_MYCODO = os.path.join(DATABASE_PATH, DATABASE_NAME)
 MYCODO_DB_PATH = 'sqlite:///' + SQL_DATABASE_MYCODO
+RECIPES_PATH = os.path.join(DATABASE_PATH,'recipes/databases')
+STATIC_PATH = os.path.join(INSTALL_DIRECTORY, 'mycodo/mycodo_flask/static')
+RECIPES_ICONS = os.path.join(STATIC_PATH ,'images')
+TEMP_PATH = os.path.join(DATABASE_PATH,'recipes/temp')
 
 # Misc paths
 PATH_1WIRE = '/sys/bus/w1/devices/'
@@ -993,6 +1002,9 @@ ID_FILE = os.path.join(DATABASE_PATH, 'statistics.id')
 # Login restrictions
 LOGIN_ATTEMPTS = 5
 LOGIN_BAN_SECONDS = 600  # 10 minutes
+
+#Schedules weeks length
+SCHEDULE_WEEKS = 15
 
 # Check for upgrade every 2 days (if enabled)
 UPGRADE_CHECK_INTERVAL = 172800

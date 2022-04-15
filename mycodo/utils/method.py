@@ -160,6 +160,95 @@ class DateMethod(AbstractMethod):
                  None])
 
         return result
+        
+class WeeklyMethod(AbstractMethod):
+    """
+    A Weekly/Schedule method allows a specific weekly dictated by week since start date/time setpoint.
+    This is useful for long-running methods, that may take place over the period of days, weeks, or months.
+    """
+
+    def ignore_date(self):
+        """
+        :return: False -> date part of date-time should be considered
+        """
+        return False
+
+    def calculate_setpoint(self, now, method_start_time=None):
+        # Calculate where the current time/date is within the time/date method
+
+        if self.ignore_date():
+            now = datetime.datetime.strptime(str(now.strftime('%H:%M:%S')), '%H:%M:%S')
+
+        for each_method in self.method_data_all:
+            if self.ignore_date():
+                start_time = datetime.datetime.strptime(each_method.time_start, '%H:%M:%S')
+                end_time = datetime.datetime.strptime(each_method.time_end, '%H:%M:%S')
+            else:
+                start_time = datetime.datetime.strptime(each_method.time_start, '%Y-%m-%d %H:%M:%S')
+                end_time = datetime.datetime.strptime(each_method.time_end, '%Y-%m-%d %H:%M:%S')
+
+            if start_time < now < end_time:
+                setpoint_start = each_method.setpoint_start
+                if each_method.setpoint_end is not None:
+                    setpoint_end = each_method.setpoint_end
+                else:
+                    setpoint_end = each_method.setpoint_start
+
+                setpoint_diff = abs(setpoint_end - setpoint_start)
+                total_seconds = (end_time - start_time).total_seconds()
+                part_seconds = (now - start_time).total_seconds()
+                percent_total = part_seconds / total_seconds
+
+                if setpoint_start < setpoint_end:
+                    new_setpoint = setpoint_start + (setpoint_diff * percent_total)
+                else:
+                    new_setpoint = setpoint_start - (setpoint_diff * percent_total)
+
+                if self.logger:
+                    if self.ignore_date():
+                        self.logger.debug("[Method] Start: {start} End: {end}".format(
+                            start=start_time.strftime('%H:%M:%S'),
+                            end=end_time.strftime('%H:%M:%S')))
+                    else:
+                        self.logger.debug("[Method] Start: {start} End: {end}".format(
+                            start=start_time, end=end_time))
+                    self.logger.debug("[Method] Start: {start} End: {end}".format(
+                        start=setpoint_start, end=setpoint_end))
+                    self.logger.debug("[Method] Total: {tot} Part total: {par} ({per}%)".format(
+                        tot=total_seconds, par=part_seconds, per=percent_total))
+                    self.logger.debug("[Method] New Setpoint: {sp}".format(
+                        sp=new_setpoint))
+                return new_setpoint, False
+
+        # Setpoint not needing to be calculated, use default setpoint
+        return None, False
+
+    def get_plot(self, max_points_x=None):
+        result = []
+        for each_method in self.method_data_all:
+            if each_method.setpoint_end is None:
+                setpoint_end = each_method.setpoint_start
+            else:
+                setpoint_end = each_method.setpoint_end
+
+            start_time = datetime.datetime.strptime(
+                each_method.time_start, '%Y-%m-%d %H:%M:%S')
+            end_time = datetime.datetime.strptime(
+                each_method.time_end, '%Y-%m-%d %H:%M:%S')
+
+            is_dst = time.daylight and time.localtime().tm_isdst > 0
+            utc_offset_ms = (time.altzone if is_dst else time.timezone)
+            result.append(
+                [(int(start_time.strftime("%s")) - utc_offset_ms) * 1000,
+                 each_method.setpoint_start])
+            result.append(
+                [(int(end_time.strftime("%s")) - utc_offset_ms) * 1000,
+                 setpoint_end])
+            result.append(
+                [(int(start_time.strftime("%s")) - utc_offset_ms) * 1000,
+                 None])
+
+        return result
 
 
 class DailyMethod(DateMethod):
