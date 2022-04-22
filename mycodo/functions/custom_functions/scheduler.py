@@ -52,7 +52,7 @@ weeks_option = []
 for wk in range(1,SCHEDULE_WEEKS+1):
     week_ = {
         'id': 'week_{}'.format(wk),
-        'type': 'integer',
+        'type': 'float',
         'default_value': 0,
         'required': True,
         'constraints_pass': constraints_pass_positive_or_zero_value,
