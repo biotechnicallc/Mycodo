@@ -1,8 +1,8 @@
 # Mycodo files
 site/
-env/
+#env/
 /databases/flask_secret_key
-*.db
+#*.db
 *.pem
 *.bak
 .upgrade
