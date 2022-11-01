@@ -1,6 +1,7 @@
 # coding=utf-8
 """ collection of Page endpoints """
 import calendar
+import datetime as dt
 from datetime import datetime
 import glob
 import logging
@@ -54,6 +55,7 @@ from mycodo.config import USAGE_REPORTS_PATH
 from mycodo.config import SQL_DATABASE_MYCODO
 from mycodo.config import RECIPES_PATH
 from mycodo.config import RECIPES_ICONS
+from mycodo.config import SCHEDULE_WEEKS
 from mycodo.config import TEMP_PATH
 from mycodo.config import PATH_FUNCTIONS_CUSTOM
 from mycodo.config_devices_units import MEASUREMENTS
@@ -77,6 +79,8 @@ from mycodo.databases.models import OutputChannel
 from mycodo.databases.models import PID
 from mycodo.databases.models import Unit
 from mycodo.databases.models import Widget
+from mycodo.databases.models import Method
+from mycodo.databases.models import MethodData
 from mycodo.databases.models import Recipes
 from mycodo.databases.models import Saved_Input
 from mycodo.databases.models import Saved_Output
@@ -120,6 +124,14 @@ from mycodo.utils.system_pi import return_measurement_info
 from mycodo.utils.tools import calc_energy_usage
 from mycodo.utils.tools import return_energy_usage
 from mycodo.utils.tools import return_output_usage
+from mycodo.databases.models import DisplayOrder
+from mycodo.mycodo_flask.extensions import db
+from mycodo.mycodo_flask.utils.utils_general import add_display_order
+from mycodo.mycodo_flask.utils.utils_general import delete_entry_with_id
+from mycodo.mycodo_flask.utils.utils_general import flash_success_errors
+from mycodo.mycodo_flask.utils.utils_general import return_dependencies
+from mycodo.utils.system_pi import csv_to_list_of_str
+from mycodo.utils.system_pi import list_to_csv
 
 logger = logging.getLogger('mycodo.mycodo_flask.routes_recipe')
 
@@ -564,8 +576,10 @@ def allowed_image(filename):
 
 @blueprint.route('/toggleactive_recipe', methods=['POST','GET'])
 def toggleactive_recipe():
-    recipe_id = request.args.get('recipe_id')
-    action = request.args.get('action')
+    recipe_id = request.json['recipe_id']
+    action = request.json['action']
+
+    logger.info("Activating Recipe id : {}  action : {}".format(recipe_id,action))
 
     recipes = Recipes.query.all()
     inputs = Saved_Input.query.all()
@@ -586,9 +600,6 @@ def toggleactive_recipe():
 
     enabled = False
     if(action == "Activate"):
-        db.session.query(Recipes).filter(Recipes.enabled == 0).\
-        update({"enabled": False})
-        db.session.commit()
         enabled = True
     else:
         enabled = False
@@ -596,9 +607,98 @@ def toggleactive_recipe():
     db.session.query(Recipes).filter(Recipes.recipe_id == recipe_id).\
     update({"enabled":enabled})
     db.session.commit()
-    
+
+    controllers = CustomController.query.filter().all()
+    for _function in controllers:
+        db.session.query(CustomController).filter(CustomController.unique_id == _function.unique_id).\
+        update({"is_activated":enabled})
+        db.session.commit()
        
     return render_template('pages/saved_recipes.html',recipes = recipes,inputs = inputs,outputs = outputs,functions = functions,schedules = scheduler,weeks = weeks,data = data)
+
+def update_weekly_methods(start_date,end_date):
+    try:
+        #current_recipe = Recipes.query.filter(Recipes.current == True).first()
+        weekly_methods = Method.query.filter(Method.method_type == 'Weekly').all()
+        _end = None
+        week_dates = {}
+        
+        weeks = (end_date - start_date).days//7
+        for week in range(weeks):
+            _start = start_date + dt.timedelta(days=7*week, hours=0)
+            _end = _start + dt.timedelta(days=7, hours=0)
+            week_dates[week] = {"start" : _start,"end" : _end}
+           
+        other_days = (end_date - _end).days
+        if other_days > 0:
+            _start = _end
+            _end = end_date
+            week_dates[weeks + 1] = {"start" : _start,"end" : _end}
+
+        for _method in weekly_methods:
+            method_data = MethodData.query.filter(MethodData.method_id == _method.unique_id).all()
+            id = 0
+            for _method_data in method_data:
+                if id in week_dates.keys():
+                    _method_data.time_start =  week_dates[id]["start"]
+                    _method_data.time_end = week_dates[id]["end"]
+                    db.session.commit()
+
+                else:
+                    delete_entry_with_id(
+                        MethodData,_method_data.unique_id)
+                    method_order = Method.query.filter(
+                        Method.unique_id == _method.unique_id).first()
+                    display_order = csv_to_list_of_str(method_order.method_order)
+                    display_order.remove(_method_data.unique_id)
+                    method_order.method_order = list_to_csv(display_order)
+                    db.session.commit()
+                    
+                id += 1
+            
+            if(len(week_dates) > id):
+                for _id in range(id,len(week_dates)):
+                    new_method_data = MethodData()
+                    new_method_data.method_id = _method.unique_id
+                    new_method_data.time_start = week_dates[_id]["start"]
+                    new_method_data.time_end = week_dates[_id]["end"]
+                    new_method_data.setpoint_start = 10
+                    new_method_data.setpoint_end = 10
+                    
+                    db.session.add(new_method_data)
+                    db.session.commit()
+
+                    display_order = csv_to_list_of_str(_method.method_order)
+                    method = Method.query.filter(
+                        Method.unique_id == _method.unique_id).first()
+                    method.method_order = add_display_order(
+                        display_order, new_method_data.unique_id)
+                    db.session.commit()
+        return True
+
+    except Exception as except_msg:
+        logger.info(except_msg)
+        return False
+
+def update_scheduler():
+    try:
+        scheduler = CustomController.query.filter(CustomController.device == 'Scheduler').all()
+        logger.info("Updating Scheduler")
+        _spraydata = {}
+        for wk in range(1,SCHEDULE_WEEKS+1):
+            week_spray = {"week_{}".format(wk) : False}
+            _spraydata.update(week_spray)
+      
+        for schedule in scheduler:
+            _custom = json.loads(schedule.custom_options)
+            _custom["sprayed"] = _spraydata
+
+            db.session.query(CustomController).filter(CustomController.unique_id == schedule.unique_id).\
+            update({"custom_options":json.dumps(_custom)})
+            db.session.commit()
+
+    except Exception as ex:
+        logger.info("Error resetting schedule sprayed {}".format(ex))
 
 
 @blueprint.route('/change_settings', methods=['POST','GET'])
@@ -610,7 +710,7 @@ def change_settings():
 
     current_recipe = Recipes.query.filter(Recipes.recipe_id == recipe_id).first()
     recipe_icon = current_recipe.icon
-
+    
     recipes = Recipes.query.all()
     inputs = Saved_Input.query.all()
     outputs = Saved_Output.query.all()
@@ -666,22 +766,32 @@ def change_settings():
                 db.session.commit()
             except:
                 flash('Wrong date format')
-        if start_date:
-            try:
-                _start_date = datetime.strptime(start_date, '%Y-%m-%d %H:%M:%S')
-                db.session.query(Recipes).filter(Recipes.recipe_id == recipe_id).\
-                update({"start_date":_start_date})
-                db.session.commit()
-            except:
-                flash('Wrong date format')
-        if end_date:
-            try:
-                _end_date = datetime.strptime(end_date, '%Y-%m-%d %H:%M:%S')
-                db.session.query(Recipes).filter(Recipes.recipe_id == recipe_id).\
-                update({"end_date":_end_date})
-                db.session.commit()
-            except:
-                flash('Wrong date format')
+        if(start_date or end_date):
+            if start_date:
+                try:
+                    _start_date = datetime.strptime(start_date, '%Y-%m-%d %H:%M:%S')
+                    db.session.query(Recipes).filter(Recipes.recipe_id == recipe_id).\
+                    update({"start_date":_start_date})
+                    db.session.commit()
+                
+                except:
+                    flash('Wrong date format')
+            if end_date:
+                try:
+                    _end_date = datetime.strptime(end_date, '%Y-%m-%d %H:%M:%S')
+                    db.session.query(Recipes).filter(Recipes.recipe_id == recipe_id).\
+                    update({"end_date":_end_date})
+                    db.session.commit()
+                except:
+                    flash('Wrong date format')
 
-
+            current_recipe = Recipes.query.filter(Recipes.recipe_id == recipe_id).first()
+            response = update_weekly_methods(current_recipe.start_date,current_recipe.end_date)
+            update_scheduler()
+           
     return render_template('pages/saved_recipes.html',recipes = recipes,inputs = inputs,outputs = outputs,functions = functions,schedules = scheduler,weeks = weeks,data = data)
+
+@blueprint.route('/activate_recipe', methods=['POST','GET'])
+def activate_recipe():
+    recipe_id = request.form.get('recipe_id')
+    recipe_activate = request.form.get('recipe_activate')

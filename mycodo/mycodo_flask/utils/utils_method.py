@@ -235,7 +235,6 @@ def method_create(form_create_method):
     if dep_unmet:
         return 1
 
-
 def method_add(form_add_method):
     """ Add line to method_data table """
     action = '{action} {controller}'.format(
