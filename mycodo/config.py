@@ -1009,7 +1009,7 @@ SCHEDULE_WEEKS = 15
 # Check for upgrade every 2 days (if enabled)
 UPGRADE_CHECK_INTERVAL = 172800
 
-RELEASE_URL = 'https://api.github.com/repos/kizniche/Mycodo/tags'
+RELEASE_URL = 'https://api.github.com/repos/biotechnicallc/Mycodo/tags'
 
 
 class ProdConfig(object):

@@ -24,7 +24,7 @@ if python "${CURRENT_MYCODO_DIRECTORY}"/mycodo/scripts/upgrade_check.py --mainte
     printf "Note: You will need to delete the ~/Mycodo directory that was just downloaded and re-run the install command:\n"
     printf "cd ~\n"
     printf "rm -rf ~/Mycodo\n"
-    printf "curl -L https://raw.githubusercontent.com/kizniche/Mycodo/master/install/install | bash\n"
+    printf "curl -L https://raw.githubusercontent.com/biotechnicallc/Mycodo/main/install/install | bash\n"
     exit 1
   fi
 fi
