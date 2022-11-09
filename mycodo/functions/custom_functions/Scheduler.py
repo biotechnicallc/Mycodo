@@ -144,15 +144,28 @@ class CustomModule(AbstractFunction):
             self.update_period,
             ))
         try:
-            self.passed_days = (self.current_datetime - self.start_datetime).days
-            self.current_week = (self.passed_days//7)+1
-            self.current_amount = eval("self.week_"+str(self.current_week))
+            if(self.current_datetime >= self.start_datetime):
+                self.passed_days = (self.current_datetime - self.start_datetime).days
+                self.current_week = (self.passed_days//7)+1
+                self.current_amount = eval("self.week_"+str(self.current_week))
 
-            self.logger.info("Days passed : {} , Current Week : {} ,"
-            "Amount : {} ,Sprayed : {}".format(
-                self.passed_days,self.current_week,
-                self.current_amount*self.reservoir_size,
-                self._spraydata["week_{}".format(self.current_week)]))
+                self.logger.info("Days passed : {} , Current Week : {} ,"
+                "Amount : {} ,Sprayed : {}".format(
+                    self.passed_days,self.current_week,
+                    self.current_amount*self.reservoir_size,
+                    self._spraydata["week_{}".format(self.current_week)]))
+            else:
+                self.remaining_seconds = (self.start_datetime - self.current_datetime).total_seconds()
+                days = int(self.remaining_seconds // (24 * 3600))
+                self.remaining_seconds = self.remaining_seconds % (24 * 3600)
+                hours = int(self.remaining_seconds // 3600)
+                self.remaining_seconds %= 3600
+                minutes = int(self.remaining_seconds // 60)
+                self.remaining_seconds %= 60
+                seconds = int(self.remaining_seconds)
+
+                self.logger.info("Starting in : {} days {} hours {} minutes {} Seconds"
+                .format(days,hours,minutes,seconds))
 
         except Exception as ex:
              self.logger.info(str(ex))
