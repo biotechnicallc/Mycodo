@@ -5520,4 +5520,561 @@ If you experience issues, review the full install log is located at:
 Go to https://192.168.8.171/, or whatever your Raspberry Pi's
 IP address is, to create an admin user and log in.
 ### Mycodo installation initiated Sun 24 Apr 22:26:38 BST 2022
-Mycodo install canceled by user
+Mycodo install canceled by user### Mycodo installation initiated Thu 12 Jan 12:13:54 GMT 2023
+#### Mycodo installation began Thu 12 Jan 12:13:56 GMT 2023
+
+#### Checking if swap size is 100 MB and needs to be changed to 512 MB
+#### Swap not currently set to 100 MB. Not changing.
+
+#### Updating apt repositories
+Hit:1 http://archive.raspberrypi.org/debian buster InRelease
+Hit:2 http://raspbian.raspberrypi.org/raspbian buster InRelease
+Reading package lists...
+
+#### Uninstalling apt version of pip (if installed)
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Package 'python-pip' is not installed, so not removed
+The following packages were automatically installed and are no longer required:
+  libjs-sphinxdoc libjs-underscore libpython-all-dev python-all python-all-dev
+  python-colorzero python-configparser python-dbus python-entrypoints
+  python-keyring python-keyrings.alt python-secretstorage python-wheel
+  python-xdg
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+
+#### Installing prerequisite apt packages and update pip
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Package 'apache2' is not installed, so not removed
+The following packages were automatically installed and are no longer required:
+  libjs-sphinxdoc libjs-underscore libpython-all-dev python-all python-all-dev
+  python-asn1crypto python-colorzero python-configparser python-cookies
+  python-crypto python-dbus python-entrypoints python-enum34 python-funcsigs
+  python-jwt python-keyrings.alt python-mock python-pbr python-responses
+  python-wheel python-xdg python3-asn1crypto python3-cookies
+  python3-entrypoints python3-jwt python3-responses
+Use 'sudo apt autoremove' to remove them.
+The following packages will be REMOVED:
+  python-cffi-backend python-cryptography python-keyring python-oauthlib
+  python-openssl python-requests-oauthlib python-secretstorage python-twython
+  python3-cffi-backend python3-cryptography python3-keyring python3-oauthlib
+  python3-openssl python3-requests-oauthlib python3-secretstorage
+  python3-twython
+0 upgraded, 0 newly installed, 16 to remove and 0 not upgraded.
+After this operation, 5,156 kB disk space will be freed.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 99302 files and directories currently installed.)
+Removing python-keyring (17.1.1-1) ...
+Removing python-secretstorage (2.3.1-2) ...
+Removing python-openssl (19.0.0-1) ...
+Removing python-twython (3.7.0-1) ...
+Removing python-requests-oauthlib (1.0.0-0.1) ...
+Removing python-oauthlib (2.1.0-1) ...
+Removing python3-keyring (17.1.1-1) ...
+Removing python3-secretstorage (2.3.1-2) ...
+Removing python3-openssl (19.0.0-1) ...
+Removing python3-twython (3.7.0-1) ...
+Removing python3-requests-oauthlib (1.0.0-0.1) ...
+Removing python3-oauthlib (2.1.0-1) ...
+Removing python-cryptography (2.6.1-3+deb10u2) ...
+Removing python-cffi-backend (1.12.2-1) ...
+Removing python3-cryptography (2.6.1-3+deb10u2) ...
+Removing python3-cffi-backend (1.12.2-1) ...
+Processing triggers for man-db (2.8.5-2) ...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+g++ is already the newest version (4:8.3.0-1+rpi2).
+gawk is already the newest version (1:4.2.1+dfsg-1).
+gcc is already the newest version (4:8.3.0-1+rpi2).
+git is already the newest version (1:2.20.1-2+deb10u6).
+libffi-dev is already the newest version (3.2.1-9).
+libi2c-dev is already the newest version (4.1-1).
+logrotate is already the newest version (3.14.0-4).
+moreutils is already the newest version (0.62-1+b1).
+nginx is already the newest version (1.14.2-2+deb10u5).
+python3 is already the newest version (3.7.3-1).
+python3-dev is already the newest version (3.7.3-1).
+python3-setuptools is already the newest version (40.8.0-1).
+python3-smbus is already the newest version (4.1-1).
+rng-tools is already the newest version (2-unofficial-mt.14-1).
+sqlite3 is already the newest version (3.27.2-3+deb10u2).
+wget is already the newest version (1.20.1-1.1).
+The following packages were automatically installed and are no longer required:
+  libjs-sphinxdoc libjs-underscore libpython-all-dev python-all python-all-dev
+  python-asn1crypto python-colorzero python-configparser python-cookies
+  python-crypto python-dbus python-entrypoints python-enum34 python-funcsigs
+  python-jwt python-keyrings.alt python-mock python-pbr python-responses
+  python-wheel python-xdg python3-asn1crypto python3-cookies
+  python3-entrypoints python3-jwt python3-responses
+Use 'sudo apt autoremove' to remove them.
+The following additional packages will be installed:
+  python3-pylint-plugin-utils
+The following NEW packages will be installed:
+  python3-pylint-common python3-pylint-plugin-utils
+0 upgraded, 2 newly installed, 0 to remove and 0 not upgraded.
+Need to get 10.2 kB of archives.
+After this operation, 50.2 kB of additional disk space will be used.
+Get:1 http://mirror.liquidtelecom.com/raspbian/raspbian buster/main armhf python3-pylint-plugin-utils all 0.4-1 [5,640 B]
+Get:2 http://mirror.liquidtelecom.com/raspbian/raspbian buster/main armhf python3-pylint-common all 0.2.5-2 [4,576 B]
+Fetched 10.2 kB in 1s (7,771 B/s)
+Selecting previously unselected package python3-pylint-plugin-utils.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 98686 files and directories currently installed.)
+Preparing to unpack .../python3-pylint-plugin-utils_0.4-1_all.deb ...
+Unpacking python3-pylint-plugin-utils (0.4-1) ...
+Selecting previously unselected package python3-pylint-common.
+Preparing to unpack .../python3-pylint-common_0.2.5-2_all.deb ...
+Unpacking python3-pylint-common (0.2.5-2) ...
+Setting up python3-pylint-plugin-utils (0.4-1) ...
+Setting up python3-pylint-common (0.2.5-2) ...
+Searching for pip
+Best match: pip 22.3.1
+Adding pip 22.3.1 to easy-install.pth file
+Installing pip script to /usr/local/bin
+Installing pip3 script to /usr/local/bin
+Installing pip3.10 script to /usr/local/bin
+
+Using /usr/local/lib/python3.7/dist-packages
+Processing dependencies for pip
+Finished processing dependencies for pip
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Requirement already satisfied: pip in /usr/local/lib/python3.7/dist-packages (22.3.1)
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+
+#### Checking python 3 virtualenv
+#### Virtualenv doesn't exist. Creating...
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Collecting virtualenv==20.7.0
+  Downloading https://www.piwheels.org/simple/virtualenv/virtualenv-20.7.0-py2.py3-none-any.whl (5.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.3/5.3 MB 1.2 MB/s eta 0:00:00
+Collecting backports.entry-points-selectable>=1.0.4
+  Downloading https://www.piwheels.org/simple/backports-entry-points-selectable/backports.entry_points_selectable-1.2.0-py3-none-any.whl (6.2 kB)
+Requirement already satisfied: importlib-metadata>=0.12 in /usr/local/lib/python3.7/dist-packages (from virtualenv==20.7.0) (6.0.0)
+Requirement already satisfied: distlib<1,>=0.3.1 in /usr/local/lib/python3.7/dist-packages (from virtualenv==20.7.0) (0.3.6)
+Requirement already satisfied: platformdirs<3,>=2 in /usr/local/lib/python3.7/dist-packages (from virtualenv==20.7.0) (2.6.2)
+Requirement already satisfied: filelock<4,>=3.0.0 in /usr/local/lib/python3.7/dist-packages (from virtualenv==20.7.0) (3.9.0)
+Requirement already satisfied: six<2,>=1.9.0 in /usr/lib/python3/dist-packages (from virtualenv==20.7.0) (1.12.0)
+Requirement already satisfied: typing-extensions>=3.6.4 in /usr/local/lib/python3.7/dist-packages (from importlib-metadata>=0.12->virtualenv==20.7.0) (4.4.0)
+Requirement already satisfied: zipp>=0.5 in /usr/local/lib/python3.7/dist-packages (from importlib-metadata>=0.12->virtualenv==20.7.0) (3.11.0)
+Installing collected packages: backports.entry-points-selectable, virtualenv
+  Attempting uninstall: virtualenv
+    Found existing installation: virtualenv 20.14.1
+    Uninstalling virtualenv-20.14.1:
+      Successfully uninstalled virtualenv-20.14.1
+Successfully installed backports.entry-points-selectable-1.2.0 virtualenv-20.7.0
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+created virtual environment CPython3.7.3.final.0-32 in 1523ms
+  creator CPython3Posix(dest=/home/pi/Mycodo/env, clear=False, no_vcs_ignore=False, global=True)
+  seeder FromAppData(download=False, pip=bundle, setuptools=bundle, wheel=bundle, via=copy, app_data_dir=/root/.local/share/virtualenv)
+    added seed packages: pip==21.2.2, setuptools==57.4.0, wheel==0.36.2
+  activators BashActivator,CShellActivator,FishActivator,PowerShellActivator,PythonActivator
+
+#### Updating pip
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Requirement already satisfied: pip in ./env/lib/python3.7/site-packages (21.2.2)
+Collecting pip
+  Using cached pip-22.3.1-py3-none-any.whl (2.1 MB)
+Installing collected packages: pip
+  Attempting uninstall: pip
+    Found existing installation: pip 21.2.2
+    Uninstalling pip-21.2.2:
+      Successfully uninstalled pip-21.2.2
+Successfully installed pip-22.3.1
+
+#### Installing pip requirements
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Requirement already satisfied: pip in ./env/lib/python3.7/site-packages (22.3.1)
+Requirement already satisfied: setuptools in ./env/lib/python3.7/site-packages (57.4.0)
+Collecting setuptools
+  Using cached https://www.piwheels.org/simple/setuptools/setuptools-65.7.0-py3-none-any.whl (1.2 MB)
+Installing collected packages: setuptools
+  Attempting uninstall: setuptools
+    Found existing installation: setuptools 57.4.0
+    Uninstalling setuptools-57.4.0:
+      Successfully uninstalled setuptools-57.4.0
+Successfully installed setuptools-65.7.0
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Collecting alembic==1.5.8
+  Downloading https://www.piwheels.org/simple/alembic/alembic-1.5.8-py2.py3-none-any.whl (159 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 159.6/159.6 kB 379.2 kB/s eta 0:00:00
+Collecting argparse==1.4.0
+  Using cached https://www.piwheels.org/simple/argparse/argparse-1.4.0-py2.py3-none-any.whl (23 kB)
+Collecting bcrypt==3.2.0
+  Using cached https://www.piwheels.org/simple/bcrypt/bcrypt-3.2.0-cp37-cp37m-linux_armv7l.whl (57 kB)
+Collecting daemonize==2.5.0
+  Using cached https://www.piwheels.org/simple/daemonize/daemonize-2.5.0-py2.py3-none-any.whl (5.2 kB)
+Collecting distro==1.5.0
+  Downloading https://www.piwheels.org/simple/distro/distro-1.5.0-py2.py3-none-any.whl (18 kB)
+Collecting email_validator==1.1.2
+  Downloading https://www.piwheels.org/simple/email-validator/email_validator-1.1.2-py2.py3-none-any.whl (17 kB)
+Collecting filelock==3.0.12
+  Downloading https://www.piwheels.org/simple/filelock/filelock-3.0.12-py3-none-any.whl (7.6 kB)
+Collecting Flask==1.1.2
+  Downloading https://www.piwheels.org/simple/flask/Flask-1.1.2-py2.py3-none-any.whl (94 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 94.6/94.6 kB 184.9 kB/s eta 0:00:00
+Collecting Flask_Accept==0.0.6
+  Using cached https://www.piwheels.org/simple/flask-accept/flask_accept-0.0.6-py3-none-any.whl (3.8 kB)
+Collecting Flask_Babel==2.0.0
+  Using cached https://www.piwheels.org/simple/flask-babel/Flask_Babel-2.0.0-py3-none-any.whl (9.3 kB)
+Collecting Flask_Compress==1.9.0
+  Downloading https://www.piwheels.org/simple/flask-compress/Flask_Compress-1.9.0-py3-none-any.whl (9.6 kB)
+Collecting Flask_Limiter==1.4
+  Downloading https://www.piwheels.org/simple/flask-limiter/Flask_Limiter-1.4-py3-none-any.whl (15 kB)
+Collecting Flask_Login==0.5.0
+  Downloading https://www.piwheels.org/simple/flask-login/Flask_Login-0.5.0-py2.py3-none-any.whl (16 kB)
+Collecting Flask_Marshmallow==0.14.0
+  Using cached https://www.piwheels.org/simple/flask-marshmallow/flask_marshmallow-0.14.0-py2.py3-none-any.whl (10 kB)
+Collecting Flask_RESTX==0.3.0
+  Downloading https://www.piwheels.org/simple/flask-restx/flask_restx-0.3.0-py2.py3-none-any.whl (5.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.3/5.3 MB 376.7 kB/s eta 0:00:00
+Requirement already satisfied: Flask_Session==0.4.0 in /usr/local/lib/python3.7/dist-packages (from -r /home/pi/Mycodo/install/requirements.txt (line 18)) (0.4.0)
+Collecting Flask_SQLAlchemy==2.5.1
+  Using cached https://www.piwheels.org/simple/flask-sqlalchemy/Flask_SQLAlchemy-2.5.1-py2.py3-none-any.whl (17 kB)
+Collecting Flask_Talisman==0.7.0
+  Downloading https://www.piwheels.org/simple/flask-talisman/flask_talisman-0.7.0-py2.py3-none-any.whl (12 kB)
+Collecting Flask_WTF==0.14.3
+  Downloading https://www.piwheels.org/simple/flask-wtf/Flask_WTF-0.14.3-py2.py3-none-any.whl (13 kB)
+Collecting geocoder==1.38.1
+  Using cached https://www.piwheels.org/simple/geocoder/geocoder-1.38.1-py2.py3-none-any.whl (98 kB)
+Collecting gunicorn==20.1.0
+  Using cached https://www.piwheels.org/simple/gunicorn/gunicorn-20.1.0-py3-none-any.whl (81 kB)
+Collecting influxdb==5.3.1
+  Using cached https://www.piwheels.org/simple/influxdb/influxdb-5.3.1-py2.py3-none-any.whl (77 kB)
+Collecting itsdangerous==2.0.1
+  Downloading https://www.piwheels.org/simple/itsdangerous/itsdangerous-2.0.1-py3-none-any.whl (18 kB)
+Collecting Jinja2==3.0.3
+  Downloading https://www.piwheels.org/simple/jinja2/Jinja2-3.0.3-py3-none-any.whl (133 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 133.6/133.6 kB 327.1 kB/s eta 0:00:00
+Collecting marshmallow_sqlalchemy==0.24.2
+  Downloading https://www.piwheels.org/simple/marshmallow-sqlalchemy/marshmallow_sqlalchemy-0.24.2-py2.py3-none-any.whl (18 kB)
+Collecting pyro5==5.12
+  Downloading https://www.piwheels.org/simple/pyro5/Pyro5-5.12-py3-none-any.whl (77 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 77.8/77.8 kB 301.5 kB/s eta 0:00:00
+Collecting pyserial==3.5
+  Using cached https://www.piwheels.org/simple/pyserial/pyserial-3.5-py2.py3-none-any.whl (90 kB)
+Collecting python-dateutil==2.8.1
+  Downloading https://www.piwheels.org/simple/python-dateutil/python_dateutil-2.8.1-py2.py3-none-any.whl (227 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 227.2/227.2 kB 740.9 kB/s eta 0:00:00
+Collecting requests==2.25.1
+  Downloading https://www.piwheels.org/simple/requests/requests-2.25.1-py2.py3-none-any.whl (61 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 61.2/61.2 kB 1.4 MB/s eta 0:00:00
+Collecting setuptools==56.0.0
+  Downloading https://www.piwheels.org/simple/setuptools/setuptools-56.0.0-py3-none-any.whl (784 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 784.9/784.9 kB 462.9 kB/s eta 0:00:00
+Collecting SQLAlchemy==1.4.7
+  Downloading https://www.piwheels.org/simple/sqlalchemy/SQLAlchemy-1.4.7-cp37-cp37m-linux_armv7l.whl (1.5 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.5/1.5 MB 812.5 kB/s eta 0:00:00
+Collecting typing-extensions==4.3.0
+  Downloading https://www.piwheels.org/simple/typing-extensions/typing_extensions-4.3.0-py3-none-any.whl (25 kB)
+Collecting Werkzeug==2.0.2
+  Downloading https://www.piwheels.org/simple/werkzeug/Werkzeug-2.0.2-py3-none-any.whl (288 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 288.9/288.9 kB 1.1 MB/s eta 0:00:00
+Collecting WTForms==2.3.3
+  Downloading https://www.piwheels.org/simple/wtforms/WTForms-2.3.3-py2.py3-none-any.whl (169 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 169.1/169.1 kB 2.0 MB/s eta 0:00:00
+Collecting python-editor>=0.3
+  Downloading https://www.piwheels.org/simple/python-editor/python_editor-1.0.4-py3-none-any.whl (4.9 kB)
+Collecting Mako
+  Using cached https://www.piwheels.org/simple/mako/Mako-1.2.4-py3-none-any.whl (78 kB)
+Requirement already satisfied: six>=1.4.1 in /usr/lib/python3/dist-packages (from bcrypt==3.2.0->-r /home/pi/Mycodo/install/requirements.txt (line 4)) (1.12.0)
+Collecting cffi>=1.1
+  Using cached https://www.piwheels.org/simple/cffi/cffi-1.15.1-cp37-cp37m-linux_armv7l.whl (219 kB)
+Requirement already satisfied: idna>=2.0.0 in /usr/lib/python3/dist-packages (from email_validator==1.1.2->-r /home/pi/Mycodo/install/requirements.txt (line 7)) (2.6)
+Collecting dnspython>=1.15.0
+  Using cached https://www.piwheels.org/simple/dnspython/dnspython-2.2.1-py3-none-any.whl (269 kB)
+Requirement already satisfied: click>=5.1 in /usr/lib/python3/dist-packages (from Flask==1.1.2->-r /home/pi/Mycodo/install/requirements.txt (line 9)) (7.0)
+Collecting pytz
+  Using cached https://www.piwheels.org/simple/pytz/pytz-2022.7-py3-none-any.whl (499 kB)
+Collecting Babel>=2.3
+  Using cached https://www.piwheels.org/simple/babel/Babel-2.11.0-py3-none-any.whl (9.5 MB)
+Collecting brotli
+  Using cached https://www.piwheels.org/simple/brotli/Brotli-1.0.9-cp37-cp37m-linux_armv7l.whl (2.5 MB)
+Collecting limits
+  Using cached https://www.piwheels.org/simple/limits/limits-3.1.4-py3-none-any.whl (43 kB)
+Collecting marshmallow>=2.0.0
+  Using cached marshmallow-3.19.0-py3-none-any.whl (49 kB)
+Collecting jsonschema
+  Using cached https://www.piwheels.org/simple/jsonschema/jsonschema-4.17.3-py3-none-any.whl (90 kB)
+Collecting aniso8601>=0.82
+  Using cached https://www.piwheels.org/simple/aniso8601/aniso8601-9.0.1-py2.py3-none-any.whl (52 kB)
+Requirement already satisfied: cachelib in /usr/local/lib/python3.7/dist-packages (from Flask_Session==0.4.0->-r /home/pi/Mycodo/install/requirements.txt (line 18)) (0.10.0)
+Collecting ratelim
+  Using cached https://www.piwheels.org/simple/ratelim/ratelim-0.1.6-py2.py3-none-any.whl (4.0 kB)
+Collecting future
+  Using cached https://www.piwheels.org/simple/future/future-0.18.2-py3-none-any.whl (491 kB)
+Collecting msgpack
+  Using cached https://www.piwheels.org/simple/msgpack/msgpack-1.0.4-cp37-cp37m-linux_armv7l.whl (126 kB)
+Collecting MarkupSafe>=2.0
+  Using cached https://www.piwheels.org/simple/markupsafe/MarkupSafe-2.1.1-cp37-cp37m-linux_armv7l.whl (26 kB)
+Collecting serpent>=1.27
+  Using cached https://www.piwheels.org/simple/serpent/serpent-1.41-py3-none-any.whl (12 kB)
+Requirement already satisfied: certifi>=2017.4.17 in /usr/lib/python3/dist-packages (from requests==2.25.1->-r /home/pi/Mycodo/install/requirements.txt (line 31)) (2018.8.24)
+Requirement already satisfied: urllib3<1.27,>=1.21.1 in /usr/lib/python3/dist-packages (from requests==2.25.1->-r /home/pi/Mycodo/install/requirements.txt (line 31)) (1.24.1)
+Requirement already satisfied: chardet<5,>=3.0.2 in /usr/lib/python3/dist-packages (from requests==2.25.1->-r /home/pi/Mycodo/install/requirements.txt (line 31)) (3.0.4)
+Requirement already satisfied: importlib-metadata in /usr/local/lib/python3.7/dist-packages (from SQLAlchemy==1.4.7->-r /home/pi/Mycodo/install/requirements.txt (line 33)) (6.0.0)
+Collecting greenlet!=0.4.17
+  Downloading https://www.piwheels.org/simple/greenlet/greenlet-2.0.1-cp37-cp37m-linux_armv7l.whl (318 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 318.7/318.7 kB 305.1 kB/s eta 0:00:00
+Collecting pycparser
+  Using cached https://www.piwheels.org/simple/pycparser/pycparser-2.21-py2.py3-none-any.whl (119 kB)
+Collecting packaging>=17.0
+  Downloading https://www.piwheels.org/simple/packaging/packaging-23.0-py3-none-any.whl (42 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 42.7/42.7 kB 1.1 MB/s eta 0:00:00
+Requirement already satisfied: zipp>=0.5 in /usr/local/lib/python3.7/dist-packages (from importlib-metadata->SQLAlchemy==1.4.7->-r /home/pi/Mycodo/install/requirements.txt (line 33)) (3.11.0)
+Collecting pyrsistent!=0.17.0,!=0.17.1,!=0.17.2,>=0.14.0
+  Using cached https://www.piwheels.org/simple/pyrsistent/pyrsistent-0.19.3-cp37-cp37m-linux_armv7l.whl (83 kB)
+Collecting importlib-resources>=1.4.0
+  Using cached https://www.piwheels.org/simple/importlib-resources/importlib_resources-5.10.2-py3-none-any.whl (34 kB)
+Collecting pkgutil-resolve-name>=1.3.10
+  Using cached https://www.piwheels.org/simple/pkgutil-resolve-name/pkgutil_resolve_name-1.3.10-py3-none-any.whl (4.7 kB)
+Collecting attrs>=17.4.0
+  Using cached https://www.piwheels.org/simple/attrs/attrs-22.2.0-py3-none-any.whl (60 kB)
+Collecting deprecated>=1.2
+  Using cached https://www.piwheels.org/simple/deprecated/Deprecated-1.2.13-py2.py3-none-any.whl (9.5 kB)
+Collecting packaging>=17.0
+  Using cached https://www.piwheels.org/simple/packaging/packaging-22.0-py3-none-any.whl (42 kB)
+Collecting decorator
+  Using cached https://www.piwheels.org/simple/decorator/decorator-5.1.1-py3-none-any.whl (10 kB)
+Requirement already satisfied: wrapt<2,>=1.10 in /usr/lib/python3/dist-packages (from deprecated>=1.2->limits->Flask_Limiter==1.4->-r /home/pi/Mycodo/install/requirements.txt (line 13)) (1.10.11)
+Installing collected packages: pytz, python-editor, pyserial, msgpack, filelock, distro, daemonize, brotli, argparse, aniso8601, Werkzeug, typing-extensions, setuptools, serpent, requests, python-dateutil, pyrsistent, pycparser, pkgutil-resolve-name, packaging, MarkupSafe, itsdangerous, importlib-resources, greenlet, future, Flask_Talisman, dnspython, deprecated, decorator, Babel, attrs, WTForms, ratelim, pyro5, marshmallow, limits, Jinja2, influxdb, gunicorn, email_validator, cffi, SQLAlchemy, Mako, jsonschema, geocoder, Flask, bcrypt, marshmallow_sqlalchemy, Flask_WTF, Flask_SQLAlchemy, Flask_RESTX, Flask_Marshmallow, Flask_Login, Flask_Limiter, Flask_Compress, Flask_Babel, Flask_Accept, alembic
+  Attempting uninstall: pyserial
+    Found existing installation: pyserial 3.4
+    Not uninstalling pyserial at /usr/lib/python3/dist-packages, outside environment /home/pi/Mycodo/env
+    Can't uninstall 'pyserial'. No files were found to uninstall.
+  Attempting uninstall: filelock
+    Found existing installation: filelock 3.9.0
+    Not uninstalling filelock at /usr/local/lib/python3.7/dist-packages, outside environment /home/pi/Mycodo/env
+    Can't uninstall 'filelock'. No files were found to uninstall.
+  Attempting uninstall: Werkzeug
+    Found existing installation: Werkzeug 0.14.1
+    Not uninstalling werkzeug at /usr/lib/python3/dist-packages, outside environment /home/pi/Mycodo/env
+    Can't uninstall 'Werkzeug'. No files were found to uninstall.
+  Attempting uninstall: typing-extensions
+    Found existing installation: typing_extensions 4.4.0
+    Not uninstalling typing-extensions at /usr/local/lib/python3.7/dist-packages, outside environment /home/pi/Mycodo/env
+    Can't uninstall 'typing_extensions'. No files were found to uninstall.
+  Attempting uninstall: setuptools
+    Found existing installation: setuptools 65.7.0
+    Uninstalling setuptools-65.7.0:
+      Successfully uninstalled setuptools-65.7.0
+  Attempting uninstall: requests
+    Found existing installation: requests 2.21.0
+    Not uninstalling requests at /usr/lib/python3/dist-packages, outside environment /home/pi/Mycodo/env
+    Can't uninstall 'requests'. No files were found to uninstall.
+  Attempting uninstall: MarkupSafe
+    Found existing installation: MarkupSafe 1.1.0
+    Not uninstalling markupsafe at /usr/lib/python3/dist-packages, outside environment /home/pi/Mycodo/env
+    Can't uninstall 'MarkupSafe'. No files were found to uninstall.
+  Attempting uninstall: itsdangerous
+    Found existing installation: itsdangerous 0.24
+    Not uninstalling itsdangerous at /usr/lib/python3/dist-packages, outside environment /home/pi/Mycodo/env
+    Can't uninstall 'itsdangerous'. No files were found to uninstall.
+  Attempting uninstall: Jinja2
+    Found existing installation: Jinja2 2.10
+    Not uninstalling jinja2 at /usr/lib/python3/dist-packages, outside environment /home/pi/Mycodo/env
+    Can't uninstall 'Jinja2'. No files were found to uninstall.
+  Attempting uninstall: Flask
+    Found existing installation: Flask 1.0.2
+    Not uninstalling flask at /usr/lib/python3/dist-packages, outside environment /home/pi/Mycodo/env
+    Can't uninstall 'Flask'. No files were found to uninstall.
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+platformdirs 2.6.2 requires typing-extensions>=4.4; python_version < "3.8", but you have typing-extensions 4.3.0 which is incompatible.
+Successfully installed Babel-2.11.0 Flask-1.1.2 Flask_Accept-0.0.6 Flask_Babel-2.0.0 Flask_Compress-1.9.0 Flask_Limiter-1.4 Flask_Login-0.5.0 Flask_Marshmallow-0.14.0 Flask_RESTX-0.3.0 Flask_SQLAlchemy-2.5.1 Flask_Talisman-0.7.0 Flask_WTF-0.14.3 Jinja2-3.0.3 Mako-1.2.4 MarkupSafe-2.1.1 SQLAlchemy-1.4.7 WTForms-2.3.3 Werkzeug-2.0.2 alembic-1.5.8 aniso8601-9.0.1 argparse-1.4.0 attrs-22.2.0 bcrypt-3.2.0 brotli-1.0.9 cffi-1.15.1 daemonize-2.5.0 decorator-5.1.1 deprecated-1.2.13 distro-1.5.0 dnspython-2.2.1 email_validator-1.1.2 filelock-3.0.12 future-0.18.2 geocoder-1.38.1 greenlet-2.0.1 gunicorn-20.1.0 importlib-resources-5.10.2 influxdb-5.3.1 itsdangerous-2.0.1 jsonschema-4.17.3 limits-3.1.4 marshmallow-3.19.0 marshmallow_sqlalchemy-0.24.2 msgpack-1.0.4 packaging-22.0 pkgutil-resolve-name-1.3.10 pycparser-2.21 pyro5-5.12 pyrsistent-0.19.3 pyserial-3.5 python-dateutil-2.8.1 python-editor-1.0.4 pytz-2022.7 ratelim-0.1.6 requests-2.25.1 serpent-1.41 setuptools-56.0.0 typing-extensions-4.3.0
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Collecting pylibftdi==0.19.0
+  Downloading https://www.piwheels.org/simple/pylibftdi/pylibftdi-0.19.0-py2.py3-none-any.whl (32 kB)
+Requirement already satisfied: RPi.GPIO in /usr/lib/python3/dist-packages (from -r /home/pi/Mycodo/install/requirements-rpi.txt (line 3)) (0.7.0)
+Collecting RPi.GPIO
+  Downloading https://www.piwheels.org/simple/rpi-gpio/RPi.GPIO-0.7.1-cp37-cp37m-linux_armv7l.whl (47 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 47.9/47.9 kB 40.3 kB/s eta 0:00:00
+Collecting smbus2==0.4.1
+  Downloading https://www.piwheels.org/simple/smbus2/smbus2-0.4.1-py2.py3-none-any.whl (11 kB)
+Installing collected packages: smbus2, RPi.GPIO, pylibftdi
+  Attempting uninstall: RPi.GPIO
+    Found existing installation: RPi.GPIO 0.7.0
+    Not uninstalling rpi-gpio at /usr/lib/python3/dist-packages, outside environment /home/pi/Mycodo/env
+    Can't uninstall 'RPi.GPIO'. No files were found to uninstall.
+Successfully installed RPi.GPIO-0.7.1 pylibftdi-0.19.0 smbus2-0.4.1
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Collecting testfixtures==6.17.1
+  Downloading https://www.piwheels.org/simple/testfixtures/testfixtures-6.17.1-py2.py3-none-any.whl (95 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 95.0/95.0 kB 186.0 kB/s eta 0:00:00
+Collecting mock==4.0.3
+  Using cached https://www.piwheels.org/simple/mock/mock-4.0.3-py3-none-any.whl (28 kB)
+Collecting pytest==6.2.3
+  Downloading https://www.piwheels.org/simple/pytest/pytest-6.2.3-py3-none-any.whl (280 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 280.5/280.5 kB 411.4 kB/s eta 0:00:00
+Collecting factory_boy==3.2.0
+  Downloading https://www.piwheels.org/simple/factory-boy/factory_boy-3.2.0-py2.py3-none-any.whl (35 kB)
+Collecting webtest==2.0.35
+  Downloading https://www.piwheels.org/simple/webtest/WebTest-2.0.35-py2.py3-none-any.whl (32 kB)
+Collecting pluggy<1.0.0a1,>=0.12
+  Downloading https://www.piwheels.org/simple/pluggy/pluggy-0.13.1-py2.py3-none-any.whl (18 kB)
+Collecting py>=1.8.2
+  Using cached https://www.piwheels.org/simple/py/py-1.11.0-py2.py3-none-any.whl (98 kB)
+Collecting iniconfig
+  Using cached https://www.piwheels.org/simple/iniconfig/iniconfig-2.0.0-py3-none-any.whl (5.9 kB)
+Requirement already satisfied: attrs>=19.2.0 in ./env/lib/python3.7/site-packages (from pytest==6.2.3->-r /home/pi/Mycodo/install/requirements-testing.txt (line 4)) (22.2.0)
+Collecting toml
+  Downloading https://www.piwheels.org/simple/toml/toml-0.10.2-py2.py3-none-any.whl (16 kB)
+Requirement already satisfied: importlib-metadata>=0.12 in /usr/local/lib/python3.7/dist-packages (from pytest==6.2.3->-r /home/pi/Mycodo/install/requirements-testing.txt (line 4)) (6.0.0)
+Requirement already satisfied: packaging in ./env/lib/python3.7/site-packages (from pytest==6.2.3->-r /home/pi/Mycodo/install/requirements-testing.txt (line 4)) (22.0)
+Collecting Faker>=0.7.0
+  Using cached https://www.piwheels.org/simple/faker/Faker-16.3.0-py3-none-any.whl (1.7 MB)
+Requirement already satisfied: beautifulsoup4 in /usr/lib/python3/dist-packages (from webtest==2.0.35->-r /home/pi/Mycodo/install/requirements-testing.txt (line 6)) (4.7.1)
+Collecting WebOb>=1.2
+  Using cached https://www.piwheels.org/simple/webob/WebOb-1.8.7-py2.py3-none-any.whl (114 kB)
+Collecting waitress>=0.8.5
+  Using cached https://www.piwheels.org/simple/waitress/waitress-2.1.2-py3-none-any.whl (57 kB)
+Requirement already satisfied: six in /usr/lib/python3/dist-packages (from webtest==2.0.35->-r /home/pi/Mycodo/install/requirements-testing.txt (line 6)) (1.12.0)
+Requirement already satisfied: python-dateutil>=2.4 in ./env/lib/python3.7/site-packages (from Faker>=0.7.0->factory_boy==3.2.0->-r /home/pi/Mycodo/install/requirements-testing.txt (line 5)) (2.8.1)
+Requirement already satisfied: typing-extensions>=3.10.0.1 in ./env/lib/python3.7/site-packages (from Faker>=0.7.0->factory_boy==3.2.0->-r /home/pi/Mycodo/install/requirements-testing.txt (line 5)) (4.3.0)
+Requirement already satisfied: zipp>=0.5 in /usr/local/lib/python3.7/dist-packages (from importlib-metadata>=0.12->pytest==6.2.3->-r /home/pi/Mycodo/install/requirements-testing.txt (line 4)) (3.11.0)
+Installing collected packages: testfixtures, WebOb, waitress, toml, py, mock, iniconfig, webtest, pluggy, Faker, pytest, factory_boy
+Successfully installed Faker-16.3.0 WebOb-1.8.7 factory_boy-3.2.0 iniconfig-2.0.0 mock-4.0.3 pluggy-0.13.1 py-1.11.0 pytest-6.2.3 testfixtures-6.17.1 toml-0.10.2 waitress-2.1.2 webtest-2.0.35
+--2023-01-12 12:18:00--  https://project-downloads.drogon.net/wiringpi-latest.deb
+Resolving project-downloads.drogon.net (project-downloads.drogon.net)... 188.246.205.22, 2a03:9800:10:7b::2
+Connecting to project-downloads.drogon.net (project-downloads.drogon.net)|188.246.205.22|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 52260 (51K) [application/x-debian-package]
+Saving to: ‘wiringpi-latest.deb’
+
+     0K .......... .......... .......... .......... .......... 97%  144K 0s
+    50K .                                                     100% 1974G=0.3s
+
+2023-01-12 12:18:02 (147 KB/s) - ‘wiringpi-latest.deb’ saved [52260/52260]
+
+(Reading database ... 98708 files and directories currently installed.)
+Preparing to unpack wiringpi-latest.deb ...
+Unpacking wiringpi (2.52) over (2.52) ...
+Setting up wiringpi (2.52) ...
+Processing triggers for man-db (2.8.5-2) ...
+
+#### Ensuring compatible version of influxdb is installed ####
+#### Incorrect InfluxDB version (v1.8.10-1) installed. Installing v1.8.0-1...
+dpkg: warning: downgrading influxdb from 1.8.10-1 to 1.8.0-1
+(Reading database ... 98708 files and directories currently installed.)
+Preparing to unpack influxdb_1.8.0_armhf.deb ...
+Unpacking influxdb (1.8.0-1) over (1.8.10-1) ...
+Setting up influxdb (1.8.0-1) ...
+Installing new version of config file /etc/influxdb/influxdb.conf ...
+Processing triggers for man-db (2.8.5-2) ...
+
+#### Creating InfluxDB database and user
+#### Attempting to connect...
+#### Could not connect to Influxdb. Waiting 30 seconds then trying again...
+#### Attempting to connect...
+#### Influxdb database and user successfully created
+
+#### Running initialization
+
+#### Creating mycodo user
+useradd: user 'mycodo' already exists
+The user `mycodo' is already a member of `adm'.
+The user `mycodo' is already a member of `dialout'.
+The user `mycodo' is already a member of `gpio'.
+The user `mycodo' is already a member of `i2c'.
+The user `mycodo' is already a member of `kmem'.
+The user `mycodo' is already a member of `video'.
+The user `pi' is already a member of `mycodo'.
+The user `mycodo' is already a member of `pi'.
+
+#### Compiling mycodo_wrapper
+
+#### Creating symlinks to Mycodo executables
+
+#### Creating files and directories
+
+#### Setting permissions
+
+#### Installing logrotate scripts
+Mycodo logrotate script installed
+
+#### Generating SSL certificates at /home/pi/Mycodo/mycodo/mycodo_flask/ssl_certs (replace with your own if desired)
+Generating RSA private key, 4096 bit long modulus (2 primes)
+...............................................................++++
+......................................................................................................++++
+e is 65537 (0x010001)
+writing RSA key
+Signature ok
+subject=O = mycodo, OU = mycodo, CN = mycodo
+Getting Private key
+
+#### Disabling installed mycodo startup script
+Removed /etc/systemd/system/multi-user.target.wants/mycodo.service.
+Removed /etc/systemd/system/mycodo.service.
+#### Enabling current mycodo startup script
+Created symlink /etc/systemd/system/mycodo.service → /home/pi/Mycodo/install/mycodo.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/mycodo.service → /home/pi/Mycodo/install/mycodo.service.
+
+#### Compiling Translations
+compiling catalog mycodo_flask/translations/nl/LC_MESSAGES/messages.po to mycodo_flask/translations/nl/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/pl/LC_MESSAGES/messages.po to mycodo_flask/translations/pl/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/fr/LC_MESSAGES/messages.po to mycodo_flask/translations/fr/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/de/LC_MESSAGES/messages.po to mycodo_flask/translations/de/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/zh/LC_MESSAGES/messages.po to mycodo_flask/translations/zh/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/sr/LC_MESSAGES/messages.po to mycodo_flask/translations/sr/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/ru/LC_MESSAGES/messages.po to mycodo_flask/translations/ru/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/nb/LC_MESSAGES/messages.po to mycodo_flask/translations/nb/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/sv/LC_MESSAGES/messages.po to mycodo_flask/translations/sv/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/pt/LC_MESSAGES/messages.po to mycodo_flask/translations/pt/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/es/LC_MESSAGES/messages.po to mycodo_flask/translations/es/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/it/LC_MESSAGES/messages.po to mycodo_flask/translations/it/LC_MESSAGES/messages.mo
+
+#### Generating widget HTML files
+
+#### Running initialization
+
+#### Creating mycodo user
+useradd: user 'mycodo' already exists
+The user `mycodo' is already a member of `adm'.
+The user `mycodo' is already a member of `dialout'.
+The user `mycodo' is already a member of `gpio'.
+The user `mycodo' is already a member of `i2c'.
+The user `mycodo' is already a member of `kmem'.
+The user `mycodo' is already a member of `video'.
+The user `pi' is already a member of `mycodo'.
+The user `mycodo' is already a member of `pi'.
+
+#### Compiling mycodo_wrapper
+
+#### Creating symlinks to Mycodo executables
+
+#### Creating files and directories
+
+#### Setting permissions
+
+#### Installing and configuring nginx web server
+Removed /etc/systemd/system/mycodoflask.service.
+Removed /etc/systemd/system/multi-user.target.wants/mycodoflask.service.
+Synchronizing state of nginx.service with SysV service script with /lib/systemd/systemd-sysv-install.
+Executing: /lib/systemd/systemd-sysv-install enable nginx
+Created symlink /etc/systemd/system/multi-user.target.wants/mycodoflask.service → /home/pi/Mycodo/install/mycodoflask.service.
+Created symlink /etc/systemd/system/mycodoflask.service → /home/pi/Mycodo/install/mycodoflask.service.
+
+#### Restarting nginx
+#### Restarting mycodoflask
+
+#### Connecting to http://localhost (creates Mycodo database if it doesn't exist)
+#### Could not connect to http://localhost. Waiting 60 seconds then trying again (up to 5 times)...
+#### Trying again...
+#### Successfully connected to http://localhost
+
+#### Setting permissions
+
+#### Restarting the Mycodo daemon
+#### Mycodo Installer finished Thu 12 Jan 12:21:48 GMT 2023
+#### Total install time: 7 minutes and 52 seconds
+
+*********************************
+** Mycodo finished installing! **
+*********************************
+
+Although the install finished, it doesn't necessarily mean it installed correctly.
+If you experience issues, review the full install log is located at:
+/home/pi/Mycodo/install/setup.log
+
+Go to https://192.168.4.1/, or whatever your Raspberry Pi's
+IP address is, to create an admin user and log in.

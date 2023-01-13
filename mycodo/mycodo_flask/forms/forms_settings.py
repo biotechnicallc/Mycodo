@@ -375,6 +375,10 @@ class SettingsPi(FlaskForm):
     pigpiod_sample_rate = StringField(lazy_gettext('Configure pigpiod'))
     change_pigpiod_sample_rate = SubmitField(lazy_gettext('Reconfigure'))
 
+    wifi_ssid = StringField('Wifi SSID')
+    wifi_pssd = StringField('Wifi PSSD')
+    change_wifi = SubmitField('Change Wifi')
+
     sample_rate_controller_conditional = DecimalField(
         lazy_gettext('Conditional Sample Rate (seconds)'),
         widget=NumberInput(step='any'))

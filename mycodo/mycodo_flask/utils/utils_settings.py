@@ -1470,6 +1470,31 @@ def settings_pi_mod(form):
                 "manner), the digits '0' through '9', and the hyphen ('-').")
         action_str = "Change Hostname to '{host}'".format(
             host=form.hostname.data)
+
+    elif form.change_wifi.data:
+        # write wifi config to file
+        if(form.wifi_ssid.data):
+            with open('/etc/wpa_supplicant/wifi.conf', 'w+') as f:
+                f.write('ctrl_interface=/var/run/wpa_supplicant\n')
+                f.write('ctrl_interface_group=0\n')
+                f.write('update_config=1\n')
+                f.write('country=US\n')
+                f.write('\n')
+                f.write('network={\n')
+                f.write('\tssid="' + form.wifi_ssid.data + '"\n')
+                f.write('\tpsk="' + form.wifi_pssd.data + '"\n')
+                f.write('\tproto=RSN\n')
+                f.write('\tkey_mgmt=WPA-PSK\n')
+                f.write('}')
+                f.write('\n')
+
+        _, _, status = cmd_output("mv /etc/wpa_supplicant/wifi.conf /etc/wpa_supplicant/wpa_supplicant.conf", user='root')
+        action_str = "Moved wifi File"
+        _, _, status = cmd_output("systemctl daemon-reload", user='root')
+        action_str = "Reload Daemon"
+        _, _, status = cmd_output("systemctl restart wpa_supplicant", user='root')
+        action_str = "Wifi Changed"
+
     elif form.change_pigpiod_sample_rate.data:
         if form.pigpiod_sample_rate.data not in ['low', 'high',
                                                  'disabled', 'uninstalled']:

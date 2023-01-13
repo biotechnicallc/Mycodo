@@ -19,7 +19,30 @@
           The following settings are configured through the non-interactive version of raspi-config. Changes here often require a system reboot before they take effect, which may be executed from the menu at the top-right (Configuration -> Restart System).
         </div>
       </div>
+      <div class="row small-gutters" style="padding-top: 2em">
+        <div class="col-12">
+          Wifi Configuration:
+        </div>
+      </div>
       <div class="row small-gutters">
+        <div class="col-12">
+          Wifi Username
+        </div>
+        <div class="col-6">
+          {{form_settings_pi.wifi_ssid(class_='form-control', value=pi_settings['wifi_pssd'])}}
+        </div>
+        <div class="col-12">
+          Wifi Password
+        </div>
+        <div class="col-6">
+          {{form_settings_pi.wifi_pssd(class_='form-control', value=pi_settings['wifi_pssd'])}}
+        </div>
+        <div class="col">
+          {{form_settings_pi.change_wifi(class_='btn btn-primary')}}
+        </div>
+      </div>
+
+      <div class="row small-gutters" style="padding-top: 2em">
         <div class="col">
           I<sup>2</sup>C Enabled: {{pi_settings['i2c_enabled']}}
         </div>
