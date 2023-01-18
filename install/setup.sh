@@ -50,6 +50,20 @@ if [ $exitstatus != 0 ]; then
     exit 1
 fi
 
+DNSMASQ=$(command -v dnsmasq)
+exitstatus=$?
+if [ $exitstatus != 0 ]; then
+    printf "\ndnsmasq not installed. Install it with 'sudo apt-get install dnsmasq' then try the install again.\n"
+    exit 1
+fi
+
+HOSTAPD=$(command -v hostapd)
+exitstatus=$?
+if [ $exitstatus != 0 ]; then
+    printf "\nhostapd not installed. Install it with 'sudo apt-get install hostapd ' then try the install again.\n"
+    exit 1
+fi
+
 NOW=$(date)
 printf "### Mycodo installation initiated %s\n" "${NOW}" 2>&1 | tee -a "${LOG_LOCATION}"
 
@@ -130,6 +144,7 @@ ${INSTALL_CMD} web-server-restart 2>&1 | tee -a "${LOG_LOCATION}"
 ${INSTALL_CMD} web-server-connect 2>&1 | tee -a "${LOG_LOCATION}"
 ${INSTALL_CMD} update-permissions 2>&1 | tee -a "${LOG_LOCATION}"
 ${INSTALL_CMD} restart-daemon 2>&1 | tee -a "${LOG_LOCATION}"
+${INSTALL_CMD} enable-ap-manager 2>&1 | tee -a "${LOG_LOCATION}"
 
 trap : 0
 

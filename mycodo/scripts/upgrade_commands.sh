@@ -90,6 +90,7 @@ Options:
   web-server-reload             Reload the web server
   web-server-restart            Restart the web server
   web-server-update             Update the web server configuration files
+  enable-ap-manager            Enable AP and wifi modes automatically
 
 Docker-specific Commands:
   docker-update-pip             Update pip
@@ -514,7 +515,10 @@ case "${1:-''}" in
         systemctl enable nginx
         systemctl enable "${MYCODO_PATH}"/install/mycodoflask.service
     ;;
-
+    'enable-ap-manager')
+        printf "\n#### Enabling AP manager service\n"
+        systemctl enable "${MYCODO_PATH}"/install/wificonfig.service
+    ;;
 
     #
     # Docker-specific commands

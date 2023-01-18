@@ -6078,3 +6078,1287 @@ If you experience issues, review the full install log is located at:
 
 Go to https://192.168.4.1/, or whatever your Raspberry Pi's
 IP address is, to create an admin user and log in.
+### Mycodo installation initiated Tue 17 Jan 11:25:22 GMT 2023
+#### Mycodo installation began Tue 17 Jan 11:25:24 GMT 2023
+
+#### Checking if swap size is 100 MB and needs to be changed to 512 MB
+#### Swap currently set to 100 MB. Changing to 512 MB and restarting
+Stopping dphys-swapfile (via systemctl): dphys-swapfile.service.
+Starting dphys-swapfile (via systemctl): dphys-swapfile.service.
+
+#### Updating apt repositories
+Hit:1 http://raspbian.raspberrypi.org/raspbian bullseye InRelease
+Get:2 http://archive.raspberrypi.org/debian bullseye InRelease [23.6 kB]
+Get:3 http://archive.raspberrypi.org/debian bullseye/main armhf Packages [311 kB]
+Fetched 334 kB in 2s (145 kB/s)
+Reading package lists...
+
+#### Uninstalling apt version of pip (if installed)
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Package 'python-pip' is not installed, so not removed
+0 upgraded, 0 newly installed, 0 to remove and 1 not upgraded.
+1 not fully installed or removed.
+After this operation, 0 B of additional disk space will be used.
+Setting up hostapd (2:2.9.0-21) ...
+hostapd.service is a disabled or a static unit not running, not starting it.
+/var/lib/dpkg/info/hostapd.postinst: 1: /etc/default/hostapd: : not found
+dpkg: error processing package hostapd (--configure):
+ installed hostapd package post-installation script subprocess returned error exit status 127
+Errors were encountered while processing:
+ hostapd
+E: Sub-process /usr/bin/dpkg returned an error code (1)
+
+#### Installing prerequisite apt packages and update pip
+Reading package lists...
+Building dependency tree...
+Reading state information...
+E: Unable to locate package python-cffi-backend
+Reading package lists...
+Building dependency tree...
+Reading state information...
+g++ is already the newest version (4:10.2.1-1+rpi1).
+g++ set to manually installed.
+gcc is already the newest version (4:10.2.1-1+rpi1).
+gcc set to manually installed.
+git is already the newest version (1:2.30.2-1).
+logrotate is already the newest version (3.18.0-2+deb11u1).
+python3 is already the newest version (3.9.2-3).
+python3 set to manually installed.
+rng-tools is already the newest version (5migrate1).
+wget is already the newest version (1.21-1+deb11u1).
+wget set to manually installed.
+The following additional packages will be installed:
+  blt geoip-database i2c-tools javascript-common libexpat1-dev libgeoip1
+  libi2c0 libio-pty-perl libipc-run-perl libjs-jquery libjs-sphinxdoc
+  libjs-underscore libnginx-mod-http-geoip libnginx-mod-http-image-filter
+  libnginx-mod-http-xslt-filter libnginx-mod-mail libnginx-mod-stream
+  libnginx-mod-stream-geoip libpython3-dev libpython3.9-dev libsigsegv2
+  libtcl8.6 libtime-duration-perl libtimedate-perl libtk8.6 libxft2
+  libxrender1 libxslt1.1 libxss1 nginx-common nginx-core pylint
+  python3-astroid python3-distutils python3-isort python3-lazy-object-proxy
+  python3-lib2to3 python3-logilab-common python3-mccabe
+  python3-mypy-extensions python3-pylint-plugin-utils python3-tk
+  python3-typing-extensions python3-wrapt python3.9-dev read-edid tk8.6-blt2.5
+  x11-common
+Suggested packages:
+  blt-demo gawk-doc python-smbus geoip-bin tcl8.6 tk8.6 fcgiwrap nginx-doc
+  ssl-cert pylint-doc python-setuptools-doc tix python3-tk-dbg sqlite3-doc
+The following NEW packages will be installed:
+  blt gawk geoip-database i2c-tools javascript-common libexpat1-dev libffi-dev
+  libgeoip1 libi2c-dev libi2c0 libio-pty-perl libipc-run-perl libjs-jquery
+  libjs-sphinxdoc libjs-underscore libnginx-mod-http-geoip
+  libnginx-mod-http-image-filter libnginx-mod-http-xslt-filter
+  libnginx-mod-mail libnginx-mod-stream libnginx-mod-stream-geoip
+  libpython3-dev libpython3.9-dev libsigsegv2 libtcl8.6 libtime-duration-perl
+  libtimedate-perl libtk8.6 libxft2 libxrender1 libxslt1.1 libxss1 moreutils
+  nginx nginx-common nginx-core pylint python3-astroid python3-dev
+  python3-distutils python3-isort python3-lazy-object-proxy python3-lib2to3
+  python3-logilab-common python3-mccabe python3-mypy-extensions
+  python3-pylint-common python3-pylint-plugin-utils python3-setuptools
+  python3-smbus python3-tk python3-typing-extensions python3-wrapt
+  python3.9-dev read-edid sqlite3 tk8.6-blt2.5 x11-common
+0 upgraded, 58 newly installed, 0 to remove and 1 not upgraded.
+1 not fully installed or removed.
+Need to get 15.1 MB of archives.
+After this operation, 55.7 MB of additional disk space will be used.
+Get:1 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf libsigsegv2 armhf 2.13-1 [34.3 kB]
+Get:2 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf gawk armhf 1:5.1.0-1 [533 kB]
+Get:3 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf libtcl8.6 armhf 8.6.11+dfsg-1 [894 kB]
+Err:3 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf libtcl8.6 armhf 8.6.11+dfsg-1
+  Error reading from server - read (104: Connection reset by peer) [IP: 197.155.77.1 80]
+Get:4 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf libxrender1 armhf 1:0.9.10-1 [29.9 kB]
+Get:5 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf libxft2 armhf 2.3.2-2 [49.3 kB]
+Get:6 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf x11-common all 1:7.7+22 [252 kB]
+Get:7 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf libxss1 armhf 1:1.2.3-1 [17.3 kB]
+Get:8 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf libtk8.6 armhf 8.6.11-2 [681 kB]
+Get:9 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf tk8.6-blt2.5 armhf 2.5.3+dfsg-4.1 [477 kB]
+Get:10 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf blt armhf 2.5.3+dfsg-4.1 [14.9 kB]
+Get:11 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf geoip-database all 20191224-3 [3,032 kB]
+Get:12 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf libi2c0 armhf 4.2-1+b1 [10.4 kB]
+Err:12 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf libi2c0 armhf 4.2-1+b1
+  Error reading from server - read (104: Connection reset by peer) [IP: 197.155.77.1 80]
+Get:13 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf i2c-tools armhf 4.2-1+b1 [78.0 kB]
+Get:14 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf javascript-common all 11+nmu1 [6,260 B]
+Get:15 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf libexpat1-dev armhf 2.2.10-2+deb11u5 [123 kB]
+Get:16 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf libffi-dev armhf 3.3-6 [58.2 kB]
+Get:17 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf libgeoip1 armhf 1.6.12-7+b1 [86.7 kB]
+Get:18 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf libi2c-dev armhf 4.2-1+b1 [12.8 kB]
+Get:19 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf libio-pty-perl armhf 1:1.15-2 [36.1 kB]
+Get:20 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf libipc-run-perl all 20200505.0-1 [102 kB]
+Get:21 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf libjs-jquery all 3.5.1+dfsg+~3.5.5-7 [315 kB]
+Get:22 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf libjs-underscore all 1.9.1~dfsg-3 [100 kB]
+Get:23 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf libjs-sphinxdoc all 3.4.3-2 [127 kB]
+Get:24 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf nginx-common all 1.18.0-6.1+deb11u3 [126 kB]
+Get:25 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf libnginx-mod-http-geoip armhf 1.18.0-6.1+deb11u3 [97.7 kB]
+Get:26 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf libnginx-mod-http-image-filter armhf 1.18.0-6.1+deb11u3 [101 kB]
+Get:27 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf libxslt1.1 armhf 1.1.34-4+deb11u1 [217 kB]
+Get:28 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf libnginx-mod-http-xslt-filter armhf 1.18.0-6.1+deb11u3 [99.6 kB]
+Get:29 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf libnginx-mod-mail armhf 1.18.0-6.1+deb11u3 [125 kB]
+Get:30 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf libnginx-mod-stream armhf 1.18.0-6.1+deb11u3 [145 kB]
+Get:31 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf libnginx-mod-stream-geoip armhf 1.18.0-6.1+deb11u3 [97.0 kB]
+Get:32 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf libpython3.9-dev armhf 3.9.2-1+rpi1 [3,055 kB]
+Get:33 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf libpython3-dev armhf 3.9.2-3 [21.7 kB]
+Err:33 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf libpython3-dev armhf 3.9.2-3
+  Error reading from server - read (104: Connection reset by peer) [IP: 197.155.77.1 80]
+Get:34 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf libtime-duration-perl all 1.21-1 [13.7 kB]
+Get:35 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf libtimedate-perl all 2.3300-2 [39.3 kB]
+Get:36 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf moreutils armhf 0.65-1 [70.8 kB]
+Get:37 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf nginx-core armhf 1.18.0-6.1+deb11u3 [455 kB]
+Get:38 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf nginx all 1.18.0-6.1+deb11u3 [92.9 kB]
+Get:39 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf python3-lib2to3 all 3.9.2-1 [77.8 kB]
+Get:40 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf python3-distutils all 3.9.2-1 [143 kB]
+Get:41 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf python3-setuptools all 52.0.0-4 [366 kB]
+Get:42 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf python3-lazy-object-proxy armhf 1.5.2-1 [18.7 kB]
+Get:43 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf python3-wrapt armhf 1.12.1-4+b1 [40.1 kB]
+Get:44 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf python3-astroid all 2.5.1-1 [163 kB]
+Get:45 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf python3-isort all 5.6.4-1 [63.2 kB]
+Err:45 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf python3-isort all 5.6.4-1
+  Error reading from server - read (104: Connection reset by peer) [IP: 197.155.77.1 80]
+Get:46 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf python3-mypy-extensions all 0.4.3-2 [5,700 B]
+Get:47 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf python3-typing-extensions all 3.7.4.3-1 [29.8 kB]
+Get:48 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf python3-logilab-common all 1.8.1-1 [379 kB]
+Get:49 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf python3-mccabe all 0.6.1-3 [9,988 B]
+Get:50 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf pylint all 2.7.2-3 [297 kB]
+Get:51 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf python3.9-dev armhf 3.9.2-1+rpi1 [501 kB]
+Get:52 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf python3-dev armhf 3.9.2-3 [24.8 kB]
+Get:53 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf python3-pylint-plugin-utils all 0.6-1 [5,992 B]
+Get:54 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf python3-pylint-common all 0.2.5-4 [4,732 B]
+Get:55 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf python3-smbus armhf 4.2-1+b1 [12.5 kB]
+Get:56 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf python3-tk armhf 3.9.2-1 [97.5 kB]
+Get:57 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf read-edid armhf 3.0.2-1.1 [14.9 kB]
+Get:58 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf sqlite3 armhf 3.34.1-3 [1,054 kB]
+Fetched 14.1 MB in 1min 33s (151 kB/s)
+E: Failed to fetch http://mirror.liquidtelecom.com/raspbian/raspbian/pool/main/t/tcl8.6/libtcl8.6_8.6.11+dfsg-1_armhf.deb  Error reading from server - read (104: Connection reset by peer) [IP: 197.155.77.1 80]
+E: Failed to fetch http://mirror.liquidtelecom.com/raspbian/raspbian/pool/main/i/i2c-tools/libi2c0_4.2-1+b1_armhf.deb  Error reading from server - read (104: Connection reset by peer) [IP: 197.155.77.1 80]
+E: Failed to fetch http://mirror.liquidtelecom.com/raspbian/raspbian/pool/main/p/python3-defaults/libpython3-dev_3.9.2-3_armhf.deb  Error reading from server - read (104: Connection reset by peer) [IP: 197.155.77.1 80]
+E: Failed to fetch http://mirror.liquidtelecom.com/raspbian/raspbian/pool/main/i/isort/python3-isort_5.6.4-1_all.deb  Error reading from server - read (104: Connection reset by peer) [IP: 197.155.77.1 80]
+E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?
+python3: can't open file '/usr/lib/python3/dist-packages/easy_install.py': [Errno 2] No such file or directory
+/usr/bin/python3: No module named pip
+
+#### Checking python 3 virtualenv
+#### Virtualenv doesn't exist. Creating...
+/usr/bin/python3: No module named pip
+/usr/bin/python3: No module named virtualenv
+
+#### Updating pip
+/home/pi/Mycodo/mycodo/scripts/upgrade_commands.sh: line 443: /home/pi/Mycodo/env/bin/python: No such file or directory
+
+#### Installing pip requirements
+
+## Error: Virtualenv doesn't exist. Create with /home/pi/Mycodo/mycodo/scripts/upgrade_commands.sh setup-virtualenv
+--2023-01-17 11:27:14--  https://project-downloads.drogon.net/wiringpi-latest.deb
+Resolving project-downloads.drogon.net (project-downloads.drogon.net)... 188.246.205.22, 2a03:9800:10:7b::2
+Connecting to project-downloads.drogon.net (project-downloads.drogon.net)|188.246.205.22|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 52260 (51K) [application/x-debian-package]
+Saving to: ‘wiringpi-latest.deb’
+
+     0K .......... .......... .......... .......... .......... 97%  140K 0s
+    50K .                                                     100% 1.93T=0.4s
+
+2023-01-17 11:27:16 (143 KB/s) - ‘wiringpi-latest.deb’ saved [52260/52260]
+
+Selecting previously unselected package wiringpi.
+(Reading database ... 44752 files and directories currently installed.)
+Preparing to unpack wiringpi-latest.deb ...
+Unpacking wiringpi (2.52) ...
+Setting up wiringpi (2.52) ...
+Processing triggers for man-db (2.9.4-2) ...
+
+#### Ensuring compatible version of influxdb is installed ####
+/home/pi/Mycodo/mycodo/scripts/upgrade_commands.sh: line 377: gawk: command not found
+#### Incorrect InfluxDB version (v) installed. Installing v1.8.0-1...
+Selecting previously unselected package influxdb.
+(Reading database ... 44802 files and directories currently installed.)
+Preparing to unpack influxdb_1.8.0_armhf.deb ...
+Unpacking influxdb (1.8.0-1) ...
+Setting up influxdb (1.8.0-1) ...
+Created symlink /etc/systemd/system/influxd.service → /lib/systemd/system/influxdb.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/influxdb.service → /lib/systemd/system/influxdb.service.
+Processing triggers for man-db (2.9.4-2) ...
+
+#### Creating InfluxDB database and user
+#### Attempting to connect...
+#### Could not connect to Influxdb. Waiting 30 seconds then trying again...
+#### Attempting to connect...
+#### Influxdb database and user successfully created
+
+#### Running initialization
+
+#### Creating mycodo user
+Adding user `mycodo' to group `adm' ...
+Adding user mycodo to group adm
+Done.
+Adding user `mycodo' to group `dialout' ...
+Adding user mycodo to group dialout
+Done.
+Adding user `mycodo' to group `gpio' ...
+Adding user mycodo to group gpio
+Done.
+Adding user `mycodo' to group `i2c' ...
+Adding user mycodo to group i2c
+Done.
+Adding user `mycodo' to group `kmem' ...
+Adding user mycodo to group kmem
+Done.
+Adding user `mycodo' to group `video' ...
+Adding user mycodo to group video
+Done.
+Adding user `pi' to group `mycodo' ...
+Adding user pi to group mycodo
+Done.
+Adding user `mycodo' to group `pi' ...
+Adding user mycodo to group pi
+Done.
+
+#### Compiling mycodo_wrapper
+
+#### Creating symlinks to Mycodo executables
+
+#### Creating files and directories
+
+#### Setting permissions
+
+#### Installing logrotate scripts
+logrotate execution moved from cron.daily to cron.hourly
+Mycodo logrotate script installed
+
+#### Generating SSL certificates at /home/pi/Mycodo/mycodo/mycodo_flask/ssl_certs (replace with your own if desired)
+Generating RSA private key, 4096 bit long modulus (2 primes)
+......++++
+................................................++++
+e is 65537 (0x010001)
+writing RSA key
+Signature ok
+subject=O = mycodo, OU = mycodo, CN = mycodo
+Getting Private key
+
+#### Disabling installed mycodo startup script
+Failed to disable unit: Unit file mycodo.service does not exist.
+#### Enabling current mycodo startup script
+Created symlink /etc/systemd/system/mycodo.service → /home/pi/Mycodo/install/mycodo.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/mycodo.service → /home/pi/Mycodo/install/mycodo.service.
+
+#### Compiling Translations
+/home/pi/Mycodo/mycodo/scripts/upgrade_commands.sh: line 117: /home/pi/Mycodo/env/bin/pybabel: No such file or directory
+
+#### Generating widget HTML files
+/home/pi/Mycodo/mycodo/scripts/upgrade_commands.sh: line 180: /home/pi/Mycodo/env/bin/python: No such file or directory
+
+#### Running initialization
+
+#### Creating mycodo user
+useradd: user 'mycodo' already exists
+The user `mycodo' is already a member of `adm'.
+The user `mycodo' is already a member of `dialout'.
+The user `mycodo' is already a member of `gpio'.
+The user `mycodo' is already a member of `i2c'.
+The user `mycodo' is already a member of `kmem'.
+The user `mycodo' is already a member of `video'.
+The user `pi' is already a member of `mycodo'.
+The user `mycodo' is already a member of `pi'.
+
+#### Compiling mycodo_wrapper
+
+#### Creating symlinks to Mycodo executables
+
+#### Creating files and directories
+
+#### Setting permissions
+
+#### Installing and configuring nginx web server
+Failed to disable unit: Unit file mycodoflask.service does not exist.
+ln: failed to create symbolic link '/etc/nginx/sites-enabled/default': No such file or directory
+Failed to enable unit: Unit file nginx.service does not exist.
+Created symlink /etc/systemd/system/multi-user.target.wants/mycodoflask.service → /home/pi/Mycodo/install/mycodoflask.service.
+Created symlink /etc/systemd/system/mycodoflask.service → /home/pi/Mycodo/install/mycodoflask.service.
+
+#### Restarting nginx
+Failed to restart nginx.service: Unit nginx.service not found.
+#### Restarting mycodoflask
+
+#### Connecting to http://localhost (creates Mycodo database if it doesn't exist)
+#### Could not connect to http://localhost. Waiting 60 seconds then trying again (up to 5 times)...
+#### Trying again...
+#### Could not connect to http://localhost. Waiting 60 seconds then trying again (up to 5 times)...
+#### Trying again...
+#### Could not connect to http://localhost. Waiting 60 seconds then trying again (up to 5 times)...
+#### Trying again...
+#### Could not connect to http://localhost. Waiting 60 seconds then trying again (up to 5 times)...
+#### Trying again...
+#### Could not connect to http://localhost. Waiting 60 seconds then trying again (up to 5 times)...
+
+**********************************
+** ERROR During Mycodo Install! **
+**********************************
+
+An error occurred that may have prevented Mycodo from
+being installed properly!
+
+Open to the end of the setup log to view the full error:
+/home/pi/Mycodo/install/setup.log
+
+Please contact the developer by submitting a bug report
+at https://github.com/kizniche/Mycodo/issues with the
+pertinent excerpts from the setup log located at:
+/home/pi/Mycodo/install/setup.log
+### Mycodo installation initiated Tue 17 Jan 11:37:12 GMT 2023
+#### Mycodo installation began Tue 17 Jan 11:37:14 GMT 2023
+
+#### Checking if swap size is 100 MB and needs to be changed to 512 MB
+#### Swap not currently set to 100 MB. Not changing.
+
+#### Updating apt repositories
+Hit:1 http://raspbian.raspberrypi.org/raspbian bullseye InRelease
+Hit:2 http://archive.raspberrypi.org/debian bullseye InRelease
+Reading package lists...
+
+#### Uninstalling apt version of pip (if installed)
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Package 'python-pip' is not installed, so not removed
+0 upgraded, 0 newly installed, 0 to remove and 1 not upgraded.
+1 not fully installed or removed.
+After this operation, 0 B of additional disk space will be used.
+Setting up hostapd (2:2.9.0-21) ...
+hostapd.service is a disabled or a static unit not running, not starting it.
+/var/lib/dpkg/info/hostapd.postinst: 1: /etc/default/hostapd: : not found
+dpkg: error processing package hostapd (--configure):
+ installed hostapd package post-installation script subprocess returned error exit status 127
+Errors were encountered while processing:
+ hostapd
+E: Sub-process /usr/bin/dpkg returned an error code (1)
+
+#### Installing prerequisite apt packages and update pip
+Reading package lists...
+Building dependency tree...
+Reading state information...
+E: Unable to locate package python-cffi-backend
+Reading package lists...
+Building dependency tree...
+Reading state information...
+g++ is already the newest version (4:10.2.1-1+rpi1).
+g++ set to manually installed.
+gcc is already the newest version (4:10.2.1-1+rpi1).
+gcc set to manually installed.
+git is already the newest version (1:2.30.2-1).
+logrotate is already the newest version (3.18.0-2+deb11u1).
+python3 is already the newest version (3.9.2-3).
+python3 set to manually installed.
+rng-tools is already the newest version (5migrate1).
+wget is already the newest version (1.21-1+deb11u1).
+wget set to manually installed.
+The following additional packages will be installed:
+  blt geoip-database i2c-tools javascript-common libexpat1-dev libgeoip1
+  libi2c0 libio-pty-perl libipc-run-perl libjs-jquery libjs-sphinxdoc
+  libjs-underscore libnginx-mod-http-geoip libnginx-mod-http-image-filter
+  libnginx-mod-http-xslt-filter libnginx-mod-mail libnginx-mod-stream
+  libnginx-mod-stream-geoip libpython3-dev libpython3.9-dev libsigsegv2
+  libtcl8.6 libtime-duration-perl libtimedate-perl libtk8.6 libxft2
+  libxrender1 libxslt1.1 libxss1 nginx-common nginx-core pylint
+  python3-astroid python3-distutils python3-isort python3-lazy-object-proxy
+  python3-lib2to3 python3-logilab-common python3-mccabe
+  python3-mypy-extensions python3-pylint-plugin-utils python3-tk
+  python3-typing-extensions python3-wrapt python3.9-dev read-edid tk8.6-blt2.5
+  x11-common
+Suggested packages:
+  blt-demo gawk-doc python-smbus geoip-bin tcl8.6 tk8.6 fcgiwrap nginx-doc
+  ssl-cert pylint-doc python-setuptools-doc tix python3-tk-dbg sqlite3-doc
+The following NEW packages will be installed:
+  blt gawk geoip-database i2c-tools javascript-common libexpat1-dev libffi-dev
+  libgeoip1 libi2c-dev libi2c0 libio-pty-perl libipc-run-perl libjs-jquery
+  libjs-sphinxdoc libjs-underscore libnginx-mod-http-geoip
+  libnginx-mod-http-image-filter libnginx-mod-http-xslt-filter
+  libnginx-mod-mail libnginx-mod-stream libnginx-mod-stream-geoip
+  libpython3-dev libpython3.9-dev libsigsegv2 libtcl8.6 libtime-duration-perl
+  libtimedate-perl libtk8.6 libxft2 libxrender1 libxslt1.1 libxss1 moreutils
+  nginx nginx-common nginx-core pylint python3-astroid python3-dev
+  python3-distutils python3-isort python3-lazy-object-proxy python3-lib2to3
+  python3-logilab-common python3-mccabe python3-mypy-extensions
+  python3-pylint-common python3-pylint-plugin-utils python3-setuptools
+  python3-smbus python3-tk python3-typing-extensions python3-wrapt
+  python3.9-dev read-edid sqlite3 tk8.6-blt2.5 x11-common
+0 upgraded, 58 newly installed, 0 to remove and 1 not upgraded.
+1 not fully installed or removed.
+Need to get 989 kB/15.1 MB of archives.
+After this operation, 55.7 MB of additional disk space will be used.
+Get:1 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf libtcl8.6 armhf 8.6.11+dfsg-1 [894 kB]
+Get:2 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf libi2c0 armhf 4.2-1+b1 [10.4 kB]
+Get:3 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf libpython3-dev armhf 3.9.2-3 [21.7 kB]
+Get:4 http://mirror.liquidtelecom.com/raspbian/raspbian bullseye/main armhf python3-isort all 5.6.4-1 [63.2 kB]
+Preconfiguring packages ...
+Fetched 961 kB in 5s (175 kB/s)
+Selecting previously unselected package libsigsegv2:armhf.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 44828 files and directories currently installed.)
+Preparing to unpack .../libsigsegv2_2.13-1_armhf.deb ...
+Unpacking libsigsegv2:armhf (2.13-1) ...
+Setting up libsigsegv2:armhf (2.13-1) ...
+Selecting previously unselected package gawk.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 44837 files and directories currently installed.)
+Preparing to unpack .../00-gawk_1%3a5.1.0-1_armhf.deb ...
+Unpacking gawk (1:5.1.0-1) ...
+Selecting previously unselected package libtcl8.6:armhf.
+Preparing to unpack .../01-libtcl8.6_8.6.11+dfsg-1_armhf.deb ...
+Unpacking libtcl8.6:armhf (8.6.11+dfsg-1) ...
+Selecting previously unselected package libxrender1:armhf.
+Preparing to unpack .../02-libxrender1_1%3a0.9.10-1_armhf.deb ...
+Unpacking libxrender1:armhf (1:0.9.10-1) ...
+Selecting previously unselected package libxft2:armhf.
+Preparing to unpack .../03-libxft2_2.3.2-2_armhf.deb ...
+Unpacking libxft2:armhf (2.3.2-2) ...
+Selecting previously unselected package x11-common.
+Preparing to unpack .../04-x11-common_1%3a7.7+22_all.deb ...
+Unpacking x11-common (1:7.7+22) ...
+Selecting previously unselected package libxss1:armhf.
+Preparing to unpack .../05-libxss1_1%3a1.2.3-1_armhf.deb ...
+Unpacking libxss1:armhf (1:1.2.3-1) ...
+Selecting previously unselected package libtk8.6:armhf.
+Preparing to unpack .../06-libtk8.6_8.6.11-2_armhf.deb ...
+Unpacking libtk8.6:armhf (8.6.11-2) ...
+Selecting previously unselected package tk8.6-blt2.5.
+Preparing to unpack .../07-tk8.6-blt2.5_2.5.3+dfsg-4.1_armhf.deb ...
+Unpacking tk8.6-blt2.5 (2.5.3+dfsg-4.1) ...
+Selecting previously unselected package blt.
+Preparing to unpack .../08-blt_2.5.3+dfsg-4.1_armhf.deb ...
+Unpacking blt (2.5.3+dfsg-4.1) ...
+Selecting previously unselected package geoip-database.
+Preparing to unpack .../09-geoip-database_20191224-3_all.deb ...
+Unpacking geoip-database (20191224-3) ...
+Selecting previously unselected package libi2c0:armhf.
+Preparing to unpack .../10-libi2c0_4.2-1+b1_armhf.deb ...
+Unpacking libi2c0:armhf (4.2-1+b1) ...
+Selecting previously unselected package i2c-tools.
+Preparing to unpack .../11-i2c-tools_4.2-1+b1_armhf.deb ...
+Unpacking i2c-tools (4.2-1+b1) ...
+Selecting previously unselected package javascript-common.
+Preparing to unpack .../12-javascript-common_11+nmu1_all.deb ...
+Unpacking javascript-common (11+nmu1) ...
+Selecting previously unselected package libexpat1-dev:armhf.
+Preparing to unpack .../13-libexpat1-dev_2.2.10-2+deb11u5_armhf.deb ...
+Unpacking libexpat1-dev:armhf (2.2.10-2+deb11u5) ...
+Selecting previously unselected package libffi-dev:armhf.
+Preparing to unpack .../14-libffi-dev_3.3-6_armhf.deb ...
+Unpacking libffi-dev:armhf (3.3-6) ...
+Selecting previously unselected package libgeoip1:armhf.
+Preparing to unpack .../15-libgeoip1_1.6.12-7+b1_armhf.deb ...
+Unpacking libgeoip1:armhf (1.6.12-7+b1) ...
+Selecting previously unselected package libi2c-dev.
+Preparing to unpack .../16-libi2c-dev_4.2-1+b1_armhf.deb ...
+Unpacking libi2c-dev (4.2-1+b1) ...
+Selecting previously unselected package libio-pty-perl.
+Preparing to unpack .../17-libio-pty-perl_1%3a1.15-2_armhf.deb ...
+Unpacking libio-pty-perl (1:1.15-2) ...
+Selecting previously unselected package libipc-run-perl.
+Preparing to unpack .../18-libipc-run-perl_20200505.0-1_all.deb ...
+Unpacking libipc-run-perl (20200505.0-1) ...
+Selecting previously unselected package libjs-jquery.
+Preparing to unpack .../19-libjs-jquery_3.5.1+dfsg+~3.5.5-7_all.deb ...
+Unpacking libjs-jquery (3.5.1+dfsg+~3.5.5-7) ...
+Selecting previously unselected package libjs-underscore.
+Preparing to unpack .../20-libjs-underscore_1.9.1~dfsg-3_all.deb ...
+Unpacking libjs-underscore (1.9.1~dfsg-3) ...
+Selecting previously unselected package libjs-sphinxdoc.
+Preparing to unpack .../21-libjs-sphinxdoc_3.4.3-2_all.deb ...
+Unpacking libjs-sphinxdoc (3.4.3-2) ...
+Selecting previously unselected package nginx-common.
+Preparing to unpack .../22-nginx-common_1.18.0-6.1+deb11u3_all.deb ...
+Unpacking nginx-common (1.18.0-6.1+deb11u3) ...
+Selecting previously unselected package libnginx-mod-http-geoip.
+Preparing to unpack .../23-libnginx-mod-http-geoip_1.18.0-6.1+deb11u3_armhf.deb ...
+Unpacking libnginx-mod-http-geoip (1.18.0-6.1+deb11u3) ...
+Selecting previously unselected package libnginx-mod-http-image-filter.
+Preparing to unpack .../24-libnginx-mod-http-image-filter_1.18.0-6.1+deb11u3_armhf.deb ...
+Unpacking libnginx-mod-http-image-filter (1.18.0-6.1+deb11u3) ...
+Selecting previously unselected package libxslt1.1:armhf.
+Preparing to unpack .../25-libxslt1.1_1.1.34-4+deb11u1_armhf.deb ...
+Unpacking libxslt1.1:armhf (1.1.34-4+deb11u1) ...
+Selecting previously unselected package libnginx-mod-http-xslt-filter.
+Preparing to unpack .../26-libnginx-mod-http-xslt-filter_1.18.0-6.1+deb11u3_armhf.deb ...
+Unpacking libnginx-mod-http-xslt-filter (1.18.0-6.1+deb11u3) ...
+Selecting previously unselected package libnginx-mod-mail.
+Preparing to unpack .../27-libnginx-mod-mail_1.18.0-6.1+deb11u3_armhf.deb ...
+Unpacking libnginx-mod-mail (1.18.0-6.1+deb11u3) ...
+Selecting previously unselected package libnginx-mod-stream.
+Preparing to unpack .../28-libnginx-mod-stream_1.18.0-6.1+deb11u3_armhf.deb ...
+Unpacking libnginx-mod-stream (1.18.0-6.1+deb11u3) ...
+Selecting previously unselected package libnginx-mod-stream-geoip.
+Preparing to unpack .../29-libnginx-mod-stream-geoip_1.18.0-6.1+deb11u3_armhf.deb ...
+Unpacking libnginx-mod-stream-geoip (1.18.0-6.1+deb11u3) ...
+Selecting previously unselected package libpython3.9-dev:armhf.
+Preparing to unpack .../30-libpython3.9-dev_3.9.2-1+rpi1_armhf.deb ...
+Unpacking libpython3.9-dev:armhf (3.9.2-1+rpi1) ...
+Selecting previously unselected package libpython3-dev:armhf.
+Preparing to unpack .../31-libpython3-dev_3.9.2-3_armhf.deb ...
+Unpacking libpython3-dev:armhf (3.9.2-3) ...
+Selecting previously unselected package libtime-duration-perl.
+Preparing to unpack .../32-libtime-duration-perl_1.21-1_all.deb ...
+Unpacking libtime-duration-perl (1.21-1) ...
+Selecting previously unselected package libtimedate-perl.
+Preparing to unpack .../33-libtimedate-perl_2.3300-2_all.deb ...
+Unpacking libtimedate-perl (2.3300-2) ...
+Selecting previously unselected package moreutils.
+Preparing to unpack .../34-moreutils_0.65-1_armhf.deb ...
+Unpacking moreutils (0.65-1) ...
+Selecting previously unselected package nginx-core.
+Preparing to unpack .../35-nginx-core_1.18.0-6.1+deb11u3_armhf.deb ...
+Unpacking nginx-core (1.18.0-6.1+deb11u3) ...
+Selecting previously unselected package nginx.
+Preparing to unpack .../36-nginx_1.18.0-6.1+deb11u3_all.deb ...
+Unpacking nginx (1.18.0-6.1+deb11u3) ...
+Selecting previously unselected package python3-lib2to3.
+Preparing to unpack .../37-python3-lib2to3_3.9.2-1_all.deb ...
+Unpacking python3-lib2to3 (3.9.2-1) ...
+Selecting previously unselected package python3-distutils.
+Preparing to unpack .../38-python3-distutils_3.9.2-1_all.deb ...
+Unpacking python3-distutils (3.9.2-1) ...
+Selecting previously unselected package python3-setuptools.
+Preparing to unpack .../39-python3-setuptools_52.0.0-4_all.deb ...
+Unpacking python3-setuptools (52.0.0-4) ...
+Selecting previously unselected package python3-lazy-object-proxy.
+Preparing to unpack .../40-python3-lazy-object-proxy_1.5.2-1_armhf.deb ...
+Unpacking python3-lazy-object-proxy (1.5.2-1) ...
+Selecting previously unselected package python3-wrapt.
+Preparing to unpack .../41-python3-wrapt_1.12.1-4+b1_armhf.deb ...
+Unpacking python3-wrapt (1.12.1-4+b1) ...
+Selecting previously unselected package python3-astroid.
+Preparing to unpack .../42-python3-astroid_2.5.1-1_all.deb ...
+Unpacking python3-astroid (2.5.1-1) ...
+Selecting previously unselected package python3-isort.
+Preparing to unpack .../43-python3-isort_5.6.4-1_all.deb ...
+Unpacking python3-isort (5.6.4-1) ...
+Selecting previously unselected package python3-mypy-extensions.
+Preparing to unpack .../44-python3-mypy-extensions_0.4.3-2_all.deb ...
+Unpacking python3-mypy-extensions (0.4.3-2) ...
+Selecting previously unselected package python3-typing-extensions.
+Preparing to unpack .../45-python3-typing-extensions_3.7.4.3-1_all.deb ...
+Unpacking python3-typing-extensions (3.7.4.3-1) ...
+Selecting previously unselected package python3-logilab-common.
+Preparing to unpack .../46-python3-logilab-common_1.8.1-1_all.deb ...
+Unpacking python3-logilab-common (1.8.1-1) ...
+Selecting previously unselected package python3-mccabe.
+Preparing to unpack .../47-python3-mccabe_0.6.1-3_all.deb ...
+Unpacking python3-mccabe (0.6.1-3) ...
+Selecting previously unselected package pylint.
+Preparing to unpack .../48-pylint_2.7.2-3_all.deb ...
+Unpacking pylint (2.7.2-3) ...
+Selecting previously unselected package python3.9-dev.
+Preparing to unpack .../49-python3.9-dev_3.9.2-1+rpi1_armhf.deb ...
+Unpacking python3.9-dev (3.9.2-1+rpi1) ...
+Selecting previously unselected package python3-dev.
+Preparing to unpack .../50-python3-dev_3.9.2-3_armhf.deb ...
+Unpacking python3-dev (3.9.2-3) ...
+Selecting previously unselected package python3-pylint-plugin-utils.
+Preparing to unpack .../51-python3-pylint-plugin-utils_0.6-1_all.deb ...
+Unpacking python3-pylint-plugin-utils (0.6-1) ...
+Selecting previously unselected package python3-pylint-common.
+Preparing to unpack .../52-python3-pylint-common_0.2.5-4_all.deb ...
+Unpacking python3-pylint-common (0.2.5-4) ...
+Selecting previously unselected package python3-smbus:armhf.
+Preparing to unpack .../53-python3-smbus_4.2-1+b1_armhf.deb ...
+Unpacking python3-smbus:armhf (4.2-1+b1) ...
+Selecting previously unselected package python3-tk:armhf.
+Preparing to unpack .../54-python3-tk_3.9.2-1_armhf.deb ...
+Unpacking python3-tk:armhf (3.9.2-1) ...
+Selecting previously unselected package read-edid.
+Preparing to unpack .../55-read-edid_3.0.2-1.1_armhf.deb ...
+Unpacking read-edid (3.0.2-1.1) ...
+Selecting previously unselected package sqlite3.
+Preparing to unpack .../56-sqlite3_3.34.1-3_armhf.deb ...
+Unpacking sqlite3 (3.34.1-3) ...
+Setting up javascript-common (11+nmu1) ...
+Setting up libxrender1:armhf (1:0.9.10-1) ...
+Setting up libio-pty-perl (1:1.15-2) ...
+Setting up gawk (1:5.1.0-1) ...
+Setting up libi2c0:armhf (4.2-1+b1) ...
+Setting up python3-mypy-extensions (0.4.3-2) ...
+Setting up read-edid (3.0.2-1.1) ...
+Setting up x11-common (1:7.7+22) ...
+Setting up nginx-common (1.18.0-6.1+deb11u3) ...
+Created symlink /etc/systemd/system/multi-user.target.wants/nginx.service → /lib/systemd/system/nginx.service.
+Setting up libffi-dev:armhf (3.3-6) ...
+Setting up libi2c-dev (4.2-1+b1) ...
+Setting up hostapd (2:2.9.0-21) ...
+hostapd.service is a disabled or a static unit not running, not starting it.
+/var/lib/dpkg/info/hostapd.postinst: 1: /etc/default/hostapd: : not found
+dpkg: error processing package hostapd (--configure):
+ installed hostapd package post-installation script subprocess returned error exit status 127
+Setting up libexpat1-dev:armhf (2.2.10-2+deb11u5) ...
+Setting up i2c-tools (4.2-1+b1) ...
+Setting up python3-wrapt (1.12.1-4+b1) ...
+Setting up libtcl8.6:armhf (8.6.11+dfsg-1) ...
+Setting up libipc-run-perl (20200505.0-1) ...
+Setting up python3-typing-extensions (3.7.4.3-1) ...
+Setting up libtime-duration-perl (1.21-1) ...
+Setting up python3-isort (5.6.4-1) ...
+Setting up libtimedate-perl (2.3300-2) ...
+Setting up libxslt1.1:armhf (1.1.34-4+deb11u1) ...
+Setting up libgeoip1:armhf (1.6.12-7+b1) ...
+Setting up python3-mccabe (0.6.1-3) ...
+Setting up libxss1:armhf (1:1.2.3-1) ...
+Setting up python3-lazy-object-proxy (1.5.2-1) ...
+Setting up libjs-jquery (3.5.1+dfsg+~3.5.5-7) ...
+Setting up geoip-database (20191224-3) ...
+Setting up python3-smbus:armhf (4.2-1+b1) ...
+Setting up python3-lib2to3 (3.9.2-1) ...
+Setting up sqlite3 (3.34.1-3) ...
+Setting up libjs-underscore (1.9.1~dfsg-3) ...
+Setting up python3-distutils (3.9.2-1) ...
+Setting up libnginx-mod-mail (1.18.0-6.1+deb11u3) ...
+Setting up libxft2:armhf (2.3.2-2) ...
+Setting up moreutils (0.65-1) ...
+Setting up python3-setuptools (52.0.0-4) ...
+Setting up python3-logilab-common (1.8.1-1) ...
+Setting up libtk8.6:armhf (8.6.11-2) ...
+Setting up libnginx-mod-http-image-filter (1.18.0-6.1+deb11u3) ...
+Setting up libnginx-mod-stream (1.18.0-6.1+deb11u3) ...
+Setting up libpython3.9-dev:armhf (3.9.2-1+rpi1) ...
+Setting up libnginx-mod-stream-geoip (1.18.0-6.1+deb11u3) ...
+Setting up libnginx-mod-http-xslt-filter (1.18.0-6.1+deb11u3) ...
+Setting up libnginx-mod-http-geoip (1.18.0-6.1+deb11u3) ...
+Setting up libjs-sphinxdoc (3.4.3-2) ...
+Setting up python3.9-dev (3.9.2-1+rpi1) ...
+Setting up python3-astroid (2.5.1-1) ...
+Setting up pylint (2.7.2-3) ...
+Setting up nginx-core (1.18.0-6.1+deb11u3) ...
+Upgrading binary: nginx.
+Setting up tk8.6-blt2.5 (2.5.3+dfsg-4.1) ...
+Setting up libpython3-dev:armhf (3.9.2-3) ...
+Setting up nginx (1.18.0-6.1+deb11u3) ...
+Setting up blt (2.5.3+dfsg-4.1) ...
+Setting up python3-tk:armhf (3.9.2-1) ...
+Setting up python3-dev (3.9.2-3) ...
+Setting up python3-pylint-plugin-utils (0.6-1) ...
+Setting up python3-pylint-common (0.2.5-4) ...
+Processing triggers for man-db (2.9.4-2) ...
+Processing triggers for install-info (6.7.0.dfsg.2-6) ...
+Processing triggers for libc-bin (2.31-13+rpt2+rpi1+deb11u5) ...
+Errors were encountered while processing:
+ hostapd
+E: Sub-process /usr/bin/dpkg returned an error code (1)
+python3: can't open file '/usr/lib/python3/dist-packages/easy_install.py': [Errno 2] No such file or directory
+/usr/bin/python3: No module named pip
+
+#### Checking python 3 virtualenv
+#### Virtualenv doesn't exist. Creating...
+/usr/bin/python3: No module named pip
+/usr/bin/python3: No module named virtualenv
+
+#### Updating pip
+/home/pi/Mycodo/mycodo/scripts/upgrade_commands.sh: line 443: /home/pi/Mycodo/env/bin/python: No such file or directory
+
+#### Installing pip requirements
+
+## Error: Virtualenv doesn't exist. Create with /home/pi/Mycodo/mycodo/scripts/upgrade_commands.sh setup-virtualenv
+--2023-01-17 11:38:15--  https://project-downloads.drogon.net/wiringpi-latest.deb
+Resolving project-downloads.drogon.net (project-downloads.drogon.net)... 188.246.205.22, 2a03:9800:10:7b::2
+Connecting to project-downloads.drogon.net (project-downloads.drogon.net)|188.246.205.22|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 52260 (51K) [application/x-debian-package]
+Saving to: ‘wiringpi-latest.deb’
+
+     0K .......... .......... .......... .......... .......... 97%  131K 0s
+    50K .                                                     100% 1.93T=0.4s
+
+2023-01-17 11:38:17 (133 KB/s) - ‘wiringpi-latest.deb’ saved [52260/52260]
+
+(Reading database ... 46918 files and directories currently installed.)
+Preparing to unpack wiringpi-latest.deb ...
+Unpacking wiringpi (2.52) over (2.52) ...
+Setting up wiringpi (2.52) ...
+Processing triggers for man-db (2.9.4-2) ...
+
+#### Ensuring compatible version of influxdb is installed ####
+Correct version of InfluxDB currently installed
+
+#### Creating InfluxDB database and user
+#### Attempting to connect...
+#### Influxdb database and user successfully created
+
+#### Running initialization
+
+#### Creating mycodo user
+useradd: user 'mycodo' already exists
+The user `mycodo' is already a member of `adm'.
+The user `mycodo' is already a member of `dialout'.
+The user `mycodo' is already a member of `gpio'.
+The user `mycodo' is already a member of `i2c'.
+The user `mycodo' is already a member of `kmem'.
+The user `mycodo' is already a member of `video'.
+The user `pi' is already a member of `mycodo'.
+The user `mycodo' is already a member of `pi'.
+
+#### Compiling mycodo_wrapper
+
+#### Creating symlinks to Mycodo executables
+
+#### Creating files and directories
+
+#### Setting permissions
+
+#### Installing logrotate scripts
+Mycodo logrotate script installed
+
+#### Generating SSL certificates at /home/pi/Mycodo/mycodo/mycodo_flask/ssl_certs (replace with your own if desired)
+Generating RSA private key, 4096 bit long modulus (2 primes)
+.......++++
+.........................................................................................................................................................................................++++
+e is 65537 (0x010001)
+writing RSA key
+Signature ok
+subject=O = mycodo, OU = mycodo, CN = mycodo
+Getting Private key
+
+#### Disabling installed mycodo startup script
+Removed /etc/systemd/system/multi-user.target.wants/mycodo.service.
+Removed /etc/systemd/system/mycodo.service.
+#### Enabling current mycodo startup script
+Created symlink /etc/systemd/system/mycodo.service → /home/pi/Mycodo/install/mycodo.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/mycodo.service → /home/pi/Mycodo/install/mycodo.service.
+
+#### Compiling Translations
+/home/pi/Mycodo/mycodo/scripts/upgrade_commands.sh: line 117: /home/pi/Mycodo/env/bin/pybabel: No such file or directory
+
+#### Generating widget HTML files
+/home/pi/Mycodo/mycodo/scripts/upgrade_commands.sh: line 180: /home/pi/Mycodo/env/bin/python: No such file or directory
+
+#### Running initialization
+
+#### Creating mycodo user
+useradd: user 'mycodo' already exists
+The user `mycodo' is already a member of `adm'.
+The user `mycodo' is already a member of `dialout'.
+The user `mycodo' is already a member of `gpio'.
+The user `mycodo' is already a member of `i2c'.
+The user `mycodo' is already a member of `kmem'.
+The user `mycodo' is already a member of `video'.
+The user `pi' is already a member of `mycodo'.
+The user `mycodo' is already a member of `pi'.
+
+#### Compiling mycodo_wrapper
+
+#### Creating symlinks to Mycodo executables
+
+#### Creating files and directories
+
+#### Setting permissions
+
+#### Installing and configuring nginx web server
+Removed /etc/systemd/system/mycodoflask.service.
+Removed /etc/systemd/system/multi-user.target.wants/mycodoflask.service.
+Synchronizing state of nginx.service with SysV service script with /lib/systemd/systemd-sysv-install.
+Executing: /lib/systemd/systemd-sysv-install enable nginx
+Created symlink /etc/systemd/system/multi-user.target.wants/mycodoflask.service → /home/pi/Mycodo/install/mycodoflask.service.
+Created symlink /etc/systemd/system/mycodoflask.service → /home/pi/Mycodo/install/mycodoflask.service.
+
+#### Restarting nginx
+#### Restarting mycodoflask
+
+#### Connecting to http://localhost (creates Mycodo database if it doesn't exist)
+#### Could not connect to http://localhost. Waiting 60 seconds then trying again (up to 5 times)...
+#### Trying again...
+#### Could not connect to http://localhost. Waiting 60 seconds then trying again (up to 5 times)...
+
+**********************************
+** ERROR During Mycodo Install! **
+**********************************
+
+An error occurred that may have prevented Mycodo from
+being installed properly!
+
+Open to the end of the setup log to view the full error:
+/home/pi/Mycodo/install/setup.log
+
+Please contact the developer by submitting a bug report
+at https://github.com/kizniche/Mycodo/issues with the
+pertinent excerpts from the setup log located at:
+/home/pi/Mycodo/install/setup.log
+### Mycodo installation initiated Tue 17 Jan 11:48:09 GMT 2023
+Mycodo install canceled by user### Mycodo installation initiated Tue 17 Jan 11:50:01 GMT 2023
+#### Mycodo installation began Tue 17 Jan 11:50:03 GMT 2023
+
+#### Checking if swap size is 100 MB and needs to be changed to 512 MB
+#### Swap not currently set to 100 MB. Not changing.
+
+#### Updating apt repositories
+Hit:1 http://archive.raspberrypi.org/debian bullseye InRelease
+Hit:2 http://raspbian.raspberrypi.org/raspbian bullseye InRelease
+Reading package lists...
+
+#### Uninstalling apt version of pip (if installed)
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Package 'python-pip' is not installed, so not removed
+0 upgraded, 0 newly installed, 0 to remove and 1 not upgraded.
+1 not fully installed or removed.
+After this operation, 0 B of additional disk space will be used.
+Setting up hostapd (2:2.9.0-21) ...
+/var/lib/dpkg/info/hostapd.postinst: 1: /etc/default/hostapd: : not found
+dpkg: error processing package hostapd (--configure):
+ installed hostapd package post-installation script subprocess returned error exit status 127
+Errors were encountered while processing:
+ hostapd
+E: Sub-process /usr/bin/dpkg returned an error code (1)
+
+#### Installing prerequisite apt packages and update pip
+Reading package lists...
+Building dependency tree...
+Reading state information...
+E: Unable to locate package python-cffi-backend
+Reading package lists...
+Building dependency tree...
+Reading state information...
+g++ is already the newest version (4:10.2.1-1+rpi1).
+gawk is already the newest version (1:5.1.0-1).
+gcc is already the newest version (4:10.2.1-1+rpi1).
+git is already the newest version (1:2.30.2-1).
+libffi-dev is already the newest version (3.3-6).
+libi2c-dev is already the newest version (4.2-1+b1).
+logrotate is already the newest version (3.18.0-2+deb11u1).
+moreutils is already the newest version (0.65-1).
+nginx is already the newest version (1.18.0-6.1+deb11u3).
+python3 is already the newest version (3.9.2-3).
+python3-dev is already the newest version (3.9.2-3).
+python3-pylint-common is already the newest version (0.2.5-4).
+python3-setuptools is already the newest version (52.0.0-4).
+python3-smbus is already the newest version (4.2-1+b1).
+rng-tools is already the newest version (5migrate1).
+sqlite3 is already the newest version (3.34.1-3).
+wget is already the newest version (1.21-1+deb11u1).
+0 upgraded, 0 newly installed, 0 to remove and 1 not upgraded.
+1 not fully installed or removed.
+After this operation, 0 B of additional disk space will be used.
+Setting up hostapd (2:2.9.0-21) ...
+/var/lib/dpkg/info/hostapd.postinst: 1: /etc/default/hostapd: : not found
+dpkg: error processing package hostapd (--configure):
+ installed hostapd package post-installation script subprocess returned error exit status 127
+Errors were encountered while processing:
+ hostapd
+E: Sub-process /usr/bin/dpkg returned an error code (1)
+python3: can't open file '/usr/lib/python3/dist-packages/easy_install.py': [Errno 2] No such file or directory
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Requirement already satisfied: pip in /usr/lib/python3/dist-packages (20.3.4)
+Collecting pip
+  Downloading pip-22.3.1-py3-none-any.whl (2.1 MB)
+Installing collected packages: pip
+  Attempting uninstall: pip
+    Found existing installation: pip 20.3.4
+    Not uninstalling pip at /usr/lib/python3/dist-packages, outside environment /usr
+    Can't uninstall 'pip'. No files were found to uninstall.
+Successfully installed pip-22.3.1
+
+#### Checking python 3 virtualenv
+#### Virtualenv doesn't exist. Creating...
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Collecting virtualenv==20.7.0
+  Downloading https://www.piwheels.org/simple/virtualenv/virtualenv-20.7.0-py2.py3-none-any.whl (5.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.3/5.3 MB 998.4 kB/s eta 0:00:00
+Requirement already satisfied: six<2,>=1.9.0 in /usr/lib/python3/dist-packages (from virtualenv==20.7.0) (1.16.0)
+Collecting filelock<4,>=3.0.0
+  Downloading https://www.piwheels.org/simple/filelock/filelock-3.9.0-py3-none-any.whl (9.7 kB)
+Collecting backports.entry-points-selectable>=1.0.4
+  Downloading https://www.piwheels.org/simple/backports-entry-points-selectable/backports.entry_points_selectable-1.2.0-py3-none-any.whl (6.2 kB)
+Collecting platformdirs<3,>=2
+  Downloading https://www.piwheels.org/simple/platformdirs/platformdirs-2.6.2-py3-none-any.whl (14 kB)
+Collecting distlib<1,>=0.3.1
+  Downloading https://www.piwheels.org/simple/distlib/distlib-0.3.6-py2.py3-none-any.whl (468 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 468.5/468.5 kB 669.1 kB/s eta 0:00:00
+Installing collected packages: distlib, platformdirs, filelock, backports.entry-points-selectable, virtualenv
+Successfully installed backports.entry-points-selectable-1.2.0 distlib-0.3.6 filelock-3.9.0 platformdirs-2.6.2 virtualenv-20.7.0
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+created virtual environment CPython3.9.2.final.0-32 in 1384ms
+  creator CPython3Posix(dest=/home/pi/Mycodo/env, clear=False, no_vcs_ignore=False, global=True)
+  seeder FromAppData(download=False, pip=bundle, setuptools=bundle, wheel=bundle, via=copy, app_data_dir=/root/.local/share/virtualenv)
+    added seed packages: pip==21.2.2, setuptools==57.4.0, wheel==0.36.2
+  activators BashActivator,CShellActivator,FishActivator,PowerShellActivator,PythonActivator
+
+#### Updating pip
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Requirement already satisfied: pip in ./env/lib/python3.9/site-packages (21.2.2)
+Collecting pip
+  Using cached pip-22.3.1-py3-none-any.whl (2.1 MB)
+Installing collected packages: pip
+  Attempting uninstall: pip
+    Found existing installation: pip 21.2.2
+    Uninstalling pip-21.2.2:
+      Successfully uninstalled pip-21.2.2
+Successfully installed pip-22.3.1
+
+#### Installing pip requirements
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Requirement already satisfied: pip in ./env/lib/python3.9/site-packages (22.3.1)
+Requirement already satisfied: setuptools in ./env/lib/python3.9/site-packages (57.4.0)
+Collecting setuptools
+  Using cached https://www.piwheels.org/simple/setuptools/setuptools-66.0.0-py3-none-any.whl (1.3 MB)
+Installing collected packages: setuptools
+  Attempting uninstall: setuptools
+    Found existing installation: setuptools 57.4.0
+    Uninstalling setuptools-57.4.0:
+      Successfully uninstalled setuptools-57.4.0
+Successfully installed setuptools-66.0.0
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Collecting alembic==1.5.8
+  Downloading https://www.piwheels.org/simple/alembic/alembic-1.5.8-py2.py3-none-any.whl (159 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 159.6/159.6 kB 281.3 kB/s eta 0:00:00
+Collecting argparse==1.4.0
+  Downloading https://www.piwheels.org/simple/argparse/argparse-1.4.0-py2.py3-none-any.whl (23 kB)
+Collecting bcrypt==3.2.0
+  Downloading https://www.piwheels.org/simple/bcrypt/bcrypt-3.2.0-cp39-cp39-linux_armv7l.whl (53 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 53.6/53.6 kB 1.0 MB/s eta 0:00:00
+Collecting daemonize==2.5.0
+  Downloading https://www.piwheels.org/simple/daemonize/daemonize-2.5.0-py2.py3-none-any.whl (5.2 kB)
+Requirement already satisfied: distro==1.5.0 in /usr/lib/python3/dist-packages (from -r /home/pi/Mycodo/install/requirements.txt (line 6)) (1.5.0)
+Collecting email_validator==1.1.2
+  Downloading https://www.piwheels.org/simple/email-validator/email_validator-1.1.2-py2.py3-none-any.whl (17 kB)
+Collecting filelock==3.0.12
+  Downloading https://www.piwheels.org/simple/filelock/filelock-3.0.12-py3-none-any.whl (7.6 kB)
+Collecting Flask==1.1.2
+  Downloading https://www.piwheels.org/simple/flask/Flask-1.1.2-py2.py3-none-any.whl (94 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 94.6/94.6 kB 402.5 kB/s eta 0:00:00
+Collecting Flask_Accept==0.0.6
+  Downloading https://www.piwheels.org/simple/flask-accept/flask_accept-0.0.6-py3-none-any.whl (3.8 kB)
+Collecting Flask_Babel==2.0.0
+  Downloading https://www.piwheels.org/simple/flask-babel/Flask_Babel-2.0.0-py3-none-any.whl (9.3 kB)
+Collecting Flask_Compress==1.9.0
+  Downloading https://www.piwheels.org/simple/flask-compress/Flask_Compress-1.9.0-py3-none-any.whl (9.6 kB)
+Collecting Flask_Limiter==1.4
+  Downloading https://www.piwheels.org/simple/flask-limiter/Flask_Limiter-1.4-py3-none-any.whl (15 kB)
+Collecting Flask_Login==0.5.0
+  Downloading https://www.piwheels.org/simple/flask-login/Flask_Login-0.5.0-py2.py3-none-any.whl (16 kB)
+Collecting Flask_Marshmallow==0.14.0
+  Downloading https://www.piwheels.org/simple/flask-marshmallow/flask_marshmallow-0.14.0-py2.py3-none-any.whl (10 kB)
+Collecting Flask_RESTX==0.3.0
+  Downloading https://www.piwheels.org/simple/flask-restx/flask_restx-0.3.0-py2.py3-none-any.whl (5.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.3/5.3 MB 706.1 kB/s eta 0:00:00
+Collecting Flask_Session==0.4.0
+  Downloading https://www.piwheels.org/simple/flask-session/Flask_Session-0.4.0-py2.py3-none-any.whl (7.5 kB)
+Collecting Flask_SQLAlchemy==2.5.1
+  Downloading https://www.piwheels.org/simple/flask-sqlalchemy/Flask_SQLAlchemy-2.5.1-py2.py3-none-any.whl (17 kB)
+Collecting Flask_Talisman==0.7.0
+  Downloading https://www.piwheels.org/simple/flask-talisman/flask_talisman-0.7.0-py2.py3-none-any.whl (12 kB)
+Collecting Flask_WTF==0.14.3
+  Downloading https://www.piwheels.org/simple/flask-wtf/Flask_WTF-0.14.3-py2.py3-none-any.whl (13 kB)
+Collecting geocoder==1.38.1
+  Downloading https://www.piwheels.org/simple/geocoder/geocoder-1.38.1-py2.py3-none-any.whl (98 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 98.6/98.6 kB 232.3 kB/s eta 0:00:00
+Collecting gunicorn==20.1.0
+  Downloading https://www.piwheels.org/simple/gunicorn/gunicorn-20.1.0-py3-none-any.whl (81 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 81.0/81.0 kB 319.4 kB/s eta 0:00:00
+Collecting influxdb==5.3.1
+  Downloading https://www.piwheels.org/simple/influxdb/influxdb-5.3.1-py2.py3-none-any.whl (77 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 77.9/77.9 kB 315.3 kB/s eta 0:00:00
+Collecting itsdangerous==2.0.1
+  Downloading https://www.piwheels.org/simple/itsdangerous/itsdangerous-2.0.1-py3-none-any.whl (18 kB)
+Collecting Jinja2==3.0.3
+  Downloading https://www.piwheels.org/simple/jinja2/Jinja2-3.0.3-py3-none-any.whl (133 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 133.6/133.6 kB 327.7 kB/s eta 0:00:00
+Collecting marshmallow_sqlalchemy==0.24.2
+  Downloading https://www.piwheels.org/simple/marshmallow-sqlalchemy/marshmallow_sqlalchemy-0.24.2-py2.py3-none-any.whl (18 kB)
+Collecting pyro5==5.12
+  Downloading https://www.piwheels.org/simple/pyro5/Pyro5-5.12-py3-none-any.whl (77 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 77.8/77.8 kB 174.7 kB/s eta 0:00:00
+Collecting pyserial==3.5
+  Downloading https://www.piwheels.org/simple/pyserial/pyserial-3.5-py2.py3-none-any.whl (90 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 90.6/90.6 kB 229.5 kB/s eta 0:00:00
+Collecting python-dateutil==2.8.1
+  Downloading https://www.piwheels.org/simple/python-dateutil/python_dateutil-2.8.1-py2.py3-none-any.whl (227 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 227.2/227.2 kB 355.2 kB/s eta 0:00:00
+Requirement already satisfied: requests==2.25.1 in /usr/lib/python3/dist-packages (from -r /home/pi/Mycodo/install/requirements.txt (line 31)) (2.25.1)
+Collecting setuptools==56.0.0
+  Downloading https://www.piwheels.org/simple/setuptools/setuptools-56.0.0-py3-none-any.whl (784 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 784.9/784.9 kB 396.0 kB/s eta 0:00:00
+Collecting SQLAlchemy==1.4.7
+  Downloading https://www.piwheels.org/simple/sqlalchemy/SQLAlchemy-1.4.7-cp39-cp39-linux_armv7l.whl (1.5 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.5/1.5 MB 302.1 kB/s eta 0:00:00
+Collecting typing-extensions==4.3.0
+  Downloading https://www.piwheels.org/simple/typing-extensions/typing_extensions-4.3.0-py3-none-any.whl (25 kB)
+Collecting Werkzeug==2.0.2
+  Downloading https://www.piwheels.org/simple/werkzeug/Werkzeug-2.0.2-py3-none-any.whl (288 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 288.9/288.9 kB 359.2 kB/s eta 0:00:00
+Collecting WTForms==2.3.3
+  Downloading https://www.piwheels.org/simple/wtforms/WTForms-2.3.3-py2.py3-none-any.whl (169 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 169.1/169.1 kB 429.6 kB/s eta 0:00:00
+Collecting Mako
+  Downloading https://www.piwheels.org/simple/mako/Mako-1.2.4-py3-none-any.whl (78 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 78.7/78.7 kB 179.0 kB/s eta 0:00:00
+Collecting python-editor>=0.3
+  Downloading https://www.piwheels.org/simple/python-editor/python_editor-1.0.4-py3-none-any.whl (4.9 kB)
+Collecting cffi>=1.1
+  Downloading https://www.piwheels.org/simple/cffi/cffi-1.15.1-cp39-cp39-linux_armv7l.whl (364 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 364.7/364.7 kB 285.7 kB/s eta 0:00:00
+Requirement already satisfied: six>=1.4.1 in /usr/lib/python3/dist-packages (from bcrypt==3.2.0->-r /home/pi/Mycodo/install/requirements.txt (line 4)) (1.16.0)
+Collecting dnspython>=1.15.0
+  Downloading https://www.piwheels.org/simple/dnspython/dnspython-2.3.0-py3-none-any.whl (283 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 283.7/283.7 kB 300.8 kB/s eta 0:00:00
+Requirement already satisfied: idna>=2.0.0 in /usr/lib/python3/dist-packages (from email_validator==1.1.2->-r /home/pi/Mycodo/install/requirements.txt (line 7)) (2.10)
+Collecting click>=5.1
+  Downloading https://www.piwheels.org/simple/click/click-8.1.3-py3-none-any.whl (96 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 96.6/96.6 kB 226.9 kB/s eta 0:00:00
+Collecting pytz
+  Downloading https://www.piwheels.org/simple/pytz/pytz-2022.7.1-py3-none-any.whl (499 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 499.4/499.4 kB 334.9 kB/s eta 0:00:00
+Collecting Babel>=2.3
+  Downloading https://www.piwheels.org/simple/babel/Babel-2.11.0-py3-none-any.whl (9.5 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 9.5/9.5 MB 463.1 kB/s eta 0:00:00
+Collecting brotli
+  Downloading https://www.piwheels.org/simple/brotli/Brotli-1.0.9-cp39-cp39-linux_armv7l.whl (2.5 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.5/2.5 MB 414.3 kB/s eta 0:00:00
+Collecting limits
+  Downloading https://www.piwheels.org/simple/limits/limits-3.1.6-py3-none-any.whl (43 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 43.7/43.7 kB 990.6 kB/s eta 0:00:00
+Collecting marshmallow>=2.0.0
+  Downloading marshmallow-3.19.0-py3-none-any.whl (49 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 49.1/49.1 kB 413.0 kB/s eta 0:00:00
+Collecting aniso8601>=0.82
+  Downloading https://www.piwheels.org/simple/aniso8601/aniso8601-9.0.1-py2.py3-none-any.whl (52 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 52.8/52.8 kB 218.0 kB/s eta 0:00:00
+Collecting jsonschema
+  Downloading https://www.piwheels.org/simple/jsonschema/jsonschema-4.17.3-py3-none-any.whl (90 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 90.4/90.4 kB 387.0 kB/s eta 0:00:00
+Collecting cachelib
+  Downloading https://www.piwheels.org/simple/cachelib/cachelib-0.10.0-py3-none-any.whl (18 kB)
+Collecting ratelim
+  Downloading https://www.piwheels.org/simple/ratelim/ratelim-0.1.6-py2.py3-none-any.whl (4.0 kB)
+Collecting future
+  Downloading https://www.piwheels.org/simple/future/future-0.18.3-py3-none-any.whl (492 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 492.0/492.0 kB 404.4 kB/s eta 0:00:00
+Collecting msgpack
+  Downloading https://www.piwheels.org/simple/msgpack/msgpack-1.0.4-cp39-cp39-linux_armv7l.whl (282 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 282.9/282.9 kB 1.0 MB/s eta 0:00:00
+Collecting MarkupSafe>=2.0
+  Downloading https://www.piwheels.org/simple/markupsafe/MarkupSafe-2.1.1-cp39-cp39-linux_armv7l.whl (23 kB)
+Collecting serpent>=1.27
+  Downloading https://www.piwheels.org/simple/serpent/serpent-1.41-py3-none-any.whl (12 kB)
+Collecting greenlet!=0.4.17
+  Downloading https://www.piwheels.org/simple/greenlet/greenlet-2.0.1-cp39-cp39-linux_armv7l.whl (463 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 463.5/463.5 kB 716.0 kB/s eta 0:00:00
+Collecting pycparser
+  Downloading https://www.piwheels.org/simple/pycparser/pycparser-2.21-py2.py3-none-any.whl (119 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 119.7/119.7 kB 2.5 MB/s eta 0:00:00
+Collecting packaging>=17.0
+  Downloading https://www.piwheels.org/simple/packaging/packaging-23.0-py3-none-any.whl (42 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 42.7/42.7 kB 181.9 kB/s eta 0:00:00
+Collecting pyrsistent!=0.17.0,!=0.17.1,!=0.17.2,>=0.14.0
+  Downloading https://www.piwheels.org/simple/pyrsistent/pyrsistent-0.19.3-cp39-cp39-linux_armv7l.whl (102 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 102.5/102.5 kB 254.5 kB/s eta 0:00:00
+Collecting attrs>=17.4.0
+  Downloading https://www.piwheels.org/simple/attrs/attrs-22.2.0-py3-none-any.whl (60 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 60.0/60.0 kB 263.0 kB/s eta 0:00:00
+Collecting deprecated>=1.2
+  Downloading https://www.piwheels.org/simple/deprecated/Deprecated-1.2.13-py2.py3-none-any.whl (9.5 kB)
+Collecting decorator
+  Downloading https://www.piwheels.org/simple/decorator/decorator-5.1.1-py3-none-any.whl (10 kB)
+Requirement already satisfied: wrapt<2,>=1.10 in /usr/lib/python3/dist-packages (from deprecated>=1.2->limits->Flask_Limiter==1.4->-r /home/pi/Mycodo/install/requirements.txt (line 13)) (1.12.1)
+Installing collected packages: pytz, python-editor, pyserial, msgpack, filelock, daemonize, brotli, argparse, aniso8601, Werkzeug, typing-extensions, setuptools, serpent, python-dateutil, pyrsistent, pycparser, packaging, MarkupSafe, itsdangerous, greenlet, future, Flask_Talisman, dnspython, deprecated, decorator, click, cachelib, Babel, attrs, WTForms, SQLAlchemy, ratelim, pyro5, marshmallow, Mako, limits, jsonschema, Jinja2, influxdb, gunicorn, email_validator, cffi, marshmallow_sqlalchemy, geocoder, Flask, bcrypt, alembic, Flask_WTF, Flask_SQLAlchemy, Flask_Session, Flask_RESTX, Flask_Marshmallow, Flask_Login, Flask_Limiter, Flask_Compress, Flask_Babel, Flask_Accept
+  Attempting uninstall: filelock
+    Found existing installation: filelock 3.9.0
+    Not uninstalling filelock at /usr/local/lib/python3.9/dist-packages, outside environment /home/pi/Mycodo/env
+    Can't uninstall 'filelock'. No files were found to uninstall.
+  Attempting uninstall: typing-extensions
+    Found existing installation: typing-extensions 3.7.4.3
+    Not uninstalling typing-extensions at /usr/lib/python3/dist-packages, outside environment /home/pi/Mycodo/env
+    Can't uninstall 'typing-extensions'. No files were found to uninstall.
+  Attempting uninstall: setuptools
+    Found existing installation: setuptools 66.0.0
+    Uninstalling setuptools-66.0.0:
+      Successfully uninstalled setuptools-66.0.0
+Successfully installed Babel-2.11.0 Flask-1.1.2 Flask_Accept-0.0.6 Flask_Babel-2.0.0 Flask_Compress-1.9.0 Flask_Limiter-1.4 Flask_Login-0.5.0 Flask_Marshmallow-0.14.0 Flask_RESTX-0.3.0 Flask_SQLAlchemy-2.5.1 Flask_Session-0.4.0 Flask_Talisman-0.7.0 Flask_WTF-0.14.3 Jinja2-3.0.3 Mako-1.2.4 MarkupSafe-2.1.1 SQLAlchemy-1.4.7 WTForms-2.3.3 Werkzeug-2.0.2 alembic-1.5.8 aniso8601-9.0.1 argparse-1.4.0 attrs-22.2.0 bcrypt-3.2.0 brotli-1.0.9 cachelib-0.10.0 cffi-1.15.1 click-8.1.3 daemonize-2.5.0 decorator-5.1.1 deprecated-1.2.13 dnspython-2.3.0 email_validator-1.1.2 filelock-3.0.12 future-0.18.3 geocoder-1.38.1 greenlet-2.0.1 gunicorn-20.1.0 influxdb-5.3.1 itsdangerous-2.0.1 jsonschema-4.17.3 limits-3.1.6 marshmallow-3.19.0 marshmallow_sqlalchemy-0.24.2 msgpack-1.0.4 packaging-23.0 pycparser-2.21 pyro5-5.12 pyrsistent-0.19.3 pyserial-3.5 python-dateutil-2.8.1 python-editor-1.0.4 pytz-2022.7.1 ratelim-0.1.6 serpent-1.41 setuptools-56.0.0 typing-extensions-4.3.0
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Collecting pylibftdi==0.19.0
+  Downloading https://www.piwheels.org/simple/pylibftdi/pylibftdi-0.19.0-py2.py3-none-any.whl (32 kB)
+Requirement already satisfied: RPi.GPIO in /usr/lib/python3/dist-packages (from -r /home/pi/Mycodo/install/requirements-rpi.txt (line 3)) (0.7.0)
+Collecting RPi.GPIO
+  Downloading https://www.piwheels.org/simple/rpi-gpio/RPi.GPIO-0.7.1-cp39-cp39-linux_armv7l.whl (66 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 66.3/66.3 kB 64.5 kB/s eta 0:00:00
+Collecting smbus2==0.4.1
+  Downloading https://www.piwheels.org/simple/smbus2/smbus2-0.4.1-py2.py3-none-any.whl (11 kB)
+Installing collected packages: smbus2, RPi.GPIO, pylibftdi
+  Attempting uninstall: RPi.GPIO
+    Found existing installation: RPi.GPIO 0.7.0
+    Not uninstalling rpi-gpio at /usr/lib/python3/dist-packages, outside environment /home/pi/Mycodo/env
+    Can't uninstall 'RPi.GPIO'. No files were found to uninstall.
+Successfully installed RPi.GPIO-0.7.1 pylibftdi-0.19.0 smbus2-0.4.1
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Collecting testfixtures==6.17.1
+  Downloading https://www.piwheels.org/simple/testfixtures/testfixtures-6.17.1-py2.py3-none-any.whl (95 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 95.0/95.0 kB 401.7 kB/s eta 0:00:00
+Collecting mock==4.0.3
+  Downloading https://www.piwheels.org/simple/mock/mock-4.0.3-py3-none-any.whl (28 kB)
+Collecting pytest==6.2.3
+  Downloading https://www.piwheels.org/simple/pytest/pytest-6.2.3-py3-none-any.whl (280 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 280.5/280.5 kB 357.6 kB/s eta 0:00:00
+Collecting factory_boy==3.2.0
+  Downloading https://www.piwheels.org/simple/factory-boy/factory_boy-3.2.0-py2.py3-none-any.whl (35 kB)
+Collecting webtest==2.0.35
+  Downloading https://www.piwheels.org/simple/webtest/WebTest-2.0.35-py2.py3-none-any.whl (32 kB)
+Requirement already satisfied: packaging in ./env/lib/python3.9/site-packages (from pytest==6.2.3->-r /home/pi/Mycodo/install/requirements-testing.txt (line 4)) (23.0)
+Requirement already satisfied: attrs>=19.2.0 in ./env/lib/python3.9/site-packages (from pytest==6.2.3->-r /home/pi/Mycodo/install/requirements-testing.txt (line 4)) (22.2.0)
+Requirement already satisfied: toml in /usr/lib/python3/dist-packages (from pytest==6.2.3->-r /home/pi/Mycodo/install/requirements-testing.txt (line 4)) (0.10.1)
+Collecting iniconfig
+  Downloading https://www.piwheels.org/simple/iniconfig/iniconfig-2.0.0-py3-none-any.whl (5.9 kB)
+Collecting py>=1.8.2
+  Downloading https://www.piwheels.org/simple/py/py-1.11.0-py2.py3-none-any.whl (98 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 98.7/98.7 kB 393.3 kB/s eta 0:00:00
+Collecting pluggy<1.0.0a1,>=0.12
+  Downloading https://www.piwheels.org/simple/pluggy/pluggy-0.13.1-py2.py3-none-any.whl (18 kB)
+Collecting Faker>=0.7.0
+  Downloading https://www.piwheels.org/simple/faker/Faker-16.4.0-py3-none-any.whl (1.7 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.7/1.7 MB 490.0 kB/s eta 0:00:00
+Collecting waitress>=0.8.5
+  Downloading https://www.piwheels.org/simple/waitress/waitress-2.1.2-py3-none-any.whl (57 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 57.7/57.7 kB 1.3 MB/s eta 0:00:00
+Collecting WebOb>=1.2
+  Downloading https://www.piwheels.org/simple/webob/WebOb-1.8.7-py2.py3-none-any.whl (114 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 115.0/115.0 kB 279.2 kB/s eta 0:00:00
+Requirement already satisfied: six in /usr/lib/python3/dist-packages (from webtest==2.0.35->-r /home/pi/Mycodo/install/requirements-testing.txt (line 6)) (1.16.0)
+Collecting beautifulsoup4
+  Downloading https://www.piwheels.org/simple/beautifulsoup4/beautifulsoup4-4.11.1-py3-none-any.whl (130 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 130.1/130.1 kB 315.9 kB/s eta 0:00:00
+Requirement already satisfied: python-dateutil>=2.4 in ./env/lib/python3.9/site-packages (from Faker>=0.7.0->factory_boy==3.2.0->-r /home/pi/Mycodo/install/requirements-testing.txt (line 5)) (2.8.1)
+Collecting soupsieve>1.2
+  Downloading https://www.piwheels.org/simple/soupsieve/soupsieve-2.3.2.post1-py3-none-any.whl (37 kB)
+Installing collected packages: testfixtures, WebOb, waitress, soupsieve, py, pluggy, mock, iniconfig, pytest, Faker, beautifulsoup4, webtest, factory_boy
+Successfully installed Faker-16.4.0 WebOb-1.8.7 beautifulsoup4-4.11.1 factory_boy-3.2.0 iniconfig-2.0.0 mock-4.0.3 pluggy-0.13.1 py-1.11.0 pytest-6.2.3 soupsieve-2.3.2.post1 testfixtures-6.17.1 waitress-2.1.2 webtest-2.0.35
+--2023-01-17 11:53:52--  https://project-downloads.drogon.net/wiringpi-latest.deb
+Resolving project-downloads.drogon.net (project-downloads.drogon.net)... 188.246.205.22, 2a03:9800:10:7b::2
+Connecting to project-downloads.drogon.net (project-downloads.drogon.net)|188.246.205.22|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 52260 (51K) [application/x-debian-package]
+Saving to: ‘wiringpi-latest.deb’
+
+     0K .......... .......... .......... .......... .......... 97%  142K 0s
+    50K .                                                     100% 1.93T=0.4s
+
+2023-01-17 11:53:54 (145 KB/s) - ‘wiringpi-latest.deb’ saved [52260/52260]
+
+(Reading database ... 47213 files and directories currently installed.)
+Preparing to unpack wiringpi-latest.deb ...
+Unpacking wiringpi (2.52) over (2.52) ...
+Setting up wiringpi (2.52) ...
+Processing triggers for man-db (2.9.4-2) ...
+
+#### Ensuring compatible version of influxdb is installed ####
+Correct version of InfluxDB currently installed
+
+#### Creating InfluxDB database and user
+#### Attempting to connect...
+#### Influxdb database and user successfully created
+
+#### Running initialization
+
+#### Creating mycodo user
+useradd: user 'mycodo' already exists
+The user `mycodo' is already a member of `adm'.
+The user `mycodo' is already a member of `dialout'.
+The user `mycodo' is already a member of `gpio'.
+The user `mycodo' is already a member of `i2c'.
+The user `mycodo' is already a member of `kmem'.
+The user `mycodo' is already a member of `video'.
+The user `pi' is already a member of `mycodo'.
+The user `mycodo' is already a member of `pi'.
+
+#### Compiling mycodo_wrapper
+
+#### Creating symlinks to Mycodo executables
+
+#### Creating files and directories
+
+#### Setting permissions
+
+#### Installing logrotate scripts
+Mycodo logrotate script installed
+
+#### Generating SSL certificates at /home/pi/Mycodo/mycodo/mycodo_flask/ssl_certs (replace with your own if desired)
+Generating RSA private key, 4096 bit long modulus (2 primes)
+......................++++
+......................................................................................................................................................................++++
+e is 65537 (0x010001)
+writing RSA key
+Signature ok
+subject=O = mycodo, OU = mycodo, CN = mycodo
+Getting Private key
+
+#### Disabling installed mycodo startup script
+Removed /etc/systemd/system/multi-user.target.wants/mycodo.service.
+Removed /etc/systemd/system/mycodo.service.
+#### Enabling current mycodo startup script
+Created symlink /etc/systemd/system/mycodo.service → /home/pi/Mycodo/install/mycodo.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/mycodo.service → /home/pi/Mycodo/install/mycodo.service.
+
+#### Compiling Translations
+compiling catalog mycodo_flask/translations/es/LC_MESSAGES/messages.po to mycodo_flask/translations/es/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/sr/LC_MESSAGES/messages.po to mycodo_flask/translations/sr/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/it/LC_MESSAGES/messages.po to mycodo_flask/translations/it/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/nl/LC_MESSAGES/messages.po to mycodo_flask/translations/nl/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/de/LC_MESSAGES/messages.po to mycodo_flask/translations/de/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/sv/LC_MESSAGES/messages.po to mycodo_flask/translations/sv/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/zh/LC_MESSAGES/messages.po to mycodo_flask/translations/zh/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/pl/LC_MESSAGES/messages.po to mycodo_flask/translations/pl/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/pt/LC_MESSAGES/messages.po to mycodo_flask/translations/pt/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/fr/LC_MESSAGES/messages.po to mycodo_flask/translations/fr/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/ru/LC_MESSAGES/messages.po to mycodo_flask/translations/ru/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/nb/LC_MESSAGES/messages.po to mycodo_flask/translations/nb/LC_MESSAGES/messages.mo
+
+#### Generating widget HTML files
+
+#### Running initialization
+
+#### Creating mycodo user
+useradd: user 'mycodo' already exists
+The user `mycodo' is already a member of `adm'.
+The user `mycodo' is already a member of `dialout'.
+The user `mycodo' is already a member of `gpio'.
+The user `mycodo' is already a member of `i2c'.
+The user `mycodo' is already a member of `kmem'.
+The user `mycodo' is already a member of `video'.
+The user `pi' is already a member of `mycodo'.
+The user `mycodo' is already a member of `pi'.
+
+#### Compiling mycodo_wrapper
+
+#### Creating symlinks to Mycodo executables
+
+#### Creating files and directories
+
+#### Setting permissions
+
+#### Installing and configuring nginx web server
+Removed /etc/systemd/system/mycodoflask.service.
+Removed /etc/systemd/system/multi-user.target.wants/mycodoflask.service.
+Synchronizing state of nginx.service with SysV service script with /lib/systemd/systemd-sysv-install.
+Executing: /lib/systemd/systemd-sysv-install enable nginx
+Created symlink /etc/systemd/system/multi-user.target.wants/mycodoflask.service → /home/pi/Mycodo/install/mycodoflask.service.
+Created symlink /etc/systemd/system/mycodoflask.service → /home/pi/Mycodo/install/mycodoflask.service.
+
+#### Restarting nginx
+#### Restarting mycodoflask
+
+#### Connecting to http://localhost (creates Mycodo database if it doesn't exist)
+#### Could not connect to http://localhost. Waiting 60 seconds then trying again (up to 5 times)...
+#### Trying again...
+#### Successfully connected to http://localhost
+
+#### Setting permissions
+
+#### Restarting the Mycodo daemon
+
+#### Enabling AP manager service
+Created symlink /etc/systemd/system/wificonfig.service → /home/pi/Mycodo/install/wificonfig.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/wificonfig.service → /home/pi/Mycodo/install/wificonfig.service.
+#### Mycodo Installer finished Tue 17 Jan 11:55:31 GMT 2023
+#### Total install time: 5 minutes and 28 seconds
+
+*********************************
+** Mycodo finished installing! **
+*********************************
+
+Although the install finished, it doesn't necessarily mean it installed correctly.
+If you experience issues, review the full install log is located at:
+/home/pi/Mycodo/install/setup.log
+
+Go to https://192.168.8.119/, or whatever your Raspberry Pi's
+IP address is, to create an admin user and log in.

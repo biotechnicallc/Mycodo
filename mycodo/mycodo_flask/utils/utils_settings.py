@@ -1492,7 +1492,7 @@ def settings_pi_mod(form):
         action_str = "Moved wifi File"
         _, _, status = cmd_output("systemctl daemon-reload", user='root')
         action_str = "Reload Daemon"
-        _, _, status = cmd_output("systemctl restart wpa_supplicant", user='root')
+        _, _, status = cmd_output("systemctl restart dhcpcd", user='root')
         action_str = "Wifi Changed"
 
     elif form.change_pigpiod_sample_rate.data:

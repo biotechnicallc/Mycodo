@@ -1,0 +1,12 @@
+[Unit]
+Description=wifi ap Service
+After=multi-user.target
+
+[Service]
+ExecStart=/var/mycodo-root/env/bin/python /var/mycodo-root/mycodo/wifi_manager.py
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
+Alias=wificonfig.service
