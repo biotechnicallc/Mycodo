@@ -182,8 +182,13 @@ def page_current_recipe():
     #         db.session.commit()
 
     for schedule in scheduler:
-        weeks_ = list(json.loads(schedule.custom_options).keys())[2:]
-        data_ = list(json.loads(schedule.custom_options).values())[2:]
+        _schedule = json.loads(schedule.custom_options)
+        _schedule.pop("sprayed")
+        weeks_ = list(_schedule.keys())[2:]
+        for i in range(len(weeks_)):
+            weeks_[i] = weeks_[i].replace("_"," ")
+        data_ = list(_schedule.values())[2:]
+
         data_.insert(0,schedule.name)
         if(len(weeks_) > len(weeks)):
             weeks = list(weeks_)
@@ -202,8 +207,13 @@ def get_saved_recipes():
     weeks = []
     data = []
     for schedule in scheduler:
-        weeks_ = list(json.loads(schedule.custom_options).keys())[2:]
-        data_ = list(json.loads(schedule.custom_options).values())[2:]
+        _schedule = json.loads(schedule.custom_options)
+        _schedule.pop("sprayed")
+        weeks_ = list(_schedule.keys())[2:]
+        for i in range(len(weeks_)):
+            weeks_[i] = weeks_[i].replace("_"," ")
+        data_ = list(_schedule.values())[2:]
+
         data_.insert(0,schedule.recipe_id)
         data_.insert(1,schedule.name)
         if(len(weeks_) > len(weeks)):
@@ -373,8 +383,13 @@ def import_recipe():
     data = []
 
     for schedule in scheduler:
-        weeks_ = list(json.loads(schedule.custom_options).keys())[2:]
-        data_ = list(json.loads(schedule.custom_options).values())[2:]
+        _schedule = json.loads(schedule.custom_options)
+        _schedule.pop("sprayed")
+        weeks_ = list(_schedule.keys())[2:]
+        for i in range(len(weeks_)):
+            weeks_[i] = weeks_[i].replace("_"," ")
+        data_ = list(_schedule.values())[2:]
+
         data_.insert(0,schedule.recipe_id)
         data_.insert(1,schedule.name)
         if(len(weeks_) > len(weeks)):
@@ -467,8 +482,13 @@ def import_recipe():
                 data = []
 
                 for schedule in scheduler:
-                    weeks_ = list(json.loads(schedule.custom_options).keys())[2:]
-                    data_ = list(json.loads(schedule.custom_options).values())[2:]
+                    _schedule = json.loads(schedule.custom_options)
+                    _schedule.pop("sprayed")
+                    weeks_ = list(_schedule.keys())[2:]
+                    for i in range(len(weeks_)):
+                        weeks_[i] = weeks_[i].replace("_"," ")
+                    data_ = list(_schedule.values())[2:]
+                    
                     data_.insert(0,schedule.recipe_id)
                     data_.insert(1,schedule.name)
                     if(len(weeks_) > len(weeks)):
@@ -590,8 +610,13 @@ def toggleactive_recipe():
     data = []
 
     for schedule in scheduler:
-        weeks_ = list(json.loads(schedule.custom_options).keys())[2:]
-        data_ = list(json.loads(schedule.custom_options).values())[2:]
+        _schedule = json.loads(schedule.custom_options)
+        _schedule.pop("sprayed")
+        weeks_ = list(_schedule.keys())[2:]
+        for i in range(len(weeks_)):
+            weeks_[i] = weeks_[i].replace("_"," ")
+        data_ = list(_schedule.values())[2:]
+
         data_.insert(0,schedule.recipe_id)
         data_.insert(1,schedule.name)
         if(len(weeks_) > len(weeks)):
@@ -720,8 +745,13 @@ def change_settings():
     data = []
 
     for schedule in scheduler:
-        weeks_ = list(json.loads(schedule.custom_options).keys())[2:]
-        data_ = list(json.loads(schedule.custom_options).values())[2:]
+        _schedule = json.loads(schedule.custom_options)
+        _schedule.pop("sprayed")
+        weeks_ = list(_schedule.keys())[2:]
+        for i in range(len(weeks_)):
+            weeks_[i] = weeks_[i].replace("_"," ")
+        data_ = list(_schedule.values())[2:]
+
         data_.insert(0,schedule.recipe_id)
         data_.insert(1,schedule.name)
         if(len(weeks_) > len(weeks)):
@@ -769,7 +799,7 @@ def change_settings():
         if(start_date or end_date):
             if start_date:
                 try:
-                    _start_date = datetime.strptime(start_date, '%Y-%m-%d %H:%M:%S')
+                    _start_date = datetime.strptime(start_date, '%d/%m/%Y %H:%M')
                     db.session.query(Recipes).filter(Recipes.recipe_id == recipe_id).\
                     update({"start_date":_start_date})
                     db.session.commit()
@@ -778,7 +808,7 @@ def change_settings():
                     flash('Wrong date format')
             if end_date:
                 try:
-                    _end_date = datetime.strptime(end_date, '%Y-%m-%d %H:%M:%S')
+                    _end_date = datetime.strptime(end_date, '%d/%m/%Y %H:%M')
                     db.session.query(Recipes).filter(Recipes.recipe_id == recipe_id).\
                     update({"end_date":_end_date})
                     db.session.commit()

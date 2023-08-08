@@ -174,10 +174,11 @@
 
 .styled-table {
   border-collapse: collapse;
-  margin: 25px 0;
   font-size: 0.9em;
   font-family: sans-serif;
-  min-width: 400px;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-spacing: 0;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 .styled-table thead tr {
@@ -188,7 +189,8 @@
 
 .styled-table th,
 .styled-table td {
-    padding: 12px 15px;
+  text-align: left;
+  padding: 8px;
 }
 
 .styled-table tbody tr {
@@ -214,6 +216,7 @@
   grid-template-columns: auto auto auto;
   background-color: #2196F3;
   padding: 10px;
+  border-radius: 10px;
 }
 
 .grid-item {
@@ -222,6 +225,7 @@
   padding: 10px;
   font-size: 30px;
   text-align: center;
+  border-radius: 10px;
 }
 
 .grid-image{
@@ -240,6 +244,7 @@
   float: right;
   top:0px;
   right:0px;
+  border-radius: 5px;
 }
 
 .modal {
@@ -255,6 +260,7 @@
   grid-template-columns: auto auto;
   background-color: #91b7dd;
   padding: 10px;
+  border-radius: 10px;
 }
 
 .grid-item-modal {
@@ -263,6 +269,7 @@
   padding: 20px;
   font-size: 20px;
   text-align: center;
+  border-radius: 10px;
 }
 
 .grid-container-current {
@@ -271,6 +278,7 @@
   grid-template-columns: auto auto;
   background-color: #91b7dd;
   padding: 10px;
+  border-radius: 10px;
 }
 .grid-item-current {
   background-color: rgb(255, 255, 255);
@@ -278,10 +286,31 @@
   padding: 20px;
   font-size: 20px;
   text-align: center;
+  border-radius: 10px;
 }
 .grid-image-current{
   background-color: transparent;
   width:300px;
   height:300px;
   object-fit: contain;
+}
+.input-container{
+  width: 90%;
+  margin-bottom: 50px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #9eadbb;
+  border-style: solid;
+  border-color: cornsilk;
+  margin: 0 auto;
+}
+
+/* label,input{
+  display: block;
+} */
+
+label{
+  font-weight: bold;
+  width: 120px;
+  margin-right: 20px;
 }

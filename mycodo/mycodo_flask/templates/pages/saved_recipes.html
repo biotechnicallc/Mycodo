@@ -41,14 +41,18 @@
           <span class = close id="closeimg{{each_recipe.recipe_id}}">close</span>
         </div>
 
-        <div style = "padding-top: 10px;" >
+        <div style = "padding-top: 10px; background-color: #91b7dd;" >
           <form enctype="multipart/form-data" action="/change_settings" method="post">
               <input id="request_id" name=request_src type="hidden" value ="saved" />
               <input id="recipe_id" name=recipe_id type="hidden" value ={{each_recipe.recipe_id}} />
-              <p style = "margin-left:5px; font-weight:bold;">{{_('Recipe Name')}}</p>
-              <input id="recipe-name" name=recipe_name type="text"/>
-              <p style = "margin-left:5px; font-weight:bold;">{{_('Recipe Icon')}}</p>
-              <input id="image-file" name=file type="file"/>
+              <div class="input-container" style = "margin-bottom: 15px;">
+                <label for="recipe-end">{{_('Recipe Name')}}</label>
+                <input id="recipe-name" name=recipe_name type="text"/>
+              </div>
+              <div class="input-container" style = "margin-bottom: 15px;">
+                <label for="recipe-end">{{_('Recipe Icon')}}</label>
+                <input id="image-file" name=file type="file"/>
+              </div>
               <input style = "float: right;" id = "image_change" value="{{_('Save Changes')}}" class="btn btn-primary" type="submit"/>
           </form>
         </div>
@@ -134,7 +138,7 @@
             </div>
           </div>
 
-          <div style = "position:relative; padding-top: 10px;">
+          <div style = "position:relative; padding-top: 10px; overflow-x:auto;">
             <p style = "font-weight:bold;">Schedule</p>
             {% if not schedules %}
             {{_('No schedules available')}}
