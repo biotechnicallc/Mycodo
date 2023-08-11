@@ -28,6 +28,7 @@
     </div>
     {%- endif -%}
     {% endfor %}
+     <button id = "add-recipe" class = "grid-item add-grid-button" onClick="add_new_recipe(this.id)" type="button" >Add New</button>
   </div>
 
   {% for each_recipe in recipes -%}
@@ -198,7 +199,7 @@
 
 <script>
   function export_recipe(recipe_id,action)  
-  {   
+ {   
       $.ajax({
       type: "POST",
       url: "/export_recipe",
@@ -210,8 +211,24 @@
       success: function(data){
           console.log(data);
       }
-  });
-}
+   });
+  }
+
+ function add_new_recipe(action)  
+  {   
+      $.ajax({
+      type: "POST",
+      url: "/create_new_recipe",
+      contentType: 'application/json;charset=UTF-8',
+      data: JSON.stringify({'action':action}),
+      error : function(e){
+          console.log(e);
+      },
+      success: function(data){
+          console.log(data);
+      }
+    });
+ }
 </script>
 
 <script type="text/javascript">
@@ -237,11 +254,7 @@
         modal.style.display = "none";
       }
     }
-</script>
 
-
-
-<script type="text/javascript">
     function reply_click(clicked_id)
     {
       // Get the modal

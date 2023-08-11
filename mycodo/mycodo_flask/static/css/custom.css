@@ -213,10 +213,11 @@
 .grid-container {
   display: grid;
   grid-gap: 10px;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: 1fr 1fr 1fr;
   background-color: #2196F3;
   padding: 10px;
   border-radius: 10px;
+  grid-auto-rows: 1fr;
 }
 
 .grid-item {
@@ -245,6 +246,11 @@
   top:0px;
   right:0px;
   border-radius: 5px;
+}
+.add-grid-button {
+  color: #ffffff;
+  font-size: 15pt;
+  font-family: tahoma;
 }
 
 .modal {

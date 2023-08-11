@@ -35,6 +35,7 @@ from flask.blueprints import Blueprint
 from flask_babel import gettext
 from sqlalchemy import and_
 
+from mycodo.databases import set_uuid
 from mycodo.config import ALEMBIC_VERSION
 from mycodo.config import BACKUP_LOG_FILE
 from mycodo.config import CAMERA_INFO
@@ -221,6 +222,21 @@ def get_saved_recipes():
         data.append(data_)
     
     return render_template('pages/saved_recipes.html',recipes = recipes,inputs = inputs,outputs = outputs,functions = functions,schedules = scheduler,weeks = weeks,data = data)
+
+@blueprint.route('/create_new_recipe',methods=['POST','GET'])
+@flask_login.login_required
+def create_new_recipe():
+    recipe_id = set_uuid()
+    if utils_general.user_has_permission('edit_controllers'):
+        exist_recipe = Recipes.query.filter(Recipes.recipe_id == recipe_id).first()
+        if not exist_recipe:   
+            recipe_data = Recipes(recipe_id = recipe_id,icon = "default.png")
+            db.session.add(recipe_data)
+            db.session.commit()
+        return get_saved_recipes()
+    else:
+        return get_saved_recipes()
+
 
 @blueprint.route('/saved_recipes')
 @flask_login.login_required
@@ -732,6 +748,8 @@ def change_settings():
     recipe_name = request.form.get('recipe_name')
     start_date = request.form.get('recipe_start')
     end_date = request.form.get('recipe_end')
+    
+    logger.info(" startDate : {} EndDate {}".format(start_date,end_date))
 
     current_recipe = Recipes.query.filter(Recipes.recipe_id == recipe_id).first()
     recipe_icon = current_recipe.icon
@@ -794,26 +812,30 @@ def change_settings():
                 db.session.query(Recipes).filter(Recipes.recipe_id == recipe_id).\
                 update({"name":recipe_name})
                 db.session.commit()
-            except:
-                flash('Wrong date format')
+            except Exception as ex:
+                logger.info("Unable to update Recipe Name %s"%(ex))
+               
         if(start_date or end_date):
             if start_date:
                 try:
-                    _start_date = datetime.strptime(start_date, '%d/%m/%Y %H:%M')
+                    _start_date = datetime.strptime(start_date, '%Y-%m-%dT%H:%M')
                     db.session.query(Recipes).filter(Recipes.recipe_id == recipe_id).\
                     update({"start_date":_start_date})
                     db.session.commit()
                 
                 except:
-                    flash('Wrong date format')
+                    logger.info("Unable to update Recipe StartDate %s"%(ex))
+                  
             if end_date:
+                flash(end_date)
                 try:
-                    _end_date = datetime.strptime(end_date, '%d/%m/%Y %H:%M')
+                    _end_date = datetime.strptime(end_date, '%Y-%m-%dT%H:%M')
                     db.session.query(Recipes).filter(Recipes.recipe_id == recipe_id).\
                     update({"end_date":_end_date})
                     db.session.commit()
                 except:
-                    flash('Wrong date format')
+                    logger.info("Unable to update Recipe EndDate %s"%(ex))
+                   
 
             current_recipe = Recipes.query.filter(Recipes.recipe_id == recipe_id).first()
             response = update_weekly_methods(current_recipe.start_date,current_recipe.end_date)
