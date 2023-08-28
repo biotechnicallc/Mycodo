@@ -54,6 +54,19 @@ def get_summary(db):
                 
     return inputs,outputs,functions
 
+def set_current_recipe(recipe_id,old_recipe_id):
+    mycodo_db_path = os.path.join(DATABASE_PATH,"mycodo.db")
+    con = sqlite3.connect(mycodo_db_path ,check_same_thread=False)
+    with con as conn:
+        cursorObj = conn.cursor()
+        cursorObj.execute("UPDATE recipes SET current = False")
+        con.commit()
+        cursorObj.execute("UPDATE recipes SET current = True WHERE recipe_id = '{}'".format(recipe_id))
+        con.commit()
+
+    return "success"
+
+
 def dump_database(recipe_id):
     try:
         mycodo_db_path = os.path.join(DATABASE_PATH,"mycodo.db")
@@ -61,46 +74,46 @@ def dump_database(recipe_id):
         set_db_path = os.path.join(RECIPES_PATH,recipe_id+'.db')
 
         #clean some tables in set database
-        con = sqlite3.connect(set_db_path ,check_same_thread=False)
+        con = sqlite3.connect(mycodo_db_path ,check_same_thread=False)
         with con as conn:
             cursorObj = conn.cursor()
-            cursorObj.execute('ATTACH DATABASE "{}" AS old_db'.format(mycodo_db_path))
+            #cursorObj.execute('ATTACH DATABASE "{}" AS old_db'.format(mycodo_db_path))
 
-            cursorObj.execute("DELETE FROM users")
-            con.commit()
-            cursorObj.execute("DELETE FROM recipes")
-            con.commit()
-            cursorObj.execute("DELETE FROM saved_output")
-            con.commit()
-            cursorObj.execute("DELETE FROM saved_input")
-            con.commit()
-            cursorObj.execute("DELETE FROM saved_function")
-            con.commit()
+            # cursorObj.execute("DELETE FROM users")
+            # con.commit()
+            # cursorObj.execute("DELETE FROM recipes")
+            # con.commit()
+            # cursorObj.execute("DELETE FROM saved_output")
+            # con.commit()
+            # cursorObj.execute("DELETE FROM saved_input")
+            # con.commit()
+            # cursorObj.execute("DELETE FROM saved_function")
+            # con.commit()
             
-            #insert
-            cursorObj.execute("INSERT INTO users SELECT * FROM old_db.users")
-            con.commit()
-            cursorObj.execute("INSERT INTO recipes SELECT * FROM old_db.recipes")
-            con.commit()
-            cursorObj.execute("INSERT INTO saved_output SELECT * FROM old_db.saved_output")
-            con.commit()
-            cursorObj.execute("INSERT INTO saved_input SELECT * FROM old_db.saved_input")
-            con.commit()
-            cursorObj.execute("INSERT INTO saved_function SELECT * FROM old_db.saved_function")
-            con.commit()   
+            # #insert
+            # cursorObj.execute("INSERT INTO users SELECT * FROM old_db.users")
+            # con.commit()
+            # cursorObj.execute("INSERT INTO recipes SELECT * FROM old_db.recipes")
+            # con.commit()
+            # cursorObj.execute("INSERT INTO saved_output SELECT * FROM old_db.saved_output")
+            # con.commit()
+            # cursorObj.execute("INSERT INTO saved_input SELECT * FROM old_db.saved_input")
+            # con.commit()
+            # cursorObj.execute("INSERT INTO saved_function SELECT * FROM old_db.saved_function")
+            # con.commit()   
 
             cursorObj.execute("UPDATE recipes SET current = False")
             con.commit()
             cursorObj.execute("UPDATE recipes SET current = True WHERE recipe_id = '{}'".format(recipe_id))
             con.commit()
             
-        shutil.move(mycodo_db_path,backup_db_path) 
-        shutil.copy(set_db_path,mycodo_db_path) 
+        #shutil.move(mycodo_db_path,backup_db_path) 
+        #shutil.copy(set_db_path,mycodo_db_path) 
         return "success"
 
     except:
-        os.rmdir(mycodo_db_path) 
-        shutil.move(backup_db_path,mycodo_db_path) 
+        #os.rmdir(mycodo_db_path) 
+        #shutil.move(backup_db_path,mycodo_db_path) 
         return "failed"
 
 

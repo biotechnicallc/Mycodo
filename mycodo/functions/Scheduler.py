@@ -71,7 +71,25 @@ for wk in range(1,SCHEDULE_WEEKS+1):
         'phrase': 'Week {} Amount'.format(wk)
     }
     weeks_option.append(week_)
+
+# _spraydata = {}
+# for wk in range(1,SCHEDULE_WEEKS+1):
+#     week_spray = {"week_{}".format(wk) : False}
+#     _spraydata.update(week_spray)
+
+# _sprayed_option = []
+# _sprayed = {
+#     'id': 'sprayed',
+#     'type': 'text',
+#     'default_value': _spraydata,
+#     'required': True,
+#     'name': 'Sprayed',
+#     'phrase': 'Sprayed Amount'
+# }
+# _sprayed_option.append(_sprayed)
+
 FUNCTION_INFORMATION['custom_options'].extend(weeks_option)
+#FUNCTION_INFORMATION['custom_options'].extend(_sprayed_option)
 
 class CustomModule(AbstractFunction):
     """
@@ -106,9 +124,12 @@ class CustomModule(AbstractFunction):
         self.setup_custom_options(
             FUNCTION_INFORMATION['custom_options'], custom_function)
 
-        # Set sprayed no False
+        # Set sprayed to False
+        self._spraydata = self.get_custom_option("sprayed")
+        self.logger.info("_spraydata available : {}".format(self._spraydata))
         try:
             self._spraydata = self.get_custom_option("sprayed")
+            self.logger.info("_spraydata available : {}".format(self._spraydata))
             if(self._spraydata is None):
                 self.logger.info("_spraydata not available")
                 for wk in range(1,SCHEDULE_WEEKS+1):

@@ -1,13 +1,13 @@
 stat,value
 id,91de57d6f8
-uptime,0.0013989655452745931
+uptime,0.0013906433074562638
 os_version,10.0
 RPi_revision,c03115
 Mycodo_revision,8.12.6
 alembic_version,6e394f2e8fec
 country,KE
-daemon_startup_seconds,2.8962492950000005
-ram_use_mb,47.032
+daemon_startup_seconds,5.003669723000712
+ram_use_mb,88.568
 num_lcds,1
 num_lcds_active,0
 num_maths,1

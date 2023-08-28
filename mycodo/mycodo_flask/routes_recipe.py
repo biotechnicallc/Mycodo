@@ -174,17 +174,11 @@ def page_current_recipe():
             recipe_id = current_recipe.recipe_id
             start_date =  current_recipe.start_date
             end_date = current_recipe.end_date
-    # else:
-    #     if utils_general.user_has_permission('edit_controllers'):
-    #         current_recipe = Recipes.query.filter(Recipes.current == True).first()
-    #         recipe_id = current_recipe.recipe_id
-    #         recipe_data = {"recipe_id" : recipe_id}
-    #         db.session.query(Recipes).update(recipe_data)
-    #         db.session.commit()
-
+  
     for schedule in scheduler:
         _schedule = json.loads(schedule.custom_options)
-        _schedule.pop("sprayed")
+        if("sprayed" in _schedule):
+            _schedule.pop("sprayed")
         weeks_ = list(_schedule.keys())[2:]
         for i in range(len(weeks_)):
             weeks_[i] = weeks_[i].replace("_"," ")
@@ -205,6 +199,7 @@ def get_saved_recipes():
     functions = Saved_Function.query.all()
     scheduler = Saved_Function.query.filter(Saved_Function.device == 'Scheduler').all()
 
+    logger.info("My recipes {}".format(recipes))
     weeks = []
     data = []
     for schedule in scheduler:
@@ -223,12 +218,13 @@ def get_saved_recipes():
     
     return render_template('pages/saved_recipes.html',recipes = recipes,inputs = inputs,outputs = outputs,functions = functions,schedules = scheduler,weeks = weeks,data = data)
 
-@blueprint.route('/create_new_recipe',methods=['POST','GET'])
+@blueprint.route('/create_new_recipe',methods=['POST'])
 @flask_login.login_required
 def create_new_recipe():
     recipe_id = set_uuid()
     if utils_general.user_has_permission('edit_controllers'):
-        exist_recipe = Recipes.query.filter(Recipes.recipe_id == recipe_id).first()
+        #exist_recipe = Recipes.query.filter(Recipes.recipe_id == recipe_id).first()
+        exist_recipe = db.session.query(Recipes).filter(Recipes.recipe_id == recipe_id).first()
         if not exist_recipe:   
             recipe_data = Recipes(recipe_id = recipe_id,icon = "default.png")
             db.session.add(recipe_data)
@@ -263,12 +259,18 @@ def save_current(recipe_id):
       
         id = {"recipe_id": recipe_id}
         if(inputs):
-            db.session.query(Saved_Input).filter(Saved_Input.recipe_id == recipe_id).delete()
+            logger.info("My inputs {}".format(inputs))
+            _current = db.session.query(Saved_Input).filter(Saved_Input.recipe_id == recipe_id).all()
+            logger.info("INPUTS {}".format(_current))
+            if(_current):
+                db.session.query(Saved_Input).filter(Saved_Input.recipe_id == recipe_id).delete()
             db.session.commit()
+
             for each_input in inputs:
                 each_input.pop('id',None)
                 each_input.update(id)
-                input_data = Saved_Input(**each_input)
+                if(db.session.query(Saved_Input).filter(Saved_Input.unique_id == each_input["unique_id"]).count() == 0):
+                    input_data = Saved_Input(**each_input)
                 try:
                     db.session.add(input_data)
                     db.session.commit()
@@ -276,12 +278,17 @@ def save_current(recipe_id):
                     pass
       
         if(outputs):
-            db.session.query(Saved_Output).filter(Saved_Output.recipe_id == recipe_id).delete()
+            _current = db.session.query(Saved_Output).filter(Saved_Output.recipe_id == recipe_id).all()
+            logger.info("OUTPUTS {}".format(_current))
+            if(_current):
+                db.session.query(Saved_Output).filter(Saved_Output.recipe_id == recipe_id).delete()
             db.session.commit()
+
             for each_output in outputs:
                 each_output.pop('id',None)
                 each_output.update(id)
-                output_data = Saved_Output(**each_output)
+                if(db.session.query(Saved_Output).filter(Saved_Output.unique_id == each_output["unique_id"]).count() == 0):
+                    output_data = Saved_Output(**each_output)
                 try:
                     db.session.add(output_data)
                     db.session.commit()
@@ -289,21 +296,28 @@ def save_current(recipe_id):
                     pass
 
         if(functions):
-            db.session.query(Saved_Function).filter(Saved_Function.recipe_id == recipe_id).delete()
+            _current = db.session.query(Saved_Function).filter(Saved_Function.recipe_id == recipe_id).all()
+            logger.info("FUNCTIONS {}".format(functions))
+            if(_current):
+                db.session.query(Saved_Function).filter(Saved_Function.recipe_id == recipe_id).delete()
+
             db.session.commit()
             for each_function in functions:
                 each_function.pop('id',None)
                 each_function.update(id)
-                function_data = Saved_Function(**each_function)
+                if(db.session.query(Saved_Function).filter(Saved_Function.unique_id == each_function["unique_id"]).count() == 0):
+                    function_data = Saved_Function(**each_function)
                 try:
                     db.session.add(function_data)
                     db.session.commit()
                 except Exception as e:
                     pass
 
-        # recipe_data = {"recipe_id" : recipe_id}
-        # db.session.query(Recipes).update(recipe_data)
-        # db.session.commit()
+        recipe_data = {"recipe_id" : recipe_id}
+        exist_recipe = Recipes.query.filter(Recipes.recipe_id == recipe_id).first()
+        if(not exist_recipe):
+            db.session.query(Recipes).filter(Recipes.recipe_id == recipe_id).update(recipe_data) 
+            db.session.commit()
         src_db = SQL_DATABASE_MYCODO
         dest_db = os.path.join(RECIPES_PATH,recipe_id+'.db')
 
@@ -590,6 +604,47 @@ def export_recipe():
                 #return "success"
             return "failed"
     return "failed"
+def move_saved_to_current(recipe_id):   
+    input_schema = InputSchema(many=True)
+    output_schema = SavedOutputSchema(many=True)
+    function_schema = FunctionSchema(many=True)
+
+    if utils_general.user_has_permission('edit_controllers'):
+        db.session.query(Input).delete()
+        _inputs = db.session.query(Saved_Input).filter(Saved_Input.recipe_id == recipe_id).all()
+        saved_inputs = input_schema.dump(_inputs)
+        if(saved_inputs):
+            for each_input in saved_inputs:
+                logger.info("each input : {}".format(each_input))
+                each_input.pop('id',None)
+                each_input.pop('recipe_id',None)
+                _data = Input(**each_input)
+                db.session.add(_data)
+            db.session.commit()
+
+        db.session.query(Output).delete()
+        _outputs = db.session.query(Saved_Output).filter(Saved_Output.recipe_id == recipe_id).all()
+        saved_outputs = output_schema.dump(_outputs)
+        if(saved_outputs):
+            for each_output in saved_outputs:
+                each_output.pop('id',None)
+                each_output.pop('recipe_id',None)
+                _data = Output(**each_output)
+                db.session.add(_data)
+            db.session.commit()
+
+        db.session.query(CustomController).delete()
+        _functions = db.session.query(Saved_Function).filter(Saved_Function.recipe_id == recipe_id).all()
+        saved_functions = function_schema.dump(_functions)
+        if(saved_functions):
+            for each_function in saved_functions:
+                each_function.pop('id',None)
+                each_function.pop('recipe_id',None)
+                _data = CustomController(**each_function)
+                db.session.add(_data)
+            db.session.commit()
+
+    return
 
 @blueprint.route('/use_recipe', methods=['POST','GET'])
 def use_recipe():
@@ -598,13 +653,18 @@ def use_recipe():
     current_recipe = Recipes.query.filter(Recipes.current == True).first()
     old_recipe_id  = current_recipe.recipe_id
     save_current(old_recipe_id)
+    move_saved_to_current(recipe_id)
 
-    #copy recipe_to mycodo
-    #set recipe to current
-    utils_recipe.dump_database(recipe_id)
-    # time.sleep(5)
+    db.session.query(Recipes).filter(Recipes.recipe_id == old_recipe_id).\
+    update({"current":False})
+    db.session.commit()
+
+    db.session.query(Recipes).filter(Recipes.recipe_id == recipe_id).\
+    update({"current":True})
+    db.session.commit()
+ 
     return get_saved_recipes()
-
+   
 ALLOWED_IMAGES = ['png', 'jpeg' ,'jpg']
 def allowed_image(filename):
     return '.' in filename and filename.rsplit('.',1)[1].lower() in ALLOWED_IMAGES 

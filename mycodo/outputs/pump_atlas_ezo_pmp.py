@@ -38,18 +38,18 @@ channels_dict = {
 
 # Output information
 OUTPUT_INFORMATION = {
-    'output_name_unique': 'atlas_ezo_pmp',
-    'output_name': "{}: Atlas Scientific".format(lazy_gettext('Peristaltic Pump')),
-    'output_manufacturer': 'Atlas Scientific',
+    'output_name_unique': 'growright_pump',
+    'output_name': "{}: Growright Macroponics".format(lazy_gettext('Peristaltic Pump')),
+    'output_manufacturer': 'Biotechnica llc',
     'measurements_dict': measurements_dict,
     'channels_dict': channels_dict,
     'output_types': ['volume', 'on_off'],
 
-    'url_manufacturer': 'https://atlas-scientific.com/peristaltic/',
-    'url_datasheet': 'https://www.atlas-scientific.com/files/EZO_PMP_Datasheet.pdf',
-    'url_product_purchase': 'https://atlas-scientific.com/peristaltic/ezo-pmp/',
+    'url_manufacturer': 'https://www.biotechnica.us/',
+    'url_datasheet': 'https://www.biotechnica.us/',
+    'url_product_purchase': 'https://www.biotechnica.us/',
 
-    'message': 'Atlas Scientific peristaltic pumps can be set to dispense at their maximum rate or a '
+    'message': 'Growright pumps can be set to dispense at their maximum rate or a '
                'rate can be specified. Their minimum flow rate is 0.5 ml/min and their maximum is 105 ml/min.',
 
     'options_enabled': [
@@ -58,7 +58,9 @@ OUTPUT_INFORMATION = {
         'uart_location',
         'uart_baud_rate',
         'button_send_volume',
-        'button_send_duration'
+        'button_send_duration',
+        'button_on',
+        'button_off'
     ],
     'options_disabled': ['interface'],
 
@@ -211,7 +213,7 @@ class OutputModule(AbstractOutput):
         # self.record_dispersal(seconds_to_run=seconds)
 
     def output_switch(self, state, output_type=None, amount=None, output_channel=None):
-        if state == 'on' and output_type == 'sec' and amount:
+        if state == 'on' and output_type == 'sec':
             # Only dispense for a duration if output_type is 'sec'
             # Otherwise, refer to output_mode
             write_db = threading.Thread(

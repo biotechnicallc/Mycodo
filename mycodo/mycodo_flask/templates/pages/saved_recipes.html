@@ -15,20 +15,24 @@
     
     {% for each_recipe in recipes -%}
     {%- if each_recipe -%}
-    <div class="grid-item" >
+    <div class="grid-item-saved" >
          {%- if each_recipe.current == 1 -%}
           <p style = "float: left;text-decoration: solid;color:rgb(0, 246, 94); font-size: 15px;">current</p>
         {%- endif -%}
         <button id =  {{each_recipe.recipe_id}} class = "grid-button" onClick="reply_click(this.id)" type="button" >View</button>
-        <img class = "grid-image" src="/static/images/{{each_recipe.icon}}" alt="" /> 
+        <div style="align-self: center; width: 80%;height: 150px; margin: 20px; background:url('/static/images/{{each_recipe.icon}}'); border-radius: 10px;">
+        </div> 
         {{each_recipe.name}}
       <div>
-        <a style = "float: left;" id= {{each_recipe.recipe_id}} onClick="change_image(this.id)" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cog" style="font-size: 1em;"></i></a>
+        <a style = "float: left; margin: 2px;" id= {{each_recipe.recipe_id}} onClick="change_image(this.id)" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cog" style="font-size: 1em;"></i></a>
       </div>
     </div>
     {%- endif -%}
     {% endfor %}
-     <button id = "add-recipe" class = "grid-item add-grid-button" onClick="add_new_recipe(this.id)" type="button" >Add New</button>
+    
+    <form id = "add-recipe" class = "grid-item" enctype="multipart/form-data" action="/create_new_recipe" method="post">
+      <button id = "add-recipe" style = "width: 100%;height: 100%; border-radius: 10px;" type="submit" >Add New</button>
+    </form>
   </div>
 
   {% for each_recipe in recipes -%}
@@ -213,22 +217,23 @@
       }
    });
   }
-
- function add_new_recipe(action)  
-  {   
-      $.ajax({
-      type: "POST",
-      url: "/create_new_recipe",
-      contentType: 'application/json;charset=UTF-8',
-      data: JSON.stringify({'action':action}),
-      error : function(e){
-          console.log(e);
-      },
-      success: function(data){
-          console.log(data);
-      }
-    });
- }
+</script>
+<script>
+  function add_new_recipe(action)  
+    {   
+        $.ajax({
+        type: "POST",
+        url: "/create_new_recipe",
+        contentType: 'application/json;charset=UTF-8',
+        data: JSON.stringify({'action':action}),
+        error : function(e){
+            console.log(e);
+        },
+        success: function(data){
+            console.log(data);
+        }
+      });
+  }
 </script>
 
 <script type="text/javascript">

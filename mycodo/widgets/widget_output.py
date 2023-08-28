@@ -344,6 +344,7 @@ WIDGET_INFORMATION = {
     {% endif %}
     modOutputOutput(send_cmd);
   });
+
   $('.turn_off').click(function() {
     const btn_val = this.name;
     const send_cmd = btn_val.substring(btn_val.indexOf('/') + 1);
@@ -352,6 +353,7 @@ WIDGET_INFORMATION = {
     {% endif %}
     modOutputOutput(send_cmd);
   });
+
   $('.output_on_amt').click(function() {
     const btn_val = this.name;
     const chart = btn_val.split('/')[0];
@@ -364,6 +366,7 @@ WIDGET_INFORMATION = {
     {% endif %}
     modOutputOutput(send_cmd + on_amt);
   });
+
   $('.duty_cycle_on_amt').click(function() {
     const btn_val = this.name;
     const chart = btn_val.split('/')[0];

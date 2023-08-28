@@ -177,14 +177,12 @@
     {% set help_page = help_page|default(['', '']) -%}
 
     <nav id="nav-respond" class="navbar navbar-expand-md{% if current_user.theme in dark_themes %} navbar-dark bg-dark{% else %} navbar-light bg-light{% endif %}">
-
-      <a class="navbar-brand" id="daemon-status" data-toggle="tooltip" data-placement="bottom" href="{{url_for('routes_general.index_page')}}" style="text-align: center; padding: 0 15px; font-size: 0.8em; font-weight: bold;{%- if daemon_status == "alive" -%} /*noinspection CssOverwrittenProperties*/color: #4E9258{%- else -%} /*noinspection CssOverwrittenProperties*/color: #F70D1A{%- endif -%}" title="{%- if daemon_status == "alive" -%}{{_('Daemon is Running')}}{%- else -%}{{_('Daemon is Not Running')}}{%- endif -%}">{{host}} - {{mycodo_version}}<br><span id="time-update"></span></a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand" id="website-popup" data-toggle="tooltip" data-placement="bottom" href="https://www.biotechnica.us/" title = "{{_('www.biotechnica.us')}}" style="text-align: center; padding: 0 15px; font-size: 0.8em; font-weight: bold;"><img style = "width: 100px; height: 40px;" src="/static/img/logo.png" alt=""></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <i class="fas fa-bars"></i>
       </button>
-      <div class="collapse navbar-collapse" id="navbarCollapse">
+      <div class="collapse navbar-collapse" id="navbarCollapse" style = "position:relative;">
         <ul class="navbar-nav mr-auto">
-
           <li class="nav-item dropdown{% if active_page in ['dashboard', 'live', 'graph_async'] %} active{% endif %}">
             <a class="nav-link dropdown-toggle" href="#" id="dropdown00" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{_('Data')}}</a>
             <div class="dropdown-menu" aria-labelledby="dropdown00">
@@ -231,16 +229,23 @@
             </div>
           </li>
 
-        {% for each_dash in dashboards if each_dash.unique_id == dashboard_id %}
-          <li class="nav-item">
-            <a class="nav-link" href="#" data-toggle="modal" data-target="#modal_config_{{each_dash.unique_id}}"><i class="fas fa-cog"></i> {{each_dash.name}}</a>
-          </li>
-        {% endfor %}
-
-        </ul>
+          {% for each_dash in dashboards if each_dash.unique_id == dashboard_id %}
+            <li class="nav-item">
+              <a class="nav-link" href="#" data-toggle="modal" data-target="#modal_config_{{each_dash.unique_id}}"><i class="fas fa-cog"></i> {{each_dash.name}}</a>
+            </li>
+          {% endfor %}
+      </ul>
+      <!-- <ul class="navbar-nav flex-row mb-2">
+        <li class="nav-item">
+          <a class="nav-link"  href="https://www.biotechnica.us/" aria-haspopup="true" aria-expanded="false">{{_('www.biotechnica.us')}}</a>
+        </li>
+      </ul> -->
 
         <ul class="navbar-nav ml-auto">
-
+          <li class="nav-item">
+            <a class="navbar-brand" id="daemon-status" data-toggle="tooltip" data-placement="bottom" href="https://www.biotechnica.us/" style="text-align: center; padding: 0 15px; font-size: 0.8em; font-weight: bold; color: crimson;{%- if daemon_status == "alive" -%} /*noinspection CssOverwrittenProperties*/color: #4E9258{%- else -%} /*noinspection CssOverwrittenProperties*/color: #F70D1A{%- endif -%}" title="{%- if daemon_status == "alive" -%}{{_('Daemon is Running')}}{%- else -%}{{_('Daemon is Not Running')}}{%- endif -%}">{{host}} - {{mycodo_version}}<br><span id="time-update"></span></a>
+            <!-- <a class="nav-link" data-toggle="tooltip" data-placement="bottom" href="{{url_for('routes_general.index_page')}}" style="text-align: center; padding: 0 15px; font-size: 0.8em; font-weight: bold; color: crimson;">{{host}} - {{mycodo_version}}<br><span id="time-update"></span></a> -->
+          </li>
           <li class="nav-item">
             <a class="nav-link"  href="/settings/pi" aria-haspopup="true" aria-expanded="false"><i class="fa fa-wifi" style="font-size: 1.5em; color: green;"></i></a>
           </li>
@@ -288,7 +293,6 @@
           </li>
 
         </ul>
-
       </div>
     </nav>
 
