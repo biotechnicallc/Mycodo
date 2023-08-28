@@ -77,6 +77,10 @@
         <div class="modal-header">
            <!-- <input style = "float: left;" id = "{{each_recipe.recipe_id}}" onclick="export_recipe(this.id,'recipe_export');" name="recipe_export" value="{{_('Export Recipe')}}" class="btn btn-primary" type="button"/>
        -->
+          <form enctype="multipart/form-data" action="/delete_recipe" method="get">
+            <input id="recipe_id" name=recipe_id type="hidden" value ={{each_recipe.recipe_id}} />
+            <input style = "float: left;" id = "recipe_use" value="{{_('Delete Recipe')}}" class="btn btn-primary" type="submit"/>
+          </form>
           <form enctype="multipart/form-data" action="/export_recipe" method="get">
             <input id="export_id" name=recipe_id type="hidden" value ={{each_recipe.recipe_id}} />
             <input id="export_icon" name=recipe_icon type="hidden" value ={{each_recipe.icon}} />

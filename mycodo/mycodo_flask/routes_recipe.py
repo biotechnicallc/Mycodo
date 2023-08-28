@@ -204,7 +204,8 @@ def get_saved_recipes():
     data = []
     for schedule in scheduler:
         _schedule = json.loads(schedule.custom_options)
-        _schedule.pop("sprayed")
+        if("sprayed" in _schedule):
+            _schedule.pop("sprayed")
         weeks_ = list(_schedule.keys())[2:]
         for i in range(len(weeks_)):
             weeks_[i] = weeks_[i].replace("_"," ")
@@ -258,13 +259,22 @@ def save_current(recipe_id):
         functions = function_schema.dump(function)
       
         id = {"recipe_id": recipe_id}
+
+
+        #Clear saved Recipe Data before updating
+        db.session.query(Saved_Input).filter(Saved_Input.recipe_id == recipe_id).delete()
+        db.session.commit()
+        db.session.query(Saved_Output).filter(Saved_Output.recipe_id == recipe_id).delete()
+        db.session.commit()
+        db.session.query(Saved_Function).filter(Saved_Function.recipe_id == recipe_id).delete()
+        db.session.commit()
+
         if(inputs):
-            logger.info("My inputs {}".format(inputs))
-            _current = db.session.query(Saved_Input).filter(Saved_Input.recipe_id == recipe_id).all()
-            logger.info("INPUTS {}".format(_current))
-            if(_current):
-                db.session.query(Saved_Input).filter(Saved_Input.recipe_id == recipe_id).delete()
-            db.session.commit()
+            # _current = db.session.query(Saved_Input).filter(Saved_Input.recipe_id == recipe_id).all()
+            # logger.info("INPUTS {}".format(_current))
+            # if(_current):
+            #     db.session.query(Saved_Input).filter(Saved_Input.recipe_id == recipe_id).delete()
+            # db.session.commit()
 
             for each_input in inputs:
                 each_input.pop('id',None)
@@ -278,11 +288,11 @@ def save_current(recipe_id):
                     pass
       
         if(outputs):
-            _current = db.session.query(Saved_Output).filter(Saved_Output.recipe_id == recipe_id).all()
-            logger.info("OUTPUTS {}".format(_current))
-            if(_current):
-                db.session.query(Saved_Output).filter(Saved_Output.recipe_id == recipe_id).delete()
-            db.session.commit()
+            # _current = db.session.query(Saved_Output).filter(Saved_Output.recipe_id == recipe_id).all()
+            # logger.info("OUTPUTS {}".format(_current))
+            # if(_current):
+            #     db.session.query(Saved_Output).filter(Saved_Output.recipe_id == recipe_id).delete()
+            # db.session.commit()
 
             for each_output in outputs:
                 each_output.pop('id',None)
@@ -414,7 +424,8 @@ def import_recipe():
 
     for schedule in scheduler:
         _schedule = json.loads(schedule.custom_options)
-        _schedule.pop("sprayed")
+        if("sprayed" in _schedule):
+            _schedule.pop("sprayed")
         weeks_ = list(_schedule.keys())[2:]
         for i in range(len(weeks_)):
             weeks_[i] = weeks_[i].replace("_"," ")
@@ -513,7 +524,8 @@ def import_recipe():
 
                 for schedule in scheduler:
                     _schedule = json.loads(schedule.custom_options)
-                    _schedule.pop("sprayed")
+                    if("sprayed" in _schedule):
+                        _schedule.pop("sprayed")
                     weeks_ = list(_schedule.keys())[2:]
                     for i in range(len(weeks_)):
                         weeks_[i] = weeks_[i].replace("_"," ")
@@ -664,7 +676,30 @@ def use_recipe():
     db.session.commit()
  
     return get_saved_recipes()
-   
+
+
+@blueprint.route('/delete_recipe', methods=['POST','GET'])
+def delete_recipe():
+    recipe_id = request.args.get('recipe_id')
+    _inputs = Saved_Input.query.filter(Saved_Input.recipe_id == recipe_id).all()
+    _outputs = Saved_Output.query.filter(Saved_Output.recipe_id == recipe_id).all()
+    _functions = Saved_Function.query.filter(Saved_Function.recipe_id == recipe_id).all()
+    
+    current_recipe = Recipes.query.filter(Recipes.current == True,Recipes.recipe_id == recipe_id).first()
+    if(current_recipe):
+        flash('Cannot delete a Current')
+        return get_saved_recipes()
+
+    if(len(_inputs) == 0 and len(_outputs) == 0 and len(_functions) == 0):
+        db.session.query(Recipes).filter(Recipes.recipe_id == recipe_id).delete()
+        db.session.commit()
+
+    else:
+        logger.info("Delete Inputs {} Outputs {} Functions {}".format(_inputs,_outputs,_functions))
+    
+    return get_saved_recipes()
+
+
 ALLOWED_IMAGES = ['png', 'jpeg' ,'jpg']
 def allowed_image(filename):
     return '.' in filename and filename.rsplit('.',1)[1].lower() in ALLOWED_IMAGES 
@@ -687,7 +722,8 @@ def toggleactive_recipe():
 
     for schedule in scheduler:
         _schedule = json.loads(schedule.custom_options)
-        _schedule.pop("sprayed")
+        if("sprayed" in _schedule):
+            _schedule.pop("sprayed")
         weeks_ = list(_schedule.keys())[2:]
         for i in range(len(weeks_)):
             weeks_[i] = weeks_[i].replace("_"," ")
@@ -824,7 +860,8 @@ def change_settings():
 
     for schedule in scheduler:
         _schedule = json.loads(schedule.custom_options)
-        _schedule.pop("sprayed")
+        if("sprayed" in _schedule):
+            _schedule.pop("sprayed")
         weeks_ = list(_schedule.keys())[2:]
         for i in range(len(weeks_)):
             weeks_[i] = weeks_[i].replace("_"," ")

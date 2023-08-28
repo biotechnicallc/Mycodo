@@ -7849,3 +7849,441 @@ Please contact the developer by submitting a bug report
 at https://github.com/kizniche/Mycodo/issues with the
 pertinent excerpts from the setup log located at:
 /home/wayne/Mycodo/install/setup.log
+### Mycodo installation initiated Mon 28 Aug 09:21:03 BST 2023
+#### Mycodo installation began Mon 28 Aug 09:21:07 BST 2023
+
+#### Checking if swap size is 100 MB and needs to be changed to 512 MB
+#### Swap not currently set to 100 MB. Not changing.
+
+#### Updating apt repositories
+Hit:1 http://deb.debian.org/debian bullseye InRelease
+Hit:2 http://security.debian.org/debian-security bullseye-security InRelease
+Hit:3 http://archive.raspberrypi.org/debian bullseye InRelease
+Hit:4 http://deb.debian.org/debian bullseye-updates InRelease
+Reading package lists...
+
+#### Uninstalling apt version of pip (if installed)
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Package 'python-pip' is not installed, so not removed
+0 upgraded, 0 newly installed, 0 to remove and 27 not upgraded.
+
+#### Installing prerequisite apt packages and update pip
+Reading package lists...
+Building dependency tree...
+Reading state information...
+E: Unable to locate package python-cffi-backend
+Reading package lists...
+Building dependency tree...
+Reading state information...
+gawk is already the newest version (1:5.1.0-1).
+g++ is already the newest version (4:10.2.1-1).
+gcc is already the newest version (4:10.2.1-1).
+git is already the newest version (1:2.30.2-1+deb11u2).
+libi2c-dev is already the newest version (4.2-1+b1).
+python3-smbus is already the newest version (4.2-1+b1).
+libffi-dev is already the newest version (3.3-6).
+logrotate is already the newest version (3.18.0-2+deb11u1).
+moreutils is already the newest version (0.65-1).
+nginx is already the newest version (1.18.0-6.1+deb11u3).
+python3-pylint-common is already the newest version (0.2.5-4).
+python3 is already the newest version (3.9.2-3).
+python3-dev is already the newest version (3.9.2-3).
+rng-tools is already the newest version (5migrate1).
+python3-setuptools is already the newest version (52.0.0-4).
+sqlite3 is already the newest version (3.34.1-3).
+wget is already the newest version (1.21-1+deb11u1).
+0 upgraded, 0 newly installed, 0 to remove and 27 not upgraded.
+python3: can't open file '/usr/lib/python3/dist-packages/easy_install.py': [Errno 2] No such file or directory
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Requirement already satisfied: pip in /usr/local/lib/python3.9/dist-packages (23.2.1)
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+
+#### Checking python 3 virtualenv
+#### Virtualenv doesn't exist. Creating...
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Requirement already satisfied: virtualenv==20.7.0 in /usr/local/lib/python3.9/dist-packages (20.7.0)
+Requirement already satisfied: backports.entry-points-selectable>=1.0.4 in /usr/local/lib/python3.9/dist-packages (from virtualenv==20.7.0) (1.2.0)
+Requirement already satisfied: distlib<1,>=0.3.1 in /usr/local/lib/python3.9/dist-packages (from virtualenv==20.7.0) (0.3.7)
+Requirement already satisfied: filelock<4,>=3.0.0 in /usr/local/lib/python3.9/dist-packages (from virtualenv==20.7.0) (3.12.2)
+Requirement already satisfied: platformdirs<3,>=2 in /usr/local/lib/python3.9/dist-packages (from virtualenv==20.7.0) (2.6.2)
+Requirement already satisfied: six<2,>=1.9.0 in /usr/lib/python3/dist-packages (from virtualenv==20.7.0) (1.16.0)
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+created virtual environment CPython3.9.2.final.0-64 in 2026ms
+  creator CPython3Posix(dest=/home/wayne/Mycodo/env, clear=False, no_vcs_ignore=False, global=True)
+  seeder FromAppData(download=False, pip=bundle, setuptools=bundle, wheel=bundle, via=copy, app_data_dir=/root/.local/share/virtualenv)
+    added seed packages: pip==21.2.2, setuptools==57.4.0, wheel==0.36.2
+  activators BashActivator,CShellActivator,FishActivator,PowerShellActivator,PythonActivator
+
+#### Updating pip
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Requirement already satisfied: pip in ./env/lib/python3.9/site-packages (21.2.2)
+Collecting pip
+  Using cached https://www.piwheels.org/simple/pip/pip-23.2.1-py3-none-any.whl (2.1 MB)
+Installing collected packages: pip
+  Attempting uninstall: pip
+    Found existing installation: pip 21.2.2
+    Uninstalling pip-21.2.2:
+      Successfully uninstalled pip-21.2.2
+Successfully installed pip-23.2.1
+
+#### Installing pip requirements
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Requirement already satisfied: pip in ./env/lib/python3.9/site-packages (23.2.1)
+Requirement already satisfied: setuptools in ./env/lib/python3.9/site-packages (57.4.0)
+Collecting setuptools
+  Using cached https://www.piwheels.org/simple/setuptools/setuptools-68.1.2-py3-none-any.whl (805 kB)
+Installing collected packages: setuptools
+  Attempting uninstall: setuptools
+    Found existing installation: setuptools 57.4.0
+    Uninstalling setuptools-57.4.0:
+      Successfully uninstalled setuptools-57.4.0
+Successfully installed setuptools-68.1.2
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Collecting alembic==1.5.8 (from -r /home/wayne/Mycodo/install/requirements.txt (line 2))
+  Using cached https://www.piwheels.org/simple/alembic/alembic-1.5.8-py2.py3-none-any.whl (159 kB)
+Collecting argparse==1.4.0 (from -r /home/wayne/Mycodo/install/requirements.txt (line 3))
+  WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))': /simple/argparse/argparse-1.4.0-py2.py3-none-any.whl
+  Using cached https://www.piwheels.org/simple/argparse/argparse-1.4.0-py2.py3-none-any.whl (23 kB)
+Collecting bcrypt==3.2.0 (from -r /home/wayne/Mycodo/install/requirements.txt (line 4))
+  Using cached bcrypt-3.2.0-cp36-abi3-manylinux2014_aarch64.whl (56 kB)
+Collecting daemonize==2.5.0 (from -r /home/wayne/Mycodo/install/requirements.txt (line 5))
+  Using cached https://www.piwheels.org/simple/daemonize/daemonize-2.5.0-py2.py3-none-any.whl (5.2 kB)
+Requirement already satisfied: distro==1.5.0 in /usr/lib/python3/dist-packages (from -r /home/wayne/Mycodo/install/requirements.txt (line 6)) (1.5.0)
+Collecting email_validator==1.1.2 (from -r /home/wayne/Mycodo/install/requirements.txt (line 7))
+  Using cached https://www.piwheels.org/simple/email-validator/email_validator-1.1.2-py2.py3-none-any.whl (17 kB)
+Collecting filelock==3.0.12 (from -r /home/wayne/Mycodo/install/requirements.txt (line 8))
+  Using cached https://www.piwheels.org/simple/filelock/filelock-3.0.12-py3-none-any.whl (7.6 kB)
+Collecting Flask==1.1.2 (from -r /home/wayne/Mycodo/install/requirements.txt (line 9))
+  Using cached https://www.piwheels.org/simple/flask/Flask-1.1.2-py2.py3-none-any.whl (94 kB)
+Collecting Flask_Accept==0.0.6 (from -r /home/wayne/Mycodo/install/requirements.txt (line 10))
+  Using cached https://www.piwheels.org/simple/flask-accept/flask_accept-0.0.6-py3-none-any.whl (3.8 kB)
+Collecting Flask_Babel==2.0.0 (from -r /home/wayne/Mycodo/install/requirements.txt (line 11))
+  Using cached https://www.piwheels.org/simple/flask-babel/Flask_Babel-2.0.0-py3-none-any.whl (9.3 kB)
+Collecting Flask_Compress==1.9.0 (from -r /home/wayne/Mycodo/install/requirements.txt (line 12))
+  Using cached https://www.piwheels.org/simple/flask-compress/Flask_Compress-1.9.0-py3-none-any.whl (9.6 kB)
+Collecting Flask_Limiter==1.4 (from -r /home/wayne/Mycodo/install/requirements.txt (line 13))
+  Using cached https://www.piwheels.org/simple/flask-limiter/Flask_Limiter-1.4-py3-none-any.whl (15 kB)
+Collecting Flask_Login==0.5.0 (from -r /home/wayne/Mycodo/install/requirements.txt (line 14))
+  Using cached https://www.piwheels.org/simple/flask-login/Flask_Login-0.5.0-py2.py3-none-any.whl (16 kB)
+Collecting Flask_Marshmallow==0.14.0 (from -r /home/wayne/Mycodo/install/requirements.txt (line 15))
+  Using cached https://www.piwheels.org/simple/flask-marshmallow/flask_marshmallow-0.14.0-py2.py3-none-any.whl (10 kB)
+Collecting Flask_RESTX==0.3.0 (from -r /home/wayne/Mycodo/install/requirements.txt (line 17))
+  Using cached https://www.piwheels.org/simple/flask-restx/flask_restx-0.3.0-py2.py3-none-any.whl (5.3 MB)
+Collecting Flask_Session==0.4.0 (from -r /home/wayne/Mycodo/install/requirements.txt (line 18))
+  Using cached https://www.piwheels.org/simple/flask-session/Flask_Session-0.4.0-py2.py3-none-any.whl (7.5 kB)
+Collecting Flask_SQLAlchemy==2.5.1 (from -r /home/wayne/Mycodo/install/requirements.txt (line 19))
+  Using cached https://www.piwheels.org/simple/flask-sqlalchemy/Flask_SQLAlchemy-2.5.1-py2.py3-none-any.whl (17 kB)
+Collecting Flask_Talisman==0.7.0 (from -r /home/wayne/Mycodo/install/requirements.txt (line 20))
+  Using cached https://www.piwheels.org/simple/flask-talisman/flask_talisman-0.7.0-py2.py3-none-any.whl (12 kB)
+Collecting Flask_WTF==0.14.3 (from -r /home/wayne/Mycodo/install/requirements.txt (line 21))
+  Using cached https://www.piwheels.org/simple/flask-wtf/Flask_WTF-0.14.3-py2.py3-none-any.whl (13 kB)
+Collecting geocoder==1.38.1 (from -r /home/wayne/Mycodo/install/requirements.txt (line 22))
+  Using cached https://www.piwheels.org/simple/geocoder/geocoder-1.38.1-py2.py3-none-any.whl (98 kB)
+Collecting gunicorn==20.1.0 (from -r /home/wayne/Mycodo/install/requirements.txt (line 23))
+  Using cached https://www.piwheels.org/simple/gunicorn/gunicorn-20.1.0-py3-none-any.whl (81 kB)
+Collecting influxdb==5.3.1 (from -r /home/wayne/Mycodo/install/requirements.txt (line 24))
+  Using cached https://www.piwheels.org/simple/influxdb/influxdb-5.3.1-py2.py3-none-any.whl (77 kB)
+Collecting itsdangerous==2.0.1 (from -r /home/wayne/Mycodo/install/requirements.txt (line 25))
+  Using cached https://www.piwheels.org/simple/itsdangerous/itsdangerous-2.0.1-py3-none-any.whl (18 kB)
+Collecting Jinja2==3.0.3 (from -r /home/wayne/Mycodo/install/requirements.txt (line 26))
+  Using cached https://www.piwheels.org/simple/jinja2/Jinja2-3.0.3-py3-none-any.whl (133 kB)
+Collecting marshmallow_sqlalchemy==0.24.2 (from -r /home/wayne/Mycodo/install/requirements.txt (line 27))
+  Using cached https://www.piwheels.org/simple/marshmallow-sqlalchemy/marshmallow_sqlalchemy-0.24.2-py2.py3-none-any.whl (18 kB)
+Collecting pyro5==5.12 (from -r /home/wayne/Mycodo/install/requirements.txt (line 28))
+  Using cached https://www.piwheels.org/simple/pyro5/Pyro5-5.12-py3-none-any.whl (77 kB)
+Collecting pyserial==3.5 (from -r /home/wayne/Mycodo/install/requirements.txt (line 29))
+  Using cached https://www.piwheels.org/simple/pyserial/pyserial-3.5-py2.py3-none-any.whl (90 kB)
+Collecting python-dateutil==2.8.1 (from -r /home/wayne/Mycodo/install/requirements.txt (line 30))
+  Using cached https://www.piwheels.org/simple/python-dateutil/python_dateutil-2.8.1-py2.py3-none-any.whl (227 kB)
+Requirement already satisfied: requests==2.25.1 in /usr/lib/python3/dist-packages (from -r /home/wayne/Mycodo/install/requirements.txt (line 31)) (2.25.1)
+Collecting setuptools==56.0.0 (from -r /home/wayne/Mycodo/install/requirements.txt (line 32))
+  Using cached https://www.piwheels.org/simple/setuptools/setuptools-56.0.0-py3-none-any.whl (784 kB)
+Collecting SQLAlchemy==1.4.7 (from -r /home/wayne/Mycodo/install/requirements.txt (line 33))
+  Using cached SQLAlchemy-1.4.7-cp39-cp39-manylinux2014_aarch64.whl (1.5 MB)
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))': /simple/typing-extensions/
+Collecting typing-extensions==4.3.0 (from -r /home/wayne/Mycodo/install/requirements.txt (line 34))
+  Using cached https://www.piwheels.org/simple/typing-extensions/typing_extensions-4.3.0-py3-none-any.whl (25 kB)
+Collecting Werkzeug==2.0.2 (from -r /home/wayne/Mycodo/install/requirements.txt (line 35))
+  Using cached https://www.piwheels.org/simple/werkzeug/Werkzeug-2.0.2-py3-none-any.whl (288 kB)
+Collecting WTForms==2.3.3 (from -r /home/wayne/Mycodo/install/requirements.txt (line 36))
+  Using cached https://www.piwheels.org/simple/wtforms/WTForms-2.3.3-py2.py3-none-any.whl (169 kB)
+Collecting Mako (from alembic==1.5.8->-r /home/wayne/Mycodo/install/requirements.txt (line 2))
+  Using cached https://www.piwheels.org/simple/mako/Mako-1.2.4-py3-none-any.whl (78 kB)
+Collecting python-editor>=0.3 (from alembic==1.5.8->-r /home/wayne/Mycodo/install/requirements.txt (line 2))
+  Using cached https://www.piwheels.org/simple/python-editor/python_editor-1.0.4-py3-none-any.whl (4.9 kB)
+Collecting cffi>=1.1 (from bcrypt==3.2.0->-r /home/wayne/Mycodo/install/requirements.txt (line 4))
+  Using cached cffi-1.15.1-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (448 kB)
+Requirement already satisfied: six>=1.4.1 in /usr/lib/python3/dist-packages (from bcrypt==3.2.0->-r /home/wayne/Mycodo/install/requirements.txt (line 4)) (1.16.0)
+Requirement already satisfied: idna>=2.0.0 in /usr/lib/python3/dist-packages (from email_validator==1.1.2->-r /home/wayne/Mycodo/install/requirements.txt (line 7)) (2.10)
+Collecting dnspython>=1.15.0 (from email_validator==1.1.2->-r /home/wayne/Mycodo/install/requirements.txt (line 7))
+  Using cached https://www.piwheels.org/simple/dnspython/dnspython-2.4.2-py3-none-any.whl (300 kB)
+Collecting click>=5.1 (from Flask==1.1.2->-r /home/wayne/Mycodo/install/requirements.txt (line 9))
+  Using cached https://www.piwheels.org/simple/click/click-8.1.7-py3-none-any.whl (97 kB)
+Collecting pytz (from Flask_Babel==2.0.0->-r /home/wayne/Mycodo/install/requirements.txt (line 11))
+  Using cached https://www.piwheels.org/simple/pytz/pytz-2023.3-py3-none-any.whl (502 kB)
+Collecting Babel>=2.3 (from Flask_Babel==2.0.0->-r /home/wayne/Mycodo/install/requirements.txt (line 11))
+  Using cached https://www.piwheels.org/simple/babel/Babel-2.12.1-py3-none-any.whl (10.1 MB)
+Collecting brotli (from Flask_Compress==1.9.0->-r /home/wayne/Mycodo/install/requirements.txt (line 12))
+  Using cached Brotli-1.0.9-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (2.6 MB)
+Collecting limits (from Flask_Limiter==1.4->-r /home/wayne/Mycodo/install/requirements.txt (line 13))
+  Using cached https://www.piwheels.org/simple/limits/limits-3.5.0-py3-none-any.whl (43 kB)
+Collecting marshmallow>=2.0.0 (from Flask_Marshmallow==0.14.0->-r /home/wayne/Mycodo/install/requirements.txt (line 15))
+  Using cached https://www.piwheels.org/simple/marshmallow/marshmallow-3.20.1-py3-none-any.whl (49 kB)
+Collecting jsonschema (from Flask_RESTX==0.3.0->-r /home/wayne/Mycodo/install/requirements.txt (line 17))
+  Using cached https://www.piwheels.org/simple/jsonschema/jsonschema-4.19.0-py3-none-any.whl (83 kB)
+Collecting aniso8601>=0.82 (from Flask_RESTX==0.3.0->-r /home/wayne/Mycodo/install/requirements.txt (line 17))
+  Using cached https://www.piwheels.org/simple/aniso8601/aniso8601-9.0.1-py2.py3-none-any.whl (52 kB)
+Collecting cachelib (from Flask_Session==0.4.0->-r /home/wayne/Mycodo/install/requirements.txt (line 18))
+  Using cached https://www.piwheels.org/simple/cachelib/cachelib-0.10.2-py3-none-any.whl (18 kB)
+Collecting future (from geocoder==1.38.1->-r /home/wayne/Mycodo/install/requirements.txt (line 22))
+  Using cached https://www.piwheels.org/simple/future/future-0.18.3-py3-none-any.whl (492 kB)
+Collecting ratelim (from geocoder==1.38.1->-r /home/wayne/Mycodo/install/requirements.txt (line 22))
+  Using cached https://www.piwheels.org/simple/ratelim/ratelim-0.1.6-py2.py3-none-any.whl (4.0 kB)
+Collecting msgpack (from influxdb==5.3.1->-r /home/wayne/Mycodo/install/requirements.txt (line 24))
+  Using cached msgpack-1.0.5-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (313 kB)
+Collecting MarkupSafe>=2.0 (from Jinja2==3.0.3->-r /home/wayne/Mycodo/install/requirements.txt (line 26))
+  Obtaining dependency information for MarkupSafe>=2.0 from https://files.pythonhosted.org/packages/68/8d/c33c43c499c19f4b51181e196c9a497010908fc22c5de33551e298aa6a21/MarkupSafe-2.1.3-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl.metadata
+  Using cached MarkupSafe-2.1.3-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl.metadata (3.0 kB)
+Collecting serpent>=1.27 (from pyro5==5.12->-r /home/wayne/Mycodo/install/requirements.txt (line 28))
+  Using cached https://www.piwheels.org/simple/serpent/serpent-1.41-py3-none-any.whl (12 kB)
+Collecting greenlet!=0.4.17 (from SQLAlchemy==1.4.7->-r /home/wayne/Mycodo/install/requirements.txt (line 33))
+  Using cached greenlet-2.0.2-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (607 kB)
+Collecting pycparser (from cffi>=1.1->bcrypt==3.2.0->-r /home/wayne/Mycodo/install/requirements.txt (line 4))
+  Using cached https://www.piwheels.org/simple/pycparser/pycparser-2.21-py2.py3-none-any.whl (119 kB)
+Collecting packaging>=17.0 (from marshmallow>=2.0.0->Flask_Marshmallow==0.14.0->-r /home/wayne/Mycodo/install/requirements.txt (line 15))
+  Using cached https://www.piwheels.org/simple/packaging/packaging-23.1-py3-none-any.whl (48 kB)
+Collecting attrs>=22.2.0 (from jsonschema->Flask_RESTX==0.3.0->-r /home/wayne/Mycodo/install/requirements.txt (line 17))
+  Using cached https://www.piwheels.org/simple/attrs/attrs-23.1.0-py3-none-any.whl (61 kB)
+Collecting jsonschema-specifications>=2023.03.6 (from jsonschema->Flask_RESTX==0.3.0->-r /home/wayne/Mycodo/install/requirements.txt (line 17))
+  Using cached https://www.piwheels.org/simple/jsonschema-specifications/jsonschema_specifications-2023.7.1-py3-none-any.whl (17 kB)
+Collecting referencing>=0.28.4 (from jsonschema->Flask_RESTX==0.3.0->-r /home/wayne/Mycodo/install/requirements.txt (line 17))
+  Using cached https://www.piwheels.org/simple/referencing/referencing-0.30.2-py3-none-any.whl (25 kB)
+Collecting rpds-py>=0.7.1 (from jsonschema->Flask_RESTX==0.3.0->-r /home/wayne/Mycodo/install/requirements.txt (line 17))
+  Obtaining dependency information for rpds-py>=0.7.1 from https://files.pythonhosted.org/packages/31/89/204fad96a8bce69b6052fefd2ed21c16c4d92ec59cdbe002490eca8c0893/rpds_py-0.9.2-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl.metadata
+  Using cached rpds_py-0.9.2-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl.metadata (3.7 kB)
+Collecting deprecated>=1.2 (from limits->Flask_Limiter==1.4->-r /home/wayne/Mycodo/install/requirements.txt (line 13))
+  Using cached https://www.piwheels.org/simple/deprecated/Deprecated-1.2.14-py2.py3-none-any.whl (9.6 kB)
+Collecting importlib-resources>=1.3 (from limits->Flask_Limiter==1.4->-r /home/wayne/Mycodo/install/requirements.txt (line 13))
+  Using cached https://www.piwheels.org/simple/importlib-resources/importlib_resources-6.0.1-py3-none-any.whl (34 kB)
+Collecting decorator (from ratelim->geocoder==1.38.1->-r /home/wayne/Mycodo/install/requirements.txt (line 22))
+  Using cached https://www.piwheels.org/simple/decorator/decorator-5.1.1-py3-none-any.whl (10 kB)
+Requirement already satisfied: wrapt<2,>=1.10 in /usr/lib/python3/dist-packages (from deprecated>=1.2->limits->Flask_Limiter==1.4->-r /home/wayne/Mycodo/install/requirements.txt (line 13)) (1.12.1)
+Collecting zipp>=3.1.0 (from importlib-resources>=1.3->limits->Flask_Limiter==1.4->-r /home/wayne/Mycodo/install/requirements.txt (line 13))
+  Using cached https://www.piwheels.org/simple/zipp/zipp-3.16.2-py3-none-any.whl (7.2 kB)
+Using cached MarkupSafe-2.1.3-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (26 kB)
+Using cached rpds_py-0.9.2-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (1.2 MB)
+Installing collected packages: pytz, python-editor, pyserial, msgpack, filelock, daemonize, brotli, argparse, aniso8601, zipp, Werkzeug, typing-extensions, setuptools, serpent, rpds-py, python-dateutil, pycparser, packaging, MarkupSafe, itsdangerous, greenlet, future, Flask_Talisman, dnspython, deprecated, decorator, click, cachelib, Babel, attrs, WTForms, SQLAlchemy, referencing, ratelim, pyro5, marshmallow, Mako, Jinja2, influxdb, importlib-resources, gunicorn, email_validator, cffi, marshmallow_sqlalchemy, limits, jsonschema-specifications, geocoder, Flask, bcrypt, alembic, jsonschema, Flask_WTF, Flask_SQLAlchemy, Flask_Session, Flask_Marshmallow, Flask_Login, Flask_Limiter, Flask_Compress, Flask_Babel, Flask_Accept, Flask_RESTX
+  Attempting uninstall: filelock
+    Found existing installation: filelock 3.12.2
+    Not uninstalling filelock at /usr/local/lib/python3.9/dist-packages, outside environment /home/wayne/Mycodo/env
+    Can't uninstall 'filelock'. No files were found to uninstall.
+  Attempting uninstall: typing-extensions
+    Found existing installation: typing-extensions 3.7.4.3
+    Not uninstalling typing-extensions at /usr/lib/python3/dist-packages, outside environment /home/wayne/Mycodo/env
+    Can't uninstall 'typing-extensions'. No files were found to uninstall.
+  Attempting uninstall: setuptools
+    Found existing installation: setuptools 68.1.2
+    Uninstalling setuptools-68.1.2:
+      Successfully uninstalled setuptools-68.1.2
+Successfully installed Babel-2.12.1 Flask-1.1.2 Flask_Accept-0.0.6 Flask_Babel-2.0.0 Flask_Compress-1.9.0 Flask_Limiter-1.4 Flask_Login-0.5.0 Flask_Marshmallow-0.14.0 Flask_RESTX-0.3.0 Flask_SQLAlchemy-2.5.1 Flask_Session-0.4.0 Flask_Talisman-0.7.0 Flask_WTF-0.14.3 Jinja2-3.0.3 Mako-1.2.4 MarkupSafe-2.1.3 SQLAlchemy-1.4.7 WTForms-2.3.3 Werkzeug-2.0.2 alembic-1.5.8 aniso8601-9.0.1 argparse-1.4.0 attrs-23.1.0 bcrypt-3.2.0 brotli-1.0.9 cachelib-0.10.2 cffi-1.15.1 click-8.1.7 daemonize-2.5.0 decorator-5.1.1 deprecated-1.2.14 dnspython-2.4.2 email_validator-1.1.2 filelock-3.0.12 future-0.18.3 geocoder-1.38.1 greenlet-2.0.2 gunicorn-20.1.0 importlib-resources-6.0.1 influxdb-5.3.1 itsdangerous-2.0.1 jsonschema-4.19.0 jsonschema-specifications-2023.7.1 limits-3.5.0 marshmallow-3.20.1 marshmallow_sqlalchemy-0.24.2 msgpack-1.0.5 packaging-23.1 pycparser-2.21 pyro5-5.12 pyserial-3.5 python-dateutil-2.8.1 python-editor-1.0.4 pytz-2023.3 ratelim-0.1.6 referencing-0.30.2 rpds-py-0.9.2 serpent-1.41 setuptools-56.0.0 typing-extensions-4.3.0 zipp-3.16.2
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Collecting pylibftdi==0.19.0 (from -r /home/wayne/Mycodo/install/requirements-rpi.txt (line 2))
+  Using cached https://www.piwheels.org/simple/pylibftdi/pylibftdi-0.19.0-py2.py3-none-any.whl (32 kB)
+Requirement already satisfied: RPi.GPIO in /usr/lib/python3/dist-packages (from -r /home/wayne/Mycodo/install/requirements-rpi.txt (line 3)) (0.7.0)
+Collecting RPi.GPIO (from -r /home/wayne/Mycodo/install/requirements-rpi.txt (line 3))
+  Using cached RPi.GPIO-0.7.1-cp39-cp39-linux_aarch64.whl
+Collecting smbus2==0.4.1 (from -r /home/wayne/Mycodo/install/requirements-rpi.txt (line 4))
+  Using cached https://www.piwheels.org/simple/smbus2/smbus2-0.4.1-py2.py3-none-any.whl (11 kB)
+Installing collected packages: smbus2, RPi.GPIO, pylibftdi
+  Attempting uninstall: RPi.GPIO
+    Found existing installation: RPi.GPIO 0.7.0
+    Not uninstalling rpi-gpio at /usr/lib/python3/dist-packages, outside environment /home/wayne/Mycodo/env
+    Can't uninstall 'RPi.GPIO'. No files were found to uninstall.
+Successfully installed RPi.GPIO-0.7.1 pylibftdi-0.19.0 smbus2-0.4.1
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Collecting testfixtures==6.17.1 (from -r /home/wayne/Mycodo/install/requirements-testing.txt (line 2))
+  Using cached https://www.piwheels.org/simple/testfixtures/testfixtures-6.17.1-py2.py3-none-any.whl (95 kB)
+Collecting mock==4.0.3 (from -r /home/wayne/Mycodo/install/requirements-testing.txt (line 3))
+  Using cached https://www.piwheels.org/simple/mock/mock-4.0.3-py3-none-any.whl (28 kB)
+Collecting pytest==6.2.3 (from -r /home/wayne/Mycodo/install/requirements-testing.txt (line 4))
+  Using cached https://www.piwheels.org/simple/pytest/pytest-6.2.3-py3-none-any.whl (280 kB)
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))': /simple/factory-boy/
+Collecting factory_boy==3.2.0 (from -r /home/wayne/Mycodo/install/requirements-testing.txt (line 5))
+  Using cached https://www.piwheels.org/simple/factory-boy/factory_boy-3.2.0-py2.py3-none-any.whl (35 kB)
+Collecting webtest==2.0.35 (from -r /home/wayne/Mycodo/install/requirements-testing.txt (line 6))
+  Using cached https://www.piwheels.org/simple/webtest/WebTest-2.0.35-py2.py3-none-any.whl (32 kB)
+Requirement already satisfied: attrs>=19.2.0 in ./env/lib/python3.9/site-packages (from pytest==6.2.3->-r /home/wayne/Mycodo/install/requirements-testing.txt (line 4)) (23.1.0)
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))': /simple/iniconfig/
+Collecting iniconfig (from pytest==6.2.3->-r /home/wayne/Mycodo/install/requirements-testing.txt (line 4))
+  Using cached https://www.piwheels.org/simple/iniconfig/iniconfig-2.0.0-py3-none-any.whl (5.9 kB)
+Requirement already satisfied: packaging in ./env/lib/python3.9/site-packages (from pytest==6.2.3->-r /home/wayne/Mycodo/install/requirements-testing.txt (line 4)) (23.1)
+Collecting pluggy<1.0.0a1,>=0.12 (from pytest==6.2.3->-r /home/wayne/Mycodo/install/requirements-testing.txt (line 4))
+  WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))': /simple/pluggy/pluggy-0.13.1-py2.py3-none-any.whl
+  Using cached https://www.piwheels.org/simple/pluggy/pluggy-0.13.1-py2.py3-none-any.whl (18 kB)
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))': /simple/py/
+Collecting py>=1.8.2 (from pytest==6.2.3->-r /home/wayne/Mycodo/install/requirements-testing.txt (line 4))
+  WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))': /simple/py/py-1.11.0-py2.py3-none-any.whl
+  Using cached https://www.piwheels.org/simple/py/py-1.11.0-py2.py3-none-any.whl (98 kB)
+Requirement already satisfied: toml in /usr/lib/python3/dist-packages (from pytest==6.2.3->-r /home/wayne/Mycodo/install/requirements-testing.txt (line 4)) (0.10.1)
+Collecting Faker>=0.7.0 (from factory_boy==3.2.0->-r /home/wayne/Mycodo/install/requirements-testing.txt (line 5))
+  Using cached https://www.piwheels.org/simple/faker/Faker-19.3.1-py3-none-any.whl (1.7 MB)
+Requirement already satisfied: six in /usr/lib/python3/dist-packages (from webtest==2.0.35->-r /home/wayne/Mycodo/install/requirements-testing.txt (line 6)) (1.16.0)
+Collecting WebOb>=1.2 (from webtest==2.0.35->-r /home/wayne/Mycodo/install/requirements-testing.txt (line 6))
+  Using cached https://www.piwheels.org/simple/webob/WebOb-1.8.7-py2.py3-none-any.whl (114 kB)
+Collecting waitress>=0.8.5 (from webtest==2.0.35->-r /home/wayne/Mycodo/install/requirements-testing.txt (line 6))
+  Using cached https://www.piwheels.org/simple/waitress/waitress-2.1.2-py3-none-any.whl (57 kB)
+Collecting beautifulsoup4 (from webtest==2.0.35->-r /home/wayne/Mycodo/install/requirements-testing.txt (line 6))
+  Using cached https://www.piwheels.org/simple/beautifulsoup4/beautifulsoup4-4.12.2-py3-none-any.whl (142 kB)
+Requirement already satisfied: python-dateutil>=2.4 in ./env/lib/python3.9/site-packages (from Faker>=0.7.0->factory_boy==3.2.0->-r /home/wayne/Mycodo/install/requirements-testing.txt (line 5)) (2.8.1)
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))': /simple/soupsieve/
+Collecting soupsieve>1.2 (from beautifulsoup4->webtest==2.0.35->-r /home/wayne/Mycodo/install/requirements-testing.txt (line 6))
+  WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))': /simple/soupsieve/soupsieve-2.4.1-py3-none-any.whl
+  Using cached https://www.piwheels.org/simple/soupsieve/soupsieve-2.4.1-py3-none-any.whl (36 kB)
+Installing collected packages: testfixtures, WebOb, waitress, soupsieve, py, pluggy, mock, iniconfig, pytest, Faker, beautifulsoup4, webtest, factory_boy
+Successfully installed Faker-19.3.1 WebOb-1.8.7 beautifulsoup4-4.12.2 factory_boy-3.2.0 iniconfig-2.0.0 mock-4.0.3 pluggy-0.13.1 py-1.11.0 pytest-6.2.3 soupsieve-2.4.1 testfixtures-6.17.1 waitress-2.1.2 webtest-2.0.35
+--2023-08-28 09:26:33--  https://project-downloads.drogon.net/wiringpi-latest.deb
+Resolving project-downloads.drogon.net (project-downloads.drogon.net)... 188.246.205.22, 2a03:9800:10:7b::2
+Connecting to project-downloads.drogon.net (project-downloads.drogon.net)|188.246.205.22|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 52260 (51K) [application/x-debian-package]
+Saving to: ‘wiringpi-latest.deb’
+
+     0K .......... .......... .......... .......... .......... 97%  139K 0s
+    50K .                                                     100% 1.93T=0.4s
+
+2023-08-28 09:26:35 (142 KB/s) - ‘wiringpi-latest.deb’ saved [52260/52260]
+
+(Reading database ... 41601 files and directories currently installed.)
+Preparing to unpack wiringpi-latest.deb ...
+Unpacking wiringpi:armhf (2.52) over (2.52) ...
+Setting up wiringpi:armhf (2.52) ...
+Processing triggers for man-db (2.9.4-2) ...
+
+#### Ensuring compatible version of influxdb is installed ####
+#### Incorrect InfluxDB version (v(none)) installed. Installing v1.8.0-1...
+(Reading database ... 41601 files and directories currently installed.)
+Preparing to unpack influxdb_1.8.0_armhf.deb ...
+Unpacking influxdb:armhf (1.8.0-1) over (1.8.0-1) ...
+Setting up influxdb:armhf (1.8.0-1) ...
+Processing triggers for man-db (2.9.4-2) ...
+
+#### Creating InfluxDB database and user
+#### Attempting to connect...
+#### Could not connect to Influxdb. Waiting 30 seconds then trying again...
+#### Attempting to connect...
+#### Influxdb database and user successfully created
+
+#### Running initialization
+
+#### Creating mycodo user
+useradd: user 'mycodo' already exists
+The user `mycodo' is already a member of `adm'.
+The user `mycodo' is already a member of `dialout'.
+The user `mycodo' is already a member of `gpio'.
+The user `mycodo' is already a member of `i2c'.
+The user `mycodo' is already a member of `kmem'.
+The user `mycodo' is already a member of `video'.
+adduser: The user `pi' does not exist.
+adduser: The group `pi' does not exist.
+
+#### Compiling mycodo_wrapper
+
+#### Creating symlinks to Mycodo executables
+
+#### Creating files and directories
+
+#### Setting permissions
+
+#### Installing logrotate scripts
+Mycodo logrotate script installed
+
+#### Generating SSL certificates at /home/wayne/Mycodo/mycodo/mycodo_flask/ssl_certs (replace with your own if desired)
+Generating RSA private key, 4096 bit long modulus (2 primes)
+..................................................................................................................................................................................................................................................................................++++
+............................................................................++++
+e is 65537 (0x010001)
+writing RSA key
+Signature ok
+subject=O = mycodo, OU = mycodo, CN = mycodo
+Getting Private key
+
+#### Disabling installed mycodo startup script
+Removed /etc/systemd/system/multi-user.target.wants/mycodo.service.
+Removed /etc/systemd/system/mycodo.service.
+#### Enabling current mycodo startup script
+Created symlink /etc/systemd/system/mycodo.service → /home/wayne/Mycodo/install/mycodo.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/mycodo.service → /home/wayne/Mycodo/install/mycodo.service.
+
+#### Compiling Translations
+compiling catalog mycodo_flask/translations/ru/LC_MESSAGES/messages.po to mycodo_flask/translations/ru/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/zh/LC_MESSAGES/messages.po to mycodo_flask/translations/zh/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/pt/LC_MESSAGES/messages.po to mycodo_flask/translations/pt/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/fr/LC_MESSAGES/messages.po to mycodo_flask/translations/fr/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/sv/LC_MESSAGES/messages.po to mycodo_flask/translations/sv/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/de/LC_MESSAGES/messages.po to mycodo_flask/translations/de/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/es/LC_MESSAGES/messages.po to mycodo_flask/translations/es/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/it/LC_MESSAGES/messages.po to mycodo_flask/translations/it/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/nb/LC_MESSAGES/messages.po to mycodo_flask/translations/nb/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/sr/LC_MESSAGES/messages.po to mycodo_flask/translations/sr/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/nl/LC_MESSAGES/messages.po to mycodo_flask/translations/nl/LC_MESSAGES/messages.mo
+compiling catalog mycodo_flask/translations/pl/LC_MESSAGES/messages.po to mycodo_flask/translations/pl/LC_MESSAGES/messages.mo
+
+#### Generating widget HTML files
+
+#### Running initialization
+
+#### Creating mycodo user
+useradd: user 'mycodo' already exists
+The user `mycodo' is already a member of `adm'.
+The user `mycodo' is already a member of `dialout'.
+The user `mycodo' is already a member of `gpio'.
+The user `mycodo' is already a member of `i2c'.
+The user `mycodo' is already a member of `kmem'.
+The user `mycodo' is already a member of `video'.
+adduser: The user `pi' does not exist.
+adduser: The group `pi' does not exist.
+
+#### Compiling mycodo_wrapper
+
+#### Creating symlinks to Mycodo executables
+
+#### Creating files and directories
+
+#### Setting permissions
+
+#### Installing and configuring nginx web server
+Removed /etc/systemd/system/multi-user.target.wants/mycodoflask.service.
+Removed /etc/systemd/system/mycodoflask.service.
+Synchronizing state of nginx.service with SysV service script with /lib/systemd/systemd-sysv-install.
+Executing: /lib/systemd/systemd-sysv-install enable nginx
+Created symlink /etc/systemd/system/multi-user.target.wants/mycodoflask.service → /home/wayne/Mycodo/install/mycodoflask.service.
+Created symlink /etc/systemd/system/mycodoflask.service → /home/wayne/Mycodo/install/mycodoflask.service.
+
+#### Restarting nginx
+#### Restarting mycodoflask
+
+#### Connecting to http://localhost (creates Mycodo database if it doesn't exist)
+#### Could not connect to http://localhost. Waiting 60 seconds then trying again (up to 5 times)...
+#### Trying again...
+#### Successfully connected to http://localhost
+
+#### Setting permissions
+
+#### Restarting the Mycodo daemon
+
+**********************************
+** ERROR During Mycodo Install! **
+**********************************
+
+An error occurred that may have prevented Mycodo from
+being installed properly!
+
+Open to the end of the setup log to view the full error:
+/home/wayne/Mycodo/install/setup.log
+
+Please contact the developer by submitting a bug report
+at https://github.com/kizniche/Mycodo/issues with the
+pertinent excerpts from the setup log located at:
+/home/wayne/Mycodo/install/setup.log
