@@ -5,6 +5,7 @@
 import copy
 import datetime
 import threading
+import os
 
 from flask_babel import lazy_gettext
 
@@ -144,23 +145,24 @@ OUTPUT_INFORMATION = {
             'id': 'calibrate_ml',
             'type': 'button',
             'name': 'Calibrate to Dispensed Amount'
-        },
-        {
-            'type': 'message',
-            'default_value': """The I2C address can be changed. Enter a new address in the 0xYY format (e.g. 0x22, 0x50), then press Set I2C Address. Remember to deactivate and change the I2C address option after setting the new address."""
-        },
-        {
-            'id': 'new_i2c_address',
-            'type': 'text',
-            'default_value': '0x67',
-            'name': lazy_gettext('New I2C Address'),
-            'phrase': lazy_gettext('The new I2C to set the device to')
-        },
-        {
-            'id': 'set_i2c_address',
-            'type': 'button',
-            'name': lazy_gettext('Set I2C Address')
         }
+        #,
+        # {
+        #     'type': 'message',
+        #     'default_value': """The I2C address can be changed. Enter a new address in the 0xYY format (e.g. 0x22, 0x50), then press Set I2C Address. Remember to deactivate and change the I2C address option after setting the new address."""
+        # },
+        # {
+        #     'id': 'new_i2c_address',
+        #     'type': 'text',
+        #     'default_value': '0x67',
+        #     'name': lazy_gettext('New I2C Address'),
+        #     'phrase': lazy_gettext('The new I2C to set the device to')
+        # },
+        # {
+        #     'id': 'set_i2c_address',
+        #     'type': 'button',
+        #     'name': lazy_gettext('Set I2C Address')
+        # }
     ]
 }
 
@@ -180,7 +182,9 @@ class OutputModule(AbstractOutput):
             OutputChannel).filter(OutputChannel.output_id == self.output.unique_id).all()
         self.options_channels = self.setup_custom_channel_options_json(
             OUTPUT_INFORMATION['custom_channel_options'], output_channels)
-
+        
+        self.LOG_TEST = '/var/log/log_test.txt'
+        
     def setup_output(self):
         self.setup_output_variables(OUTPUT_INFORMATION)
         self.interface = self.output.interface
@@ -196,68 +200,85 @@ class OutputModule(AbstractOutput):
         add_measurements_influxdb(self.unique_id, measure_dict)
 
     def dispense_duration(self, seconds):
-        # timer_dispense = time.time() + seconds
-        self.currently_dispensing = True
-        write_cmd = "D,*"
-        self.atlas_device.atlas_write(write_cmd)
-        self.logger.debug("EZO-PMP command: {}".format(write_cmd))
+        try:
+            # timer_dispense = time.time() + seconds
+            self.currently_dispensing = True
+            write_cmd = "D,*"
+            self.atlas_device.atlas_write(write_cmd)
 
-        # while time.time() < timer_dispense and self.currently_dispensing:
-        #     time.sleep(0.1)
-        #
-        # write_cmd = 'X'
-        # self.atlas_device.atlas_write(write_cmd)
-        # self.logger.debug("EZO-PMP command: {}".format(write_cmd))
-        # self.currently_dispensing = False
-        #
-        # self.record_dispersal(seconds_to_run=seconds)
+            with open(self.LOG_TEST, 'a') as f:
+                data = "{} : Command Sent : Device : {}  Command :{}".format(datetime.datetime.utcnow(),self.output.unique_id,write_cmd)
+                f.write("\r\n")
+                f.write(data)
+
+            self.logger.debug("EZO-PMP command: {}".format(write_cmd))
+
+            # while time.time() < timer_dispense and self.currently_dispensing:
+            #     time.sleep(0.1)
+            #
+            # write_cmd = 'X'
+            # self.atlas_device.atlas_write(write_cmd)
+            # self.logger.debug("EZO-PMP command: {}".format(write_cmd))
+            # self.currently_dispensing = False
+            #
+            # self.record_dispersal(seconds_to_run=seconds)
+        except Exception as ex:
+            self.logger.error(ex)
 
     def output_switch(self, state, output_type=None, amount=None, output_channel=None):
-        if state == 'on' and output_type == 'sec':
-            # Only dispense for a duration if output_type is 'sec'
-            # Otherwise, refer to output_mode
-            write_db = threading.Thread(
-                target=self.dispense_duration,
-                args=(amount,))
-            write_db.start()
-            return
-
-        elif state == 'on' and output_type in ['vol', None] and amount:
-            if self.options_channels['flow_mode'][0] == 'fastest_flow_rate':
-                minutes_to_run = abs(amount) / 105
-                seconds_to_run = minutes_to_run * 60
-                write_cmd = 'D,{ml:.2f}'.format(ml=amount)
-            elif self.options_channels['flow_mode'][0] == 'specify_flow_rate':
-                minutes_to_run = abs(amount) / self.options_channels['flow_rate'][0]
-                seconds_to_run = minutes_to_run * 60
-                write_cmd = 'D,{ml:.2f},{min:.2f}'.format(
-                    ml=amount, min=minutes_to_run)
-            else:
-                self.logger.error("Invalid output_mode: '{}'".format(
-                    self.options_channels['flow_mode'][0]))
+        try:
+            if state == 'on' and output_type == 'sec':
+                # Only dispense for a duration if output_type is 'sec'
+                # Otherwise, refer to output_mode
+                write_db = threading.Thread(
+                    target=self.dispense_duration,
+                    args=(amount,))
+                write_db.start()
                 return
 
-        elif state == 'off' or (amount is not None and amount == 0):
-            self.currently_dispensing = False
-            write_cmd = 'X'
-            amount = 0
-            seconds_to_run = 0
+            elif state == 'on' and output_type in ['vol', None] and amount:
+                if self.options_channels['flow_mode'][0] == 'fastest_flow_rate':
+                    minutes_to_run = abs(amount) / 105
+                    seconds_to_run = minutes_to_run * 60
+                    write_cmd = 'D,{ml:.2f}'.format(ml=amount)
+                elif self.options_channels['flow_mode'][0] == 'specify_flow_rate':
+                    minutes_to_run = abs(amount) / self.options_channels['flow_rate'][0]
+                    seconds_to_run = minutes_to_run * 60
+                    write_cmd = 'D,{ml:.2f},{min:.2f}'.format(
+                        ml=amount, min=minutes_to_run)
+                else:
+                    self.logger.error("Invalid output_mode: '{}'".format(
+                        self.options_channels['flow_mode'][0]))
+                    return
 
-        else:
-            self.logger.error(
-                "Invalid parameters: State: {state}, Type: {ot}, Mode: {mod}, Amount: {amt}, Flow Rate: {fr}".format(
-                    state=state,
-                    ot=output_type,
-                    mod=self.options_channels['flow_mode'][0],
-                    amt=amount,
-                    fr=self.options_channels['flow_rate'][0]))
-            return
+            elif state == 'off' or (amount is not None and amount == 0):
+                self.currently_dispensing = False
+                write_cmd = 'X'
+                amount = 0
+                seconds_to_run = 0
 
-        self.logger.debug("EZO-PMP command: {}".format(write_cmd))
-        self.atlas_device.atlas_write(write_cmd)
+            else:
+                self.logger.error(
+                    "Invalid parameters: State: {state}, Type: {ot}, Mode: {mod}, Amount: {amt}, Flow Rate: {fr}".format(
+                        state=state,
+                        ot=output_type,
+                        mod=self.options_channels['flow_mode'][0],
+                        amt=amount,
+                        fr=self.options_channels['flow_rate'][0]))
+                return
+        
+            self.atlas_device.atlas_write(write_cmd)
+            with open(self.LOG_TEST, 'a') as f:
+                data = "{} : Command Sent : Device : {}  Command :{}".format(datetime.datetime.utcnow(),self.output.unique_id,write_cmd)
+                f.write("\r\n")
+                f.write(data )
+            self.logger.debug("EZO-PMP command: {}".format(write_cmd))
 
-        if amount and seconds_to_run:
-            self.record_dispersal(amount_ml=amount, seconds_to_run=seconds_to_run)
+            if amount and seconds_to_run:
+                self.record_dispersal(amount_ml=amount, seconds_to_run=seconds_to_run)
+        
+        except Exception as ex:
+            self.logger.error(ex)
 
     def is_on(self, output_channel=None):
         if self.is_setup():
@@ -334,16 +355,17 @@ class OutputModule(AbstractOutput):
         self.calibrate('calibrate_ml', args_dict['calibrate_volume_ml'])
 
     def set_i2c_address(self, args_dict):
-        if 'new_i2c_address' not in args_dict:
-            self.logger.error("Cannot set new I2C address without an I2C address")
-            return
-        try:
-            i2c_address = int(str(args_dict['new_i2c_address']), 16)
-            write_cmd = "I2C,{}".format(i2c_address)
-            self.logger.debug("I2C Change command: {}".format(write_cmd))
-            ret_val = self.atlas_device.atlas_write(write_cmd)
-            self.logger.info("Command returned: {}".format(ret_val))
-            self.atlas_device = None
-            self.output_setup = False
-        except:
-            self.logger.exception("Exception changing I2C address")
+        return
+        # if 'new_i2c_address' not in args_dict:
+        #     self.logger.error("Cannot set new I2C address without an I2C address")
+        #     return
+        # try:
+        #     i2c_address = int(str(args_dict['new_i2c_address']), 16)
+        #     write_cmd = "I2C,{}".format(i2c_address)
+        #     self.logger.debug("I2C Change command: {}".format(write_cmd))
+        #     ret_val = self.atlas_device.atlas_write(write_cmd)
+        #     self.logger.info("Command returned: {}".format(ret_val))
+        #     self.atlas_device = None
+        #     self.output_setup = False
+        # except:
+        #     self.logger.exception("Exception changing I2C address")
