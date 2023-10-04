@@ -30,18 +30,14 @@ measurements_dict = {
     5: {
         'measurement': 'power_factor',
         'unit': 'unitless'
-    },
-     5: {
-        'measurement': 'alarm',
-        'unit': 'unitless'
     }
 }
 
 # Input information
 INPUT_INFORMATION = {
-    'input_name_unique': 'GROWRIGHT_PZEM004T',
+    'input_name_unique': 'GROWRIGHT_POWER_METER',
     'input_manufacturer': 'Growright Macroponics',
-    'input_name': 'GrowRight Pzem400t',
+    'input_name': 'GrowRight Power Meter',
     'input_library': 'pylibftdi/fcntl/io/serial',
     'measurements_name': 'Voltage/Current',
     'measurements_dict': measurements_dict,
@@ -69,24 +65,7 @@ INPUT_INFORMATION = {
     'uart_baud_rate': 9600,
 
     'custom_options': [],
-    'custom_actions': [
-        {
-            'type': 'message',
-            'default_value': """The I2C address can be changed. Enter a new address in the 0xYY format (e.g. 0x22, 0x50), then press Set I2C Address. Remember to deactivate and change the I2C address option after setting the new address."""
-        },
-        {
-            'id': 'new_i2c_address',
-            'type': 'text',
-            'default_value': '0x64',
-            'name': lazy_gettext('New I2C Address'),
-            'phrase': lazy_gettext('The new I2C to set the device to')
-        },
-        {
-            'id': 'set_i2c_address',
-            'type': 'button',
-            'name': lazy_gettext('Set I2C Address')
-        }
-    ]
+    'custom_actions': []
 }
 
 class InputModule(AbstractInput):
@@ -160,9 +139,9 @@ class InputModule(AbstractInput):
             power_factor = data[8] / 100.0
             self.value_set(5,power_factor)
 
-        if self.is_enabled(6):
-            alarm = data[9]
-            self.value_set(6,alarm)
+        # if self.is_enabled(6):
+        #     alarm = data[9]
+        #     self.value_set(6,alarm)
 
         return self.return_dict
 

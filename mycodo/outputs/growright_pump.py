@@ -69,7 +69,7 @@ OUTPUT_INFORMATION = {
         ('pip-pypi', 'pylibftdi', 'pylibftdi==0.19.0')
     ],
 
-    'interfaces': ['I2C', 'UART', 'FTDI'],
+    'interfaces': ['I2C'],
     'i2c_location': ['0x67'],
     'i2c_address_editable': True,
     'ftdi_location': '/dev/ttyUSB0',

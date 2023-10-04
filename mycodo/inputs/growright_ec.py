@@ -18,41 +18,33 @@ from mycodo.utils.system_pi import str_is_float
 # Measurements
 measurements_dict = {
     0: {
-        'measurement': 'length',
-        'unit': 'cm'
+        'measurement': 'electrical_conductivity',
+        'unit': 'uS_cm'
     },
     1: {
-        'measurement': 'length',
-        'unit': 'cm'
+        'measurement': 'total_dissolved_solids',
+        'unit': 'ppm'
     },
     2: {
-        'measurement': 'length',
-        'unit': 'cm'
+        'measurement': 'salinity',
+        'unit': 'ppt'
     },
     3: {
-        'measurement': 'length',
-        'unit': 'cm'
-    },
-    4: {
-        'measurement': 'length',
-        'unit': 'cm'
-    },
-    5: {
-        'measurement': 'length',
-        'unit': 'cm'
+        'measurement': 'specific_gravity',
+        'unit': 'unitless'
     }
 }
 
 # Input information
 INPUT_INFORMATION = {
-    'input_name_unique': 'GROWRIGHT_LEVEL',
+    'input_name_unique': 'GROWRIGHT_EC',
     'input_manufacturer': 'Growright Macroponics',
-    'input_name': 'GrowRight Level',
+    'input_name': 'Growrright EC',
     'input_library': 'pylibftdi/fcntl/io/serial',
-    'measurements_name': 'Growright Level',
+    'measurements_name': 'Electrical Conductivity',
     'measurements_dict': measurements_dict,
     'url_manufacturer': 'https://www.atlas-scientific.com/conductivity/',
-    'url_datasheet': 'https://www.atlas-scientific.com/conductivity/',
+    'url_datasheet': 'https://www.atlas-scientific.com/files/EC_EZO_Datasheet.pdf',
 
     'options_enabled': [
         'measurements_select',
@@ -70,14 +62,96 @@ INPUT_INFORMATION = {
     ],
 
     'interfaces': ['I2C'],
-    'i2c_location': ['0x50'],
+    'i2c_location': ['0x64'],
     'i2c_address_editable': True,
     'uart_location': '/dev/ttyAMA0',
     'uart_baud_rate': 9600,
     'ftdi_location': '/dev/ttyUSB0',
 
-    'custom_options': [],
+    'custom_options': [
+        {
+            'id': 'temperature_comp_meas',
+            'type': 'select_measurement',
+            'default_value': '',
+            'options_select': [
+                'Input',
+                'Function',
+                'Math'
+            ],
+            'name': "{}: {}".format(lazy_gettext('Temperature Compensation'), lazy_gettext('Measurement')),
+            'phrase': lazy_gettext('Select a measurement for temperature compensation')
+        },
+        {
+            'id': 'max_age',
+            'type': 'integer',
+            'default_value': 120,
+            'required': True,
+            'constraints_pass': constraints_pass_positive_value,
+            'name': "{}: {}".format(lazy_gettext('Temperature Compensation'), lazy_gettext('Max Age')),
+            'phrase': lazy_gettext('The maximum age (seconds) of the measurement to use')
+        }
+    ],
+
     'custom_actions': [
+        {
+            'type': 'message',
+            'default_value': """Calibration: a one- or two-point calibration can be performed. It's a good idea to clear the calibration before calibrating. Always perform a dry calibration with the probe in the air (not in any fluid). Then perform either a one- or two-point calibration with calibrated solutions. If performing a one-point calibration, use the Single Point Calibration field and button. If performing a two-point calibration, use the Low and High Point Calibration fields and buttons. Allow a minute or two after submerging your probe in a calibration solution for the measurements to equilibrate before calibrating to that solution. The EZO EC circuit default temperature compensation is set to 25 °C. If the temperature of the calibration solution is +/- 2 °C from 25 °C, consider setting the temperature compensation first. Note that at no point should you change the temperature compensation value during calibration. Therefore, if you have previously enabled temperature compensation, allow at least one measurement to occur (to set the compensation value), then disable the temperature compensation measurement while you calibrate."""
+        },
+        {
+            'id': 'clear_calibrate',
+            'type': 'button',
+            'name': 'Clear Calibration'
+        },
+        {
+            'id': 'dry_calibrate',
+            'type': 'button',
+            'name': 'Calibrate Dry'
+        },
+        {
+            'type': 'new_line'
+        },
+        {
+            'id': 'single_point_ec',
+            'type': 'integer',
+            'default_value': 84,
+            'name': 'Single Point EC (µS)',
+            'phrase': 'The EC (µS) of the single point calibration solution'
+        },
+        {
+            'id': 'single_calibrate',
+            'type': 'button',
+            'name': 'Calibrate Single Point'
+        },
+        {
+            'type': 'new_line'
+        },
+        {
+            'id': 'low_point_ec',
+            'type': 'integer',
+            'default_value': 12880,
+            'name': 'Low Point EC (µS)',
+            'phrase': 'The EC (µS) of the low point calibration solution'
+        },
+        {
+            'id': 'low_calibrate',
+            'type': 'button',
+            'name': 'Calibrate Low Point'
+        },
+        {
+            'type': 'new_line'
+        },
+        {
+            'id': 'high_point_ec',
+            'type': 'integer',
+            'default_value': 80000,
+            'name': 'High Point EC (µS)',
+            'phrase': 'The EC (µS) of the high point calibration solution'
+        },
+        {
+            'id': 'high_calibrate',
+            'type': 'button',
+            'name': 'Calibrate High Point'
+        },
         {
             'type': 'message',
             'default_value': """The I2C address can be changed. Enter a new address in the 0xYY format (e.g. 0x22, 0x50), then press Set I2C Address. Remember to deactivate and change the I2C address option after setting the new address."""
@@ -233,12 +307,38 @@ class InputModule(AbstractInput):
 
         if ',' in return_string:
             # Multiple values returned
+            index_place = 0
             return_list = return_string.split(',')
+            if (self.is_enabled(0) and
+                    len(return_list) > index_place and
+                    str_is_float(return_list[index_place])):
+                self.value_set(0, float(return_list[index_place]))
+                index_place += 1
+            if (self.is_enabled(1) and
+                    len(return_list) > index_place and
+                    str_is_float(return_list[index_place])):
+                self.value_set(1, float(return_list[index_place]))
+                index_place += 1
+            if (self.is_enabled(2) and
+                    len(return_list) > index_place and
+                    str_is_float(return_list[index_place])):
+                self.value_set(2, float(return_list[index_place]))
+                index_place += 1
+            if (self.is_enabled(3) and
+                    len(return_list) > index_place and
+                    str_is_float(return_list[index_place])):
+                self.value_set(3, float(return_list[index_place]))
+        elif str_is_float(return_string):
+            # Single value returned
+            if self.is_enabled(0):
+                self.value_set(0, float(return_string))
+            elif self.is_enabled(1):
+                self.value_set(1, float(return_string))
+            elif self.is_enabled(2):
+                self.value_set(2, float(return_string))
+            elif self.is_enabled(3):
+                self.value_set(3, float(return_string))
 
-            for index in range(len(return_list)):
-                if (str_is_float(return_list[index])):
-                    self.value_set(index, float(return_list[index]))
-                    
         return self.return_dict
 
     def calibrate(self, level, ec):
