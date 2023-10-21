@@ -15,20 +15,20 @@ Support
 Documentation
 ~~~~~~~~~~~~~
 
-`Mycodo Manual <https://kizniche.github.io/Mycodo>`__ (`PDF <https://github.com/kizniche/Mycodo/raw/master/docs/mycodo-manual.pdf>`__)
+`Mycodo Manual <https://biotechnicallc.github.io/Mycodo>`__ (`PDF <https://github.com/biotechnicallc/Mycodo/raw/master/docs/mycodo-manual.pdf>`__)
 
-`Mycodo API <https://kizniche.github.io/Mycodo/mycodo-api.html>`__ (Version: v1)
+`Mycodo API <https://biotechnicallc.github.io/Mycodo/mycodo-api.html>`__ (Version: v1)
 
-`Mycodo Wiki <https://github.com/kizniche/Mycodo/wiki>`__
+`Mycodo Wiki <https://github.com/biotechnicallc/Mycodo/wiki>`__
 
-`Mycodo Custom Module Repository <https://github.com/kizniche/Mycodo-custom>`__
+`Mycodo Custom Module Repository <https://github.com/biotechnicallc/Mycodo-custom>`__
 
 `Mycodo Support Android App <https://play.google.com/store/apps/details?id=com.mycodo.mycododocs>`__
 
 Discussion
 ~~~~~~~~~~
 
-`Mycodo Issues (Bug Reports/Feature Requests) <https://github.com/kizniche/Mycodo/issues>`__
+`Mycodo Issues (Bug Reports/Feature Requests) <https://github.com/biotechnicallc/Mycodo/issues>`__
 
 `Mycodo Forum <https://forum.kylegabriel.com>`__ (the `old forum <https://kylegabriel.com/forum>`__ is being phased out, registration closed)
 
@@ -37,12 +37,12 @@ Discussion
 Bug in the Mycodo Software
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you believe there is a bug in the Mycodo software, first search through the guthub `Issues <https://github.com/kizniche/Mycodo/issues>`__ and see if your issue has already recently been discussed or resolved. If your issue is novel or significantly mre recent than a similar one, you should create a `New Issue <https://github.com/kizniche/Mycodo/issues/new>`__. When creating a new issue, make sure to read all information in the issue template and follow the instructions. Replace the template text with the information being requested (e.g. "step 1" under "Steps to Reproduce the issue" should be replaced with the actual steps to reproduce the issue). The more information you provide, the easier it is to reproduce and diagnose the issue. If the issue is not able to reproduced because not enough information is provided, it may delay or prevent solving the issue.
+If you believe there is a bug in the Mycodo software, first search through the guthub `Issues <https://github.com/biotechnicallc/Mycodo/issues>`__ and see if your issue has already recently been discussed or resolved. If your issue is novel or significantly mre recent than a similar one, you should create a `New Issue <https://github.com/biotechnicallc/Mycodo/issues/new>`__. When creating a new issue, make sure to read all information in the issue template and follow the instructions. Replace the template text with the information being requested (e.g. "step 1" under "Steps to Reproduce the issue" should be replaced with the actual steps to reproduce the issue). The more information you provide, the easier it is to reproduce and diagnose the issue. If the issue is not able to reproduced because not enough information is provided, it may delay or prevent solving the issue.
 
 Donate
 ------
 
-I have always made Mycodo free and I don't intend on changing that. However, if you find Mycodo useful and would like to support its continued development, please consider becoming a sponsor at `github.com/sponsors/kizniche <https://github.com/sponsors/kizniche>`__ or donate at `kylegabriel.com/donate <https://kylegabriel.com/donate>`__.
+I have always made Mycodo free and I don't intend on changing that. However, if you find Mycodo useful and would like to support its continued development, please consider becoming a sponsor at `github.com/sponsors/biotechnicallc <https://github.com/sponsors/biotechnicallc>`__ or donate at `kylegabriel.com/donate <https://kylegabriel.com/donate>`__.
 
 --------------
 
@@ -52,18 +52,18 @@ I have always made Mycodo free and I don't intend on changing that. However, if 
 Features
 --------
 
--  `Inputs <https://kizniche.github.io/Mycodo/Inputs/>`__ that record measurements from sensors, GPIO pin states, analog-to-digital converters, and more (or create your own `Custom Inputs <#custom-inputs>`__). See all `Supported Inputs <https://kizniche.github.io/Mycodo/Supported-Inputs-By-Measurement/>`__.
--  `Outputs <https://kizniche.github.io/Mycodo/Outputs/>`__ that perform actions such as switching GPIO pins high/low, generating PWM signals, executing shell scripts and Python code, and more (or create your own `Custom Outputs <#custom-outputs>`__). See all `Supported Outputs <https://kizniche.github.io/Mycodo/Supported-Outputs/>`__.
--  `Functions <https://kizniche.github.io/Mycodo/Functions/>`__ that perform tasks, such as coupling Inputs and Outputs in interesting ways, such as `PID controllers <https://kizniche.github.io/Mycodo/Functions/#pid-controller>`__, `Conditional Controllers <https://kizniche.github.io/Mycodo/Functions/#conditional>`__, `Trigger Controllers <https://kizniche.github.io/Mycodo/Functions/#trigger>`__, to name a few (or create your own `Custom Functions <https://kizniche.github.io/Mycodo/Functions/#custom-functions>`__). See all `Supported Functions <https://kizniche.github.io/Mycodo/Supported-Functions/>`__.
--  `Web Interface <https://kizniche.github.io/Mycodo/About/#web-interface>`__ for securely accessing Mycodo using a web browser on your local network or anywhere in the world with an internet connection, to view and configure the system, which includes several light and dark themes.
--  `Dashboards <https://kizniche.github.io/Mycodo/Data-Viewing/#dashboard>`__ that display configurable widgets, including interactive live and historical graphs, gauges, output state indicators, measurements, and more (or create your own `Custom Widgets <https://kizniche.github.io/Mycodo/Widgets/#custom-widgets>`__). See all `Supported Widgets <https://kizniche.github.io/Mycodo/Supported-Widgets/>`__.
--  `Alert Notifications <https://kizniche.github.io/Mycodo/Alerts/>`__ to send emails when measurements reach or exceed user-specified thresholds, important for knowing immediately when issues arise.
--  `Setpoint Tracking <https://kizniche.github.io/Mycodo/Methods/>`__ for changing a PID controller setpoint over time, for use with things like terrariums, reflow ovens, thermal cyclers, sous-vide cooking, and more.
--  `Notes <https://kizniche.github.io/Mycodo/Notes/>`__ to record events, alerts, and other important points in time, which can be overlaid on graphs to visualize events with your measurement data.
--  `Cameras <https://kizniche.github.io/Mycodo/Camera/>`__ for remote live streaming, image capture, and time-lapse photography.
--  `Energy Usage Measurement <https://kizniche.github.io/Mycodo/Energy-Usage/>`__ for calculating and tracking power consumption and cost over time.
--  `Upgrade System <https://kizniche.github.io/Mycodo/Upgrade-Backup-Restore/>`__ to easily upgrade the Mycodo system to the latest release to get the newest features or restore to a previously-backed up version.
--  `Translations <https://kizniche.github.io/Mycodo/Translations/>`__ that enable the web interface to be presented in different `Languages <https://github.com/kizniche/Mycodo#features>`__.
+-  `Inputs <https://biotechnicallc.github.io/Mycodo/Inputs/>`__ that record measurements from sensors, GPIO pin states, analog-to-digital converters, and more (or create your own `Custom Inputs <#custom-inputs>`__). See all `Supported Inputs <https://biotechnicallc.github.io/Mycodo/Supported-Inputs-By-Measurement/>`__.
+-  `Outputs <https://biotechnicallc.github.io/Mycodo/Outputs/>`__ that perform actions such as switching GPIO pins high/low, generating PWM signals, executing shell scripts and Python code, and more (or create your own `Custom Outputs <#custom-outputs>`__). See all `Supported Outputs <https://biotechnicallc.github.io/Mycodo/Supported-Outputs/>`__.
+-  `Functions <https://biotechnicallc.github.io/Mycodo/Functions/>`__ that perform tasks, such as coupling Inputs and Outputs in interesting ways, such as `PID controllers <https://biotechnicallc.github.io/Mycodo/Functions/#pid-controller>`__, `Conditional Controllers <https://biotechnicallc.github.io/Mycodo/Functions/#conditional>`__, `Trigger Controllers <https://biotechnicallc.github.io/Mycodo/Functions/#trigger>`__, to name a few (or create your own `Custom Functions <https://biotechnicallc.github.io/Mycodo/Functions/#custom-functions>`__). See all `Supported Functions <https://biotechnicallc.github.io/Mycodo/Supported-Functions/>`__.
+-  `Web Interface <https://biotechnicallc.github.io/Mycodo/About/#web-interface>`__ for securely accessing Mycodo using a web browser on your local network or anywhere in the world with an internet connection, to view and configure the system, which includes several light and dark themes.
+-  `Dashboards <https://biotechnicallc.github.io/Mycodo/Data-Viewing/#dashboard>`__ that display configurable widgets, including interactive live and historical graphs, gauges, output state indicators, measurements, and more (or create your own `Custom Widgets <https://biotechnicallc.github.io/Mycodo/Widgets/#custom-widgets>`__). See all `Supported Widgets <https://biotechnicallc.github.io/Mycodo/Supported-Widgets/>`__.
+-  `Alert Notifications <https://biotechnicallc.github.io/Mycodo/Alerts/>`__ to send emails when measurements reach or exceed user-specified thresholds, important for knowing immediately when issues arise.
+-  `Setpoint Tracking <https://biotechnicallc.github.io/Mycodo/Methods/>`__ for changing a PID controller setpoint over time, for use with things like terrariums, reflow ovens, thermal cyclers, sous-vide cooking, and more.
+-  `Notes <https://biotechnicallc.github.io/Mycodo/Notes/>`__ to record events, alerts, and other important points in time, which can be overlaid on graphs to visualize events with your measurement data.
+-  `Cameras <https://biotechnicallc.github.io/Mycodo/Camera/>`__ for remote live streaming, image capture, and time-lapse photography.
+-  `Energy Usage Measurement <https://biotechnicallc.github.io/Mycodo/Energy-Usage/>`__ for calculating and tracking power consumption and cost over time.
+-  `Upgrade System <https://biotechnicallc.github.io/Mycodo/Upgrade-Backup-Restore/>`__ to easily upgrade the Mycodo system to the latest release to get the newest features or restore to a previously-backed up version.
+-  `Translations <https://biotechnicallc.github.io/Mycodo/Translations/>`__ that enable the web interface to be presented in different `Languages <https://github.com/biotechnicallc/Mycodo#features>`__.
 
 .. image:: https://kylegabriel.com/projects/wp-content/uploads/sites/3/2020/06/Screenshot_2020-04-25-hydra-Default-Dashboard-Mycodo-8-4-0-dashboard_2.png
    :target: https://kylegabriel.com/projects/wp-content/uploads/sites/3/2020/06/Screenshot_2020-04-25-hydra-Default-Dashboard-Mycodo-8-4-0-dashboard_2.png
@@ -118,7 +118,7 @@ Projects of others
 Screenshots
 -----------
 
-Visit the `Screenshots <https://github.com/kizniche/Mycodo/wiki/Screenshots>`__ page of the Wiki.
+Visit the `Screenshots <https://github.com/biotechnicallc/Mycodo/wiki/Screenshots>`__ page of the Wiki.
 
 Install Mycodo
 --------------
@@ -139,7 +139,7 @@ Once you have the Raspberry Pi booted into the Raspberry Pi OS with an internet 
 
 .. code:: bash
 
-    curl -L https://kizniche.github.io/Mycodo/install | bash
+    curl -L https://biotechnicallc.github.io/Mycodo/install | bash
 
 
 Install Notes
@@ -149,14 +149,14 @@ Make sure the install script finishes without errors. A log of the output will b
 
 If the install is successful, the web user interface should be accessible by navigating a web browser to ``https://127.0.0.1/``, replacing ``127.0.0.1`` with your Raspberry Pi's IP address. Upon your first visit, you will be prompted to create an admin user before being redirected to the login page. Once logged in, check that the time is correct at the top left of the page. Incorrect time can cause a number of issues with measurement storage and retrieval, among others. Also ensure the host name and version number at the top left of the page is green, indicating the daemon is running. Red indicates the daemon is inactive or unresponsive. Last, ensure any java-blocking plugins of your browser are disabled for all parts of the web interface to function properly.
 
-If you receive an error during the install that you believe is preventing your system from operating, please `create an issue <https://github.com/kizniche/Mycodo/issues>`__ with the install log attached. If you would first like to attempt to diagnose the issue yourself, see `Diagnosing Issues <#diagnosing-issues>`__.
+If you receive an error during the install that you believe is preventing your system from operating, please `create an issue <https://github.com/biotechnicallc/Mycodo/issues>`__ with the install log attached. If you would first like to attempt to diagnose the issue yourself, see `Diagnosing Issues <#diagnosing-issues>`__.
 
 A minimal set of anonymous usage statistics are collected to help improve development. No identifying information is saved from the information that is collected and it is only used to improve Mycodo. No other sources will have access to this information. The data collected is mainly what and how many features are used, and other similar information. The data that's collected can be viewed from the 'View collected statistics' link in the ``Settings -> General`` page. There is an opt out option on the General Settings page.
 
 REST API
 --------
 
-The latest API documentation can be found here: `API Information <https://kizniche.github.io/Mycodo/API/>`__ and `API Endpoint Documentation <https://kizniche.github.io/Mycodo/mycodo-api.html>`__.
+The latest API documentation can be found here: `API Information <https://biotechnicallc.github.io/Mycodo/API/>`__ and `API Endpoint Documentation <https://biotechnicallc.github.io/Mycodo/mycodo-api.html>`__.
 
 About PID Control
 -----------------
@@ -171,35 +171,35 @@ A `proportional–integral–derivative (PID) controller <https://en.wikipedia.o
 
 The top graph visualizes the regulation of temperature. The red line is the desired temperature (setpoint) that has been configured to change over the course of each day. The blue line is the actual recorded temperature. The green vertical bars represent how long a heater has been activated for every 20-second period. This regulation was achieved with minimal tuning, and already displays a very minimal deviation from the setpoint (±0.5° Celsius). Further tuning would reduce this variability further.
 
-See the `PID Controller <https://kizniche.github.io/Mycodo/Functions/#pid-controller>`__ and `PID Tuning <https://kizniche.github.io/Mycodo/Functions/#pid-tuning>`__ sections of the manual for more information.
+See the `PID Controller <https://biotechnicallc.github.io/Mycodo/Functions/#pid-controller>`__ and `PID Tuning <https://biotechnicallc.github.io/Mycodo/Functions/#pid-tuning>`__ sections of the manual for more information.
 
 Supported Inputs and Outputs
 ----------------------------
 
-All supported Inputs, Outputs, and other devices can be found under the `Supported Devices <https://kizniche.github.io/Mycodo/Input-Devices/>`__ section of the manual.
+All supported Inputs, Outputs, and other devices can be found under the `Supported Devices <https://biotechnicallc.github.io/Mycodo/Input-Devices/>`__ section of the manual.
 
 Custom Inputs, Outputs, and Controllers
 ---------------------------------------
 
-Mycodo supports importing custom Input, Output, and Controller modules. you can find more information about each in the manual under `Custom Inputs <https://kizniche.github.io/Mycodo/Inputs/#custom-inputs>`__, `Custom Outputs <https://kizniche.github.io/Mycodo/Outputs/#custom-outputs>`__, and `Custom Functions <https://kizniche.github.io/Mycodo/Functions/#custom-functions>`__.
+Mycodo supports importing custom Input, Output, and Controller modules. you can find more information about each in the manual under `Custom Inputs <https://biotechnicallc.github.io/Mycodo/Inputs/#custom-inputs>`__, `Custom Outputs <https://biotechnicallc.github.io/Mycodo/Outputs/#custom-outputs>`__, and `Custom Functions <https://biotechnicallc.github.io/Mycodo/Functions/#custom-functions>`__.
 
-If you would like to add to the list of supported Inputs, Outputs, and Controllers, submit a pull request with the module you created or start a `New Issue <https://github.com/kizniche/Mycodo/issues/new?assignees=&labels=&template=feature-request.md&title=>`__.
+If you would like to add to the list of supported Inputs, Outputs, and Controllers, submit a pull request with the module you created or start a `New Issue <https://github.com/biotechnicallc/Mycodo/issues/new?assignees=&labels=&template=feature-request.md&title=>`__.
 
-Additionally, I have another github repository devoted to custom Inputs, Outputs, and Controllers that do not necessarily fit with the built-in set and are not included by default with Mycodo, but can be imported. These can be found at `kizniche/Mycodo-custom <https://github.com/kizniche/Mycodo-custom>`__.
+Additionally, I have another github repository devoted to custom Inputs, Outputs, and Controllers that do not necessarily fit with the built-in set and are not included by default with Mycodo, but can be imported. These can be found at `biotechnicallc/Mycodo-custom <https://github.com/biotechnicallc/Mycodo-custom>`__.
 
 Links
 -----
 
 Thanks for using and supporting Mycodo, however depending where you found this documentation, you may not have the latest version or it may have been altered, if not obtained through an official distribution site. You should be able to find the latest version on github or my web site at the following links.
 
-https://github.com/kizniche/Mycodo
+https://github.com/biotechnicallc/Mycodo
 
 https://KyleGabriel.com
 
 License
 -------
 
-See `License.txt <https://github.com/kizniche/Mycodo/blob/master/LICENSE.txt>`__
+See `License.txt <https://github.com/biotechnicallc/Mycodo/blob/master/LICENSE.txt>`__
 
 Mycodo is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
@@ -230,7 +230,7 @@ Languages
 
 By default, mycodo will display the default language set by your browser. You may also force a language in the settings at ``[Gear Icon] -> Configure -> General -> Language``
 
-If you would like to improve the translations, you can make changes at `http://translate.kylegabriel.com <http://translate.kylegabriel.com:8080/engage/mycodo/>`__, submit a pull request with an amended .po file from ~/Mycodo/mycodo/mycodo_flask/translations/, or start a `New Issue <https://github.com/kizniche/Mycodo/issues/new>`__ detailing the corrections.
+If you would like to improve the translations, you can make changes at `http://translate.kylegabriel.com <http://translate.kylegabriel.com:8080/engage/mycodo/>`__, submit a pull request with an amended .po file from ~/Mycodo/mycodo/mycodo_flask/translations/, or start a `New Issue <https://github.com/biotechnicallc/Mycodo/issues/new>`__ detailing the corrections.
 
 English
 ~~~~~~~
@@ -503,10 +503,10 @@ Mycodo最初设计用于种植可食用的蘑菇，已经发展到能够做更�
 该系统包括后端（守护进程）和前端（用户界面）。后端从传感器和设备进行测量，然后协调对这些测量的各种响应，包括调制输出（继电器，PWM，无线插座）的能力，通过PID控制的电气设备调节环境条件（稳定调节或转换时间），安排计时器，捕获照片和流视频，在测量满足特定条件时触发操作（调制继电器，执行命令，通过电子邮件通知等）等等。前端是一个Web界面，可以从任何支持浏览器的设备轻松导航和配置。
 
 
-.. |Build Status| image:: https://github.com/kizniche/Mycodo/actions/workflows/main.yml/badge.svg
-   :target: https://github.com/kizniche/Mycodo/actions/workflows/main.yml
+.. |Build Status| image:: https://github.com/biotechnicallc/Mycodo/actions/workflows/main.yml/badge.svg
+   :target: https://github.com/biotechnicallc/Mycodo/actions/workflows/main.yml
 .. |Codacy Badge| image:: https://api.codacy.com/project/badge/Grade/5b9c21d5680f4f7fb87df1cf32f71e80
-   :target: https://www.codacy.com/app/Mycodo/Mycodo?utm_source=github.com&utm_medium=referral&utm_content=kizniche/Mycodo&utm_campaign=Badge_Grade
+   :target: https://www.codacy.com/app/Mycodo/Mycodo?utm_source=github.com&utm_medium=referral&utm_content=biotechnicallc/Mycodo&utm_campaign=Badge_Grade
 .. |Translation Badge| image:: http://translate.kylegabriel.com:8080/widgets/mycodo/-/svg-badge.svg
    :target: http://translate.kylegabriel.com:8080/engage/mycodo/
 .. |Translation Table| image:: http://translate.kylegabriel.com:8080/widgets/mycodo/-/multi-auto.svg

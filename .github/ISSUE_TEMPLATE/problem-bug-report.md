@@ -6,7 +6,7 @@ labels: ''
 assignees: ''
 
 ---
-STOP right now, and please first look to see if the issue you're about to submit is already an open or recently closed issue at https://github.com/kizniche/Mycodo/issues
+STOP right now, and please first look to see if the issue you're about to submit is already an open or recently closed issue at https://github.com/biotechnicallc/Mycodo/issues
 
 Please DO NOT OPEN AN ISSUE:
 

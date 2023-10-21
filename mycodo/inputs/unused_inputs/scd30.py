@@ -32,7 +32,7 @@ measurements_dict = {
 # Input information
 # See the inputs directory for examples of working modules.
 # The following link provides the full list of options with descriptions:
-# https://github.com/kizniche/Mycodo/blob/single_file_input_modules/mycodo/inputs/examples/example_all_options_temperature.py
+# https://github.com/biotechnicallc/Mycodo/blob/single_file_input_modules/mycodo/inputs/examples/example_all_options_temperature.py
 INPUT_INFORMATION = {
     'input_name_unique': 'SCD30',
     'input_manufacturer': 'Sensirion',

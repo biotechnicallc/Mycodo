@@ -119,7 +119,7 @@ INPUT_INFORMATION = {
     'input_name_unique': 'ADS1256_ANALOG_PH_EC',
     'input_manufacturer': 'Texas Instruments',
     'input_name': 'ADS1256: Generic Analog pH/EC',
-    'input_library': 'wiringpi, kizniche/PiPyADC-py3',
+    'input_library': 'wiringpi, biotechnicallc/PiPyADC-py3',
     'measurements_name': 'Ion Concentration/Electrical Conductivity',
     'measurements_dict': measurements_dict,
     'execute_at_modification': execute_at_modification,
@@ -137,7 +137,7 @@ INPUT_INFORMATION = {
 
     'dependencies_module': [
         ('pip-pypi', 'wiringpi', 'wiringpi'),
-        ('pip-pypi', 'pipyadc_py3', 'git+https://github.com/kizniche/PiPyADC-py3.git')  # PiPyADC ported to Python3
+        ('pip-pypi', 'pipyadc_py3', 'git+https://github.com/biotechnicallc/PiPyADC-py3.git')  # PiPyADC ported to Python3
     ],
     'interfaces': ['UART'],
 

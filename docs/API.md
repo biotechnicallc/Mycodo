@@ -1,6 +1,6 @@
 ## REST API
 
-As of version 8, Mycodo has a REST API (See [API Endpoint Documentation](https://kizniche.github.io/Mycodo/mycodo-api.html)).
+As of version 8, Mycodo has a REST API (See [API Endpoint Documentation](https://biotechnicallc.github.io/Mycodo/mycodo-api.html)).
 
 An API is an application programming interface - in short, it’s a set of rules that lets programs talk to each other, exposing data and functionality across the internet in a consistent format.
 
@@ -82,7 +82,7 @@ A vendor-specific content type header must be included to determine which API ve
 
 Visit https://{RASPBERRY_PI_IP_ADDRESS}/api for documentation of the current API endpoints of your Mycodo install.
 
-Documentation for the latest API version is also available in HTML format: `Mycodo API Docs <https://kizniche.github.io/Mycodo/mycodo-api.html>`__
+Documentation for the latest API version is also available in HTML format: `Mycodo API Docs <https://biotechnicallc.github.io/Mycodo/mycodo-api.html>`__
 
 ## Daemon Control Object
 

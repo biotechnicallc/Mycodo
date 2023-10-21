@@ -1,7 +1,7 @@
 {% extends "layout-settings.html" %}
 {% set active_page = "settings" %}
 {% set active_settings = "users" %}
-{% set help_page = ["https://kizniche.github.io/Mycodo/Configuration-Settings/#users", dict_translation['settings']['title'] + ': ' + dict_translation['user']['title']] %}
+{% set help_page = ["https://biotechnicallc.github.io/Mycodo/Configuration-Settings/#users", dict_translation['settings']['title'] + ': ' + dict_translation['user']['title']] %}
 
 {% block title %} - {{dict_translation['settings']['title'] + ': ' + dict_translation['user']['title']}}{% endblock %}
 
@@ -98,7 +98,7 @@
 {% block settings %}
   <!-- Route: /settings/users -->
   <div class="container">
-    <h3 style="text-align: right; padding-bottom: 1.3em;"><a href="https://kizniche.github.io/Mycodo/Configuration-Settings/#users" target="_blank"><span style="font-size: 16px" class="fas fa-question-circle"></span></a> {{_('User Settings')}}</h3>
+    <h3 style="text-align: right; padding-bottom: 1.3em;"><a href="https://biotechnicallc.github.io/Mycodo/Configuration-Settings/#users" target="_blank"><span style="font-size: 16px" class="fas fa-question-circle"></span></a> {{_('User Settings')}}</h3>
 
     <form class="form-horizontal" method="post" action="/settings/users">
       {{form_user.csrf_token}}
@@ -254,7 +254,7 @@
 
     <hr>
 
-    <h3>{{_('Roles')}} <a href="https://kizniche.github.io/Mycodo/Configuration-Settings/#roles"><span style="font-size: 16px" class="fas fa-question-circle"></span></a></h3>
+    <h3>{{_('Roles')}} <a href="https://biotechnicallc.github.io/Mycodo/Configuration-Settings/#roles"><span style="font-size: 16px" class="fas fa-question-circle"></span></a></h3>
 
     <form method="post" action="/settings/users">
     {{form_user_roles.csrf_token}}

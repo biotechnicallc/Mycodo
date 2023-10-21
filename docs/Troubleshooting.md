@@ -3,7 +3,7 @@
 -   Check the Logs: From the `[Gear Icon] -> Mycodo Logs` page, check the Daemon Log for any errors. If the issue began after an upgrade, also check the Upgrade Log for indications of an issue.
 -   Determine if the Daemon is Running: Execute `ps aux | grep '/var/mycodo-root/env/bin/python /var/mycodo-root/mycodo/mycodo_daemon.py'` in a terminal and look for an entry to be returned. If nothing is returned, the daemon is not running.
 -   Daemon Lock File: If the daemon is not running, make sure the daemon lock file is deleted at `/var/lock/mycodo.pid`. The daemon cannot start if the lock file is present.
--   If a solution could not be found after investigating the above suggestions, submit a [New Mycodo Issue](https://github.com/kizniche/Mycodo/issues/new) on github.
+-   If a solution could not be found after investigating the above suggestions, submit a [New Mycodo Issue](https://github.com/biotechnicallc/Mycodo/issues/new) on github.
 
 ## Incorrect Database Version
 
@@ -22,4 +22,4 @@ sudo service mycodoflask restart
 
 ## More
 
-Check out the [Diagnosing Mycodo Issues Wiki Page](https://github.com/kizniche/Mycodo/wiki/Diagnosing-Issues) on github for more information about diagnosing issues.
+Check out the [Diagnosing Mycodo Issues Wiki Page](https://github.com/biotechnicallc/Mycodo/wiki/Diagnosing-Issues) on github for more information about diagnosing issues.

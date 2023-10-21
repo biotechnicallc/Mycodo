@@ -25,13 +25,13 @@ The dashboard can be used for both viewing data and manipulating the system, tha
 
 There is a Custom Widget import system in Mycodo that allows user-created Widgets to be used in the Mycodo system. Custom Widgets can be uploaded on the `[Gear Icon] -> Configure -> Custom Widgets` page. After import, they will be available to use on the `Setup -> Widget` page.
 
-If you develop a working Widget module, please consider [creating a new GitHub issue](https://github.com/kizniche/Mycodo/issues/new?assignees=&labels=&template=feature-request.md&title=New%20Module) or pull request, and it may be included in the built-in set.
+If you develop a working Widget module, please consider [creating a new GitHub issue](https://github.com/biotechnicallc/Mycodo/issues/new?assignees=&labels=&template=feature-request.md&title=New%20Module) or pull request, and it may be included in the built-in set.
 
-Open any of the built-in modules located in the directory [Mycodo/mycodo/widgets](https://github.com/kizniche/Mycodo/tree/master/mycodo/widgets/) for examples of the proper formatting.
+Open any of the built-in modules located in the directory [Mycodo/mycodo/widgets](https://github.com/biotechnicallc/Mycodo/tree/master/mycodo/widgets/) for examples of the proper formatting.
 
-There are also example Custom Widgets in the directory [Mycodo/mycodo/widgets/examples](https://github.com/kizniche/Mycodo/tree/master/mycodo/widgets/examples)
+There are also example Custom Widgets in the directory [Mycodo/mycodo/widgets/examples](https://github.com/biotechnicallc/Mycodo/tree/master/mycodo/widgets/examples)
 
-Additionally, I have another github repository devoted to Custom Modules that are not included in the built-in set, at [kizniche/Mycodo-custom](https://github.com/kizniche/Mycodo-custom).
+Additionally, I have another github repository devoted to Custom Modules that are not included in the built-in set, at [biotechnicallc/Mycodo-custom](https://github.com/biotechnicallc/Mycodo-custom).
 
 ### Graph Widget
 

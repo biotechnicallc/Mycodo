@@ -18,7 +18,7 @@ Notes to keep track of the steps involved in making a new release.
  - [ ] Run ```mkdocs build``` to generate Mycodo/docs/mycodo-manual.pdf
  - [ ] Commit changes and wait for TravisCI to finish running pytests and verify all were successful.
  - [ ] Clone Mycodo fresh to a new directory and ensure mkdocs pip requirements are installed by running: sudo Mycodo/mycodo/scripts/upgrade_commands.sh setup-virtualenv && Mycodo/env/bin/python -m pip install -r Mycodo/docs/requirements.txt
- - [ ] Run ```mkdocs gh-deploy``` to generate and push docs to gh-pages branch (for https://kizniche.github.io/Mycodo)
+ - [ ] Run ```mkdocs gh-deploy``` to generate and push docs to gh-pages branch (for https://biotechnicallc.github.io/Mycodo)
  - [ ] Optionally, a naive Mycodo system with code prior to the yet-to-be released version can be upgraded to master to test its ability to upgrade (useful if experimental database schema changes are being performed during the upgrade).
  - [ ] Make GitHub Release
    - Tag version follows format "vMAJOR.MINOR.BUGFIX" (e.g. v8.0.3)

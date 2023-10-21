@@ -18,7 +18,7 @@ The Raspberry Pi has an integrated temperature sensor on the BCM2835 SoC that me
 
 ## AM2315
 
-From [@Theoi-Meteoroi](https://github.com/kizniche/Mycodo/issues/315#issuecomment-344798815) on GitHub:
+From [@Theoi-Meteoroi](https://github.com/biotechnicallc/Mycodo/issues/315#issuecomment-344798815) on GitHub:
 
 I figured out why this [AM2315] sensor is unreliable with Rpi3 hardware I2C. It is among a number of I2C devices that really hates the BCM2835 clock stretching blunder (hardware bug: [raspberrypi/linux\#254](https://github.com/raspberrypi/linux/issues/254)). The wakeup attempts fail, consistently. I checked the bitstream with a sniffer, and see that the sensor may respond once out of 20 or so tries (or not at all) but only with a single byte returned. The solution is to use a software implementation of the I2C bus. You need to add pull-up resistors (4.7k is dandy) to 3.3v and install the i2c\_gpio device overlay. Seems to work fine now, will run for a few days, but the CRC failures are gone and I get good readings, every time. And no twiddling the power for the sensor is required.
 
@@ -38,7 +38,7 @@ Wiring instructions for the Raspberry Pi can be found [here](https://www.co2mete
 
 ## USB Device Persistence Across Reboots
 
-From [(#547) Theoi-Meteoroi on Github](https://github.com/kizniche/Mycodo/issues/547#issuecomment-428752904):
+From [(#547) Theoi-Meteoroi on Github](https://github.com/biotechnicallc/Mycodo/issues/547#issuecomment-428752904):
 
 Using USB devices, such as USB-to-serial interfaces (CP210x) to connect a sensor, while convenient, poses an issue if there are multiple devices when the system reboots. After a reboot, there is no guarantee the device will persist with the same name. For instance, if Sensor A is /dev/ttyUSB0 and Sensor B is /dev/ttyUSB1, after a reboot Sensor A may be /dev/ttyUSB1 and Sensor B may be /dev/ttyUSB0. This will cause Mycodo to query the wrong device for a measurement, potentially causing a mis-measurement, or worse, an incorrect measurement because the response is not from the correct sensor (I've seen my temperature sensor read 700+ degrees celsius because of this!). Follow the instructions below to alleviate this issue.
 

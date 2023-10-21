@@ -85,7 +85,7 @@ def db_retrieve_table_daemon(
             logger.exception(
                 "Could not read the Mycodo database. "
                 "Please submit a New Issue at "
-                "https://github.com/kizniche/Mycodo/issues/new")
+                "https://github.com/biotechnicallc/Mycodo/issues/new")
         else:
             logger.error(
                 "The Mycodo database is locked. "

@@ -84,7 +84,7 @@ Options:
   upgrade-mycodo                Upgrade Mycodo to latest compatible release and preserve database and virtualenv
   upgrade-release-major {ver}   Upgrade Mycodo to a major version release {ver} and preserve database and virtualenv
   upgrade-release-wipe {ver}    Upgrade Mycodo to a major version release {ver} and wipe database and virtualenv
-  upgrade-master                Upgrade Mycodo to the master branch at https://github.com/kizniche/Mycodo
+  upgrade-master                Upgrade Mycodo to the master branch at https://github.com/biotechnicallc/Mycodo
   upgrade-post                  Execute post-upgrade script
   web-server-connect            Attampt to connect to the web server
   web-server-reload             Reload the web server

@@ -96,7 +96,7 @@ Open a terminal in Raspbian and run the following commands.
 ```shell script
 sudo apt-get install -y jq
 cd ~
-curl -s https://api.github.com/repos/kizniche/Mycodo/releases/latest | \
+curl -s https://api.github.com/repos/biotechnicallc/Mycodo/releases/latest | \
 jq -r '.tarball_url' | wget -i - -O mycodo-latest.tar.gz
 mkdir Mycodo
 tar xzf mycodo-latest.tar.gz -C Mycodo --strip-components=1

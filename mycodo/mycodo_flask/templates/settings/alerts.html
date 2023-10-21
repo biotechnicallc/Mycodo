@@ -1,14 +1,14 @@
 {% extends "layout-settings.html" %}
 {% set active_page = "settings" %}
 {% set active_settings = "alerts" %}
-{% set help_page = ["https://kizniche.github.io/Mycodo/Configuration-Settings/#alert-settings", dict_translation['settings']['title'] + ': ' + dict_translation['alert']['title']] %}
+{% set help_page = ["https://biotechnicallc.github.io/Mycodo/Configuration-Settings/#alert-settings", dict_translation['settings']['title'] + ': ' + dict_translation['alert']['title']] %}
 
 {% block title %} - {{dict_translation['settings']['title'] + ': ' + dict_translation['alert']['title']}}{% endblock %}
 
 {% block settings %}
   <!-- Route: /settings/alerts -->
   <div class="container">
-    <h3 style="text-align: right; padding-bottom: 1.3em;"><a href="https://kizniche.github.io/Mycodo/Configuration-Settings/#alert-settings" target="_blank"><span style="font-size: 16px" class="fas fa-question-circle"></span></a> {{_('Alerts Settings')}}</h3>
+    <h3 style="text-align: right; padding-bottom: 1.3em;"><a href="https://biotechnicallc.github.io/Mycodo/Configuration-Settings/#alert-settings" target="_blank"><span style="font-size: 16px" class="fas fa-question-circle"></span></a> {{_('Alerts Settings')}}</h3>
 
     <form class="form-horizontal" method="post" action="/settings/alerts">
       <input type="hidden" name="form-name" value="EmailAlert">

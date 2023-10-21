@@ -1,7 +1,7 @@
 {% extends "layout-settings.html" %}
 {% set active_page = "settings" %}
 {% set active_settings = "general" %}
-{% set help_page = ["https://kizniche.github.io/Mycodo/Configuration-Settings/#general-settings", dict_translation['settings']['title'] + ': ' + dict_translation['general']['title']] %}
+{% set help_page = ["https://biotechnicallc.github.io/Mycodo/Configuration-Settings/#general-settings", dict_translation['settings']['title'] + ': ' + dict_translation['general']['title']] %}
 
 {% block title %} - {{dict_translation['settings']['title'] + ': ' + dict_translation['general']['title']}}{% endblock %}
 
@@ -79,7 +79,7 @@
 {% block settings %}
   <!-- Route: /settings/general -->
   <div class="container">
-    <h3 style="text-align: right; padding-bottom: 1.3em;"><a href="https://kizniche.github.io/Mycodo/Configuration-Settings/#general-settings" target="_blank"><span style="font-size: 16px" class="fas fa-question-circle"></span></a> {{_('General Settings')}}</h3>
+    <h3 style="text-align: right; padding-bottom: 1.3em;"><a href="https://biotechnicallc.github.io/Mycodo/Configuration-Settings/#general-settings" target="_blank"><span style="font-size: 16px" class="fas fa-question-circle"></span></a> {{_('General Settings')}}</h3>
 
     <form class="form-horizontal" method="post" action="/settings/general">
       <input type="hidden" name="form-name" value="General">

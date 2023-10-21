@@ -294,11 +294,14 @@ class AbstractOutput(AbstractBaseController):
                     amount=amount,
                     output_channel=output_channel)
 
-                msg = "Command sent: Output {id} CH{ch} ({name}) duty cycle: {dc:.2f} %. Output returned: {ret}".format(
-                    id=self.unique_id,
-                    ch=output_channel,
+                # msg = "Command sent: Output {id} CH{ch} ({name}) duty cycle: {dc:.2f} %. Output returned: {ret}".format(
+                #     id=self.unique_id,
+                #     ch=output_channel,
+                #     name=self.output_name,
+                #     dc=amount,
+                #     ret=out_ret)
+                msg = "Command sent: Output ({name}) Output returned: {ret}".format(
                     name=self.output_name,
-                    dc=amount,
                     ret=out_ret)
 
             # Output type: On/Off, set duration for on state
@@ -382,13 +385,19 @@ class AbstractOutput(AbstractBaseController):
                     out_ret = self.output_switch(
                         'on', output_type='sec', amount=amount, output_channel=output_channel)
 
-                    msg = "Output {id} CH{ch} ({name}) on for {dur:.1f} " \
+                    # msg = "Output {id} CH{ch} ({name}) on for {dur:.1f} " \
+                    #       "seconds. Output returned: {ret}".format(
+                    #         id=self.unique_id,
+                    #         ch=output_channel,
+                    #         name=self.output_name,
+                    #         dur=abs(amount),
+                    #         ret=out_ret)
+                    msg = "Output ({name}) on for {dur:.1f} " \
                           "seconds. Output returned: {ret}".format(
-                            id=self.unique_id,
-                            ch=output_channel,
                             name=self.output_name,
                             dur=abs(amount),
                             ret=out_ret)
+                    
                     self.logger.debug(msg)
 
                     self.output_on_until[output_channel] = (
@@ -420,9 +429,14 @@ class AbstractOutput(AbstractBaseController):
                     ret_value = self.output_switch(
                         'on', output_channel=output_channel, output_type='sec')
 
-                    msg = "Output {id} CH{ch} ({name}) ON at {on}. Output returned: {ret}".format(
-                        id=self.unique_id,
-                        ch=output_channel,
+                    # msg = "Output {id} CH{ch} ({name}) ON at {on}. Output returned: {ret}".format(
+                    #     id=self.unique_id,
+                    #     ch=output_channel,
+                    #     name=self.output_name,
+                    #     on=self.output_time_turned_on[output_channel],
+                    #     ret=ret_value)
+                    
+                    msg = "Output ({name}) ON at {on}. Output returned: {ret}".format(
                         name=self.output_name,
                         on=self.output_time_turned_on[output_channel],
                         ret=ret_value)
@@ -436,9 +450,13 @@ class AbstractOutput(AbstractBaseController):
             ret_value = self.output_switch('off', output_type=output_type, output_channel=output_channel)
 
             timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
-            msg = "Output {id} CH{ch} ({name}) OFF at {time_off}. Output returned: {ret}".format(
-                id=self.unique_id,
-                ch=output_channel,
+            # msg = "Output {id} CH{ch} ({name}) OFF at {time_off}. Output returned: {ret}".format(
+            #     id=self.unique_id,
+            #     ch=output_channel,
+            #     name=self.output_name,
+            #     time_off=timestamp,
+            #     ret=ret_value)
+            msg = "Output ({name}) OFF at {time_off}. Output returned: {ret}".format(
                 name=self.output_name,
                 time_off=timestamp,
                 ret=ret_value)

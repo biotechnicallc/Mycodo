@@ -58,7 +58,7 @@ runDownloadMycodo() {
 
     UPDATE_VERSION="master"
     printf "\n\nUpgrade script executed with the 'force-upgrade-master' argument. Upgrading from github repo master.\n"
-    UPDATE_URL="https://github.com/kizniche/Mycodo/archive/master.tar.gz"
+    UPDATE_URL="https://github.com/biotechnicallc/Mycodo/archive/master.tar.gz"
     TARBALL_FILE="Mycodo-master"
 
   fi

@@ -13,7 +13,7 @@
 // The pair of bytes following the first byte represents CO2
 //
 // All original measurement values are converted to a high and low byte for the payload.
-// See https://github.com/kizniche/ttgo-tbeam-sensor-node-bme280/blob/master/main/bme280.ino
+// See https://github.com/biotechnicallc/ttgo-tbeam-sensor-node-bme280/blob/master/main/bme280.ino
 // for an example of how humidity, pressure, and temperature are encoded into the payload.
 
 function Decoder(bytes, port) {

@@ -9,7 +9,7 @@
 #
 #  If Mycodo has not yet been downloaded/extracted, execute the following to install:
 #
-#  curl -L https://raw.githubusercontent.com/kizniche/Mycodo/master/install/install | bash
+#  curl -L https://raw.githubusercontent.com/biotechnicallc/Mycodo/master/install/install | bash
 #
 
 INSTALL_DIRECTORY=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P )
@@ -27,7 +27,7 @@ fi
 sudo apt-get install -y jq whiptail python3
 
 cd ~
-curl -s https://api.github.com/repos/kizniche/Mycodo/releases/latest | \
+curl -s https://api.github.com/repos/biotechnicallc/Mycodo/releases/latest | \
 jq -r '.tarball_url' | wget -i - -O mycodo-latest.tar.gz
 mkdir Mycodo
 tar xzf mycodo-latest.tar.gz -C Mycodo --strip-components=1

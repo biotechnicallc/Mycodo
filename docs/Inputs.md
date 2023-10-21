@@ -6,17 +6,17 @@ Inputs, such as sensors, ADC signals, or even a response from a command, enable 
 
 ### Custom Inputs
 
-See [Building a Custom Input Module](https://github.com/kizniche/Mycodo/wiki/Building-a-Custom-Input-Module) Wiki page.
+See [Building a Custom Input Module](https://github.com/biotechnicallc/Mycodo/wiki/Building-a-Custom-Input-Module) Wiki page.
 
 There is a Custom Input import system in Mycodo that allows user-created Inputs to be created an used in the Mycodo system. Custom Inputs can be uploaded and imported from the `[Gear Icon] -> Configure -> Custom Inputs` page. After import, they will be available to use on the `Setup -> Input` page.
 
-If you develop a working Input module, please consider [creating a new GitHub issue](https://github.com/kizniche/Mycodo/issues/new?assignees=&labels=&template=feature-request.md&title=New%20Module) or pull request, and it may be included in the built-in set.
+If you develop a working Input module, please consider [creating a new GitHub issue](https://github.com/biotechnicallc/Mycodo/issues/new?assignees=&labels=&template=feature-request.md&title=New%20Module) or pull request, and it may be included in the built-in set.
 
-Open any of the built-in modules located in the directory [Mycodo/mycodo/inputs](https://github.com/kizniche/Mycodo/tree/master/mycodo/inputs/) for examples of the proper formatting.
+Open any of the built-in modules located in the directory [Mycodo/mycodo/inputs](https://github.com/biotechnicallc/Mycodo/tree/master/mycodo/inputs/) for examples of the proper formatting.
 
-There are also example Custom Inputs in the directory [Mycodo/mycodo/inputs/examples](https://github.com/kizniche/Mycodo/tree/master/mycodo/inputs/examples)
+There are also example Custom Inputs in the directory [Mycodo/mycodo/inputs/examples](https://github.com/biotechnicallc/Mycodo/tree/master/mycodo/inputs/examples)
 
-Additionally, I have another github repository devoted to Custom Modules that are not included in the built-in set, at [kizniche/Mycodo-custom](https://github.com/kizniche/Mycodo-custom).
+Additionally, I have another github repository devoted to Custom Modules that are not included in the built-in set, at [biotechnicallc/Mycodo-custom](https://github.com/biotechnicallc/Mycodo-custom).
 
 ### Input Actions
 

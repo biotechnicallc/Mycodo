@@ -19,7 +19,7 @@ INPUT_INFORMATION = {
     'input_name_unique': 'ADS1256',
     'input_manufacturer': 'Texas Instruments',
     'input_name': 'ADS1256',
-    'input_library': 'wiringpi, kizniche/PiPyADC-py3',
+    'input_library': 'wiringpi, biotechnicallc/PiPyADC-py3',
     'measurements_name': 'Voltage (Waveshare, Analog-to-Digital Converter)',
     'measurements_dict': measurements_dict,
     'measurements_rescale': True,
@@ -37,7 +37,7 @@ INPUT_INFORMATION = {
 
     'dependencies_module': [
         ('pip-pypi', 'wiringpi', 'wiringpi'),
-        ('pip-pypi', 'pipyadc_py3', 'git+https://github.com/kizniche/PiPyADC-py3.git')  # PiPyADC ported to Python3
+        ('pip-pypi', 'pipyadc_py3', 'git+https://github.com/biotechnicallc/PiPyADC-py3.git')  # PiPyADC ported to Python3
     ],
     'interfaces': ['UART'],
 

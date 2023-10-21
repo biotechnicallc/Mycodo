@@ -62,6 +62,7 @@ from mycodo.utils.widgets import parse_widget_information
 
 logger = logging.getLogger('mycodo.mycodo_flask.admin')
 
+
 blueprint = Blueprint(
     'routes_admin',
     __name__,
@@ -514,15 +515,14 @@ def admin_upgrade():
 
     # Check for any new Mycodo releases on github
     mycodo_releases = MycodoRelease()
-    (upgrade_exists,
-     releases,
-     mycodo_releases,
-     current_latest_release,
-     errors) = mycodo_releases.github_upgrade_exists()
-
+    upgrade_exists,releases,mycodo_releases,current_latest_release,errors = mycodo_releases.github_upgrade_exists()
+    
     if errors:
         for each_error in errors:
             flash(each_error, 'error')
+
+    with open("/home/wayne/mylogs.txt", 'w') as f:
+        f.write('RELEASES {} MYCODO_RELEASE {} CURRENT_LATEST {} ERRORS {}'.format(releases,mycodo_releases,current_latest_release,errors))
 
     if releases:
         current_latest_major_version = current_latest_release.split('.')[0]

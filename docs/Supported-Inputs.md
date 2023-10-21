@@ -4800,8 +4800,8 @@ This input queries the energy usage information from a WiFi outlet that is runni
 - Manufacturer: Texas Instruments
 - Measurements: Ion Concentration/Electrical Conductivity
 - Interfaces: UART
-- Libraries: wiringpi, kizniche/PiPyADC-py3
-- Dependencies: [wiringpi](https://pypi.org/project/wiringpi), [pipyadc_py3](https://github.com/kizniche/PiPyADC-py3)
+- Libraries: wiringpi, biotechnicallc/PiPyADC-py3
+- Dependencies: [wiringpi](https://pypi.org/project/wiringpi), [pipyadc_py3](https://github.com/biotechnicallc/PiPyADC-py3)
 
 This input relies on an ADS1256 analog-to-digital converter (ADC) to measure pH and/or electrical conductivity (EC) from analog sensors. You can enable or disable either measurement if you want to only connect a pH sensor or an EC sensor by selecting which measurements you want to under Measurements Enabled. Select which channel each sensor is connected to on the ADC. There are default calibration values initially set for the Input. There are also functions to allow you to easily calibrate your sensors with calibration solutions. If you use the Calibrate Slot actions, these values will be calculated and will replace the currently-set values. You can use the Clear Calibration action to delete the database values and return to using the default values. If you delete the Input or create a new Input to use your ADC/sensors with, you will need to recalibrate in order to store new calibration data.
 
@@ -4986,8 +4986,8 @@ This input relies on an ADS1256 analog-to-digital converter (ADC) to measure pH 
 - Manufacturer: Texas Instruments
 - Measurements: Voltage (Waveshare, Analog-to-Digital Converter)
 - Interfaces: UART
-- Libraries: wiringpi, kizniche/PiPyADC-py3
-- Dependencies: [wiringpi](https://pypi.org/project/wiringpi), [pipyadc_py3](https://github.com/kizniche/PiPyADC-py3)
+- Libraries: wiringpi, biotechnicallc/PiPyADC-py3
+- Dependencies: [wiringpi](https://pypi.org/project/wiringpi), [pipyadc_py3](https://github.com/biotechnicallc/PiPyADC-py3)
 
 #### Options
 

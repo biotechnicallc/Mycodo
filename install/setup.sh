@@ -106,7 +106,7 @@ Open to the end of the setup log to view the full error:
 %s/install/setup.log
 
 Please contact the developer by submitting a bug report
-at https://github.com/kizniche/Mycodo/issues with the
+at https://github.com/biotechnicallc/Mycodo/issues with the
 pertinent excerpts from the setup log located at:
 %s/install/setup.log
 " "${INSTALL_DIRECTORY}" "${INSTALL_DIRECTORY}" 2>&1 | tee -a "${LOG_LOCATION}"

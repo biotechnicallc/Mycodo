@@ -1,14 +1,14 @@
 {% extends "layout-settings.html" %}
 {% set active_page = "settings" %}
 {% set active_settings = "pi" %}
-{% set help_page = ["https://kizniche.github.io/Mycodo/Configuration-Settings/#pi-settings", dict_translation['settings']['title'] + ': ' + _('Raspberry Pi')] %}
+{% set help_page = ["https://biotechnicallc.github.io/Mycodo/Configuration-Settings/#pi-settings", dict_translation['settings']['title'] + ': ' + _('Raspberry Pi')] %}
 
 {% block title %} - {{dict_translation['settings']['title'] + ': ' + _('Raspberry Pi')}}{% endblock %}
 
 {% block settings %}
   <!-- Route: /settings/pi -->
   <div class="container">
-    <h3 style="text-align: right; padding-bottom: 1.3em;"><a href="https://kizniche.github.io/Mycodo/Configuration-Settings/#pi-settings" target="_blank"><span style="font-size: 16px" class="fas fa-question-circle"></span></a> {{_('Raspberry Pi Settings')}}</h3>
+    <h3 style="text-align: right; padding-bottom: 1.3em;"><a href="https://biotechnicallc.github.io/Mycodo/Configuration-Settings/#pi-settings" target="_blank"><span style="font-size: 16px" class="fas fa-question-circle"></span></a> {{_('Raspberry Pi Settings')}}</h3>
 
     <form class="form-horizontal" method="post" action="/settings/pi">
       <input type="hidden" name="form-name" value="Pi">

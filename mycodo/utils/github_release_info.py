@@ -82,9 +82,10 @@ class MycodoRelease:
         releases = []
         current_latest_release = '0.0.0'
         try:
-            current_latest_release = self.github_latest_release(self.mycodo_releases)
+            #current_latest_release = self.github_latest_release(self.mycodo_releases)
             current_maj_version = int(MYCODO_VERSION.split('.')[0])
             releases = self.github_releases(self.mycodo_releases, current_maj_version)
+            current_latest_release = releases[0]
 
             if releases:
                 if (parse_version(releases[0]) > parse_version(MYCODO_VERSION) or

@@ -454,7 +454,7 @@ WIDGET_INFORMATION = {
 
     credits: {
       enabled: false,
-      href: "https://github.com/kizniche/Mycodo",
+      href: "https://github.com/biotechnicallc/Mycodo",
       text: "Mycodo"
     }
   });

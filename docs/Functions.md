@@ -11,13 +11,13 @@ Function controllers perform tasks that often involve the use of Inputs and Outp
 
 There is a Custom Function import system in Mycodo that allows user-created Functions to be used in the Mycodo system. Custom Functions can be uploaded on the `[Gear Icon] -> Configure -> Custom Functions` page. After import, they will be available to use on the `Setup -> Function` page.
 
-If you develop a working Function module, please consider [creating a new GitHub issue](https://github.com/kizniche/Mycodo/issues/new?assignees=&labels=&template=feature-request.md&title=New%20Module) or pull request, and it may be included in the built-in set.
+If you develop a working Function module, please consider [creating a new GitHub issue](https://github.com/biotechnicallc/Mycodo/issues/new?assignees=&labels=&template=feature-request.md&title=New%20Module) or pull request, and it may be included in the built-in set.
 
-Open any of the built-in modules located in the directory [Mycodo/mycodo/functions](https://github.com/kizniche/Mycodo/tree/master/mycodo/functions/) for examples of the proper formatting.
+Open any of the built-in modules located in the directory [Mycodo/mycodo/functions](https://github.com/biotechnicallc/Mycodo/tree/master/mycodo/functions/) for examples of the proper formatting.
 
-There are also example Custom Functions in the directory [Mycodo/mycodo/functions/examples](https://github.com/kizniche/Mycodo/tree/master/mycodo/functions/examples)
+There are also example Custom Functions in the directory [Mycodo/mycodo/functions/examples](https://github.com/biotechnicallc/Mycodo/tree/master/mycodo/functions/examples)
 
-Additionally, I have another github repository devoted to Custom Modules that are not included in the built-in set, at [kizniche/Mycodo-custom](https://github.com/kizniche/Mycodo-custom).
+Additionally, I have another github repository devoted to Custom Modules that are not included in the built-in set, at [biotechnicallc/Mycodo-custom](https://github.com/biotechnicallc/Mycodo-custom).
 
 For Functions that require new measurements/units, they can be added on the `[Gear Icon] -> Configure -> Measurements` page.
 

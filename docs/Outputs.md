@@ -8,13 +8,13 @@ Outputs are various signals that can be generated that operate devices. An outpu
 
 There is a Custom Output import system in Mycodo that allows user-created Outputs to be created an used in the Mycodo system. Custom Outputs can be uploaded and imported from the `[Gear Icon] -> Configure -> Custom Outputs` page. After import, they will be available to use on the `Setup -> Output` page.
 
-If you develop a working Output module, please consider [creating a new GitHub issue](https://github.com/kizniche/Mycodo/issues/new?assignees=&labels=&template=feature-request.md&title=New%20Module) or pull request, and it may be included in the built-in set.
+If you develop a working Output module, please consider [creating a new GitHub issue](https://github.com/biotechnicallc/Mycodo/issues/new?assignees=&labels=&template=feature-request.md&title=New%20Module) or pull request, and it may be included in the built-in set.
 
-Open any of the built-in modules located in the directory [Mycodo/mycodo/outputs](https://github.com/kizniche/Mycodo/tree/master/mycodo/outputs/) for examples of the proper formatting.
+Open any of the built-in modules located in the directory [Mycodo/mycodo/outputs](https://github.com/biotechnicallc/Mycodo/tree/master/mycodo/outputs/) for examples of the proper formatting.
 
-There are also example Custom Outputs in the directory [Mycodo/mycodo/outputs/examples](https://github.com/kizniche/Mycodo/tree/master/mycodo/functions/examples)
+There are also example Custom Outputs in the directory [Mycodo/mycodo/outputs/examples](https://github.com/biotechnicallc/Mycodo/tree/master/mycodo/functions/examples)
 
-Additionally, I have another github repository devoted to Custom Modules that are not included in the built-in set, at [kizniche/Mycodo-custom](https://github.com/kizniche/Mycodo-custom).
+Additionally, I have another github repository devoted to Custom Modules that are not included in the built-in set, at [biotechnicallc/Mycodo-custom](https://github.com/biotechnicallc/Mycodo-custom).
 
 For Outputs that require new measurements/units, they can be added on the `[Gear Icon] -> Configure -> Measurements` page.
 
@@ -323,7 +323,7 @@ Certain 315/433 MHz wireless relays may be used, however you will need to set th
 sudo ~/Mycodo/env/bin/python ~/Mycodo/mycodo/devices/wireless_rpi_rf.py -d 2 -g 17
 ```
 
-433 MHz wireless relays have been successfully tested with SMAKN 433MHz RF Transmitters/Receivers and Etekcity Wireless Remote Control Electrical Outlets (see [Issue 88](https://github.com/kizniche/Mycodo/issues/88) for more information). If you have a 315/433 MHz transmitter/receiver and a wireless relay that does not work with the current code, submit a [new issue](https://github.com/kizniche/Mycodo/issues/new) with details of your hardware.
+433 MHz wireless relays have been successfully tested with SMAKN 433MHz RF Transmitters/Receivers and Etekcity Wireless Remote Control Electrical Outlets (see [Issue 88](https://github.com/biotechnicallc/Mycodo/issues/88) for more information). If you have a 315/433 MHz transmitter/receiver and a wireless relay that does not work with the current code, submit a [new issue](https://github.com/biotechnicallc/Mycodo/issues/new) with details of your hardware.
 
 ## Linux Command
 

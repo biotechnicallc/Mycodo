@@ -62,12 +62,12 @@
           upgrade != 1 %}
 
     <p style="padding-top: 0.5em">
-      Installed version: <a href="https://github.com/kizniche/Mycodo/releases/tag/v{{current_release}}" target="_blank">{{current_release}}</a>
-      <br>Latest version: <a href="https://github.com/kizniche/Mycodo/releases/tag/v{{current_latest_release}}" target="_blank">{{current_latest_release}}</a>
+      Installed version: <a href="https://github.com/biotechnicallc/Mycodo/releases/tag/v{{current_release}}" target="_blank">{{current_release}}</a>
+      <br>Latest version: <a href="https://github.com/biotechnicallc/Mycodo/releases/tag/v{{current_latest_release}}" target="_blank">{{current_latest_release}}</a>
     </p>
     <p>
-      Refer to the <a href="https://github.com/kizniche/Mycodo/blob/master/CHANGELOG.md" target="_blank">Changelog</a> for a full list of changes.
-      <br>Major version changes: <a href="https://github.com/kizniche/Mycodo/releases/tag/v{{current_latest_major_version}}.0.0" target="_blank">{{current_latest_major_version}}.0.0</a>
+      Refer to the <a href="https://github.com/biotechnicallc/Mycodo/blob/master/CHANGELOG.md" target="_blank">Changelog</a> for a full list of changes.
+      <br>Major version changes: <a href="https://github.com/biotechnicallc/Mycodo/releases/tag/v{{current_latest_major_version}}.0.0" target="_blank">{{current_latest_major_version}}.0.0</a>
     </p>
     <p style="font-weight: bold; color: red">Major version change detected!</p>
     <p>A new major version has been released on GitHub: v{{current_latest_major_version}}.x.x (currently at v{{current_latest_release}}). This usually means there are system-breaking changes for some or all users, and if you choose to upgrade, your system settings may not be able to be preserved. It is advisable to backup these settings by either <a href="/export">exporting</a> the settings database (~/Mycodo/databases/mycodo.db) or making note of important information (GPIO pins, PID settings, etc.).</p>
@@ -98,7 +98,7 @@
     <div style="padding: 1em 0 1.5em 0">
       <p>MANUAL UPGRADE MODE</p>
       <p>FORCE_UPGRADE_MASTER has been set to True in ~/Mycodo/config.py.</p>
-      <p>Pressing upgrade below will perform an upgrade from the <a href="https://github.com/kizniche/Mycodo/archive/master.tar.gz">master.tar.gz</a> archive of the <a href="https://github.com/kizniche/Mycodo/tree/master">Mycodo master branch</a> instead of the Release version.</p>
+      <p>Pressing upgrade below will perform an upgrade from the <a href="https://github.com/biotechnicallc/Mycodo/archive/master.tar.gz">master.tar.gz</a> archive of the <a href="https://github.com/biotechnicallc/Mycodo/tree/master">Mycodo master branch</a> instead of the Release version.</p>
       <p>If you would like to upgrade to the latest Release version instead, set <code>FORCE_UPGRADE_MASTER = False</code> in ~/Mycodo/mycodo/config.py, restart the web UI with the <code>sudo service mycodoflask restart</code> command, then refresh this page.</p>
     </div>
     <div class="form-inline" style="padding-bottom: 1em">
@@ -116,18 +116,18 @@
     {% elif not upgrade_available %}
 
     <div style="padding: 0.5em 0">
-      {{_('No upgrade is available. You are running the latest release, version')}} <a href="https://github.com/kizniche/Mycodo/releases/tag/v{{current_release}}" target="_blank">{{ current_release }}</a>
+      {{_('No upgrade is available. You are running the latest release, version')}} <a href="https://github.com/biotechnicallc/Mycodo/releases/tag/v{{current_release}}" target="_blank">{{ current_release }}</a>
     </div>
 
     {% elif upgrade_available %}
 
     <div style="padding: 0.5em 0">
-      Installed version: <a href="https://github.com/kizniche/Mycodo/releases/tag/v{{current_release}}" target="_blank">{{current_release}}</a>
-      <br>Latest version: <a href="https://github.com/kizniche/Mycodo/releases/tag/v{{current_major_release}}" target="_blank">{{current_major_release}}</a>
+      Installed version: <a href="https://github.com/biotechnicallc/Mycodo/releases/tag/v{{current_release}}" target="_blank">{{current_release}}</a>
+      <br>Latest version: <a href="https://github.com/biotechnicallc/Mycodo/releases/tag/v{{current_major_release}}" target="_blank">{{current_major_release}}</a>
     </div>
     <div style="padding: 0.5em 0">
       You are {{releases_behind}} release{% if releases_behind is not none and releases_behind > 1 %}s{% endif %} behind the latest version.
-      <br>Refer to the <a href="https://github.com/kizniche/Mycodo/blob/master/CHANGELOG.md" target="_blank">Changelog</a> for a list of all changes.
+      <br>Refer to the <a href="https://github.com/biotechnicallc/Mycodo/blob/master/CHANGELOG.md" target="_blank">Changelog</a> for a list of all changes.
     </div>
     <div style="padding: 1em 0 1.5em 0">
       {{_('Click the button below to begin the upgrade process. Note: An upgrade often takes several minutes, and in rare cases hours, to complete. During that time, the Mycodo web interface and server recording sensors and manipulating outputs (among other services) will be completely shut down. It is not recommended not perform an upgrade on a production machine (i.e. trust buy verify: treat the new version as unstable until you have verified it works as expected).')}}
@@ -154,7 +154,7 @@
         {% for each_release in current_releases %}
           <tr>
             <td>
-              <a href="https://github.com/kizniche/Mycodo/releases/tag/v{{ each_release }}" target="_blank" {% if current_release == each_release %}style="color: red"{% endif %}>v{{ each_release }}</a>
+              <a href="https://github.com/biotechnicallc/Mycodo/releases/tag/v{{ each_release }}" target="_blank" {% if current_release == each_release %}style="color: red"{% endif %}>v{{ each_release }}</a>
             </td>
             <td>
               {% if each_release == current_release %}{{_('current')}}{% elif each_release == current_major_release %}{{_('latest')}}{% endif %}
