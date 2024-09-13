@@ -909,6 +909,9 @@ THEMES_DARK = ['cyborg', 'darkly', 'slate', 'solar', 'superhero']
 # Install path (the parent directory of this script)
 INSTALL_DIRECTORY = os.path.abspath(os.path.dirname(os.path.realpath(__file__)) + '/..')
 
+#Boot Directory
+BOOT_PATH = '/boot'
+
 # Database
 DATABASE_NAME = "mycodo.db"
 DATABASE_PATH = os.path.join(INSTALL_DIRECTORY, 'databases')

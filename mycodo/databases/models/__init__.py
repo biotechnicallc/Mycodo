@@ -73,6 +73,7 @@ from .input import InputSchema
 from .output import OutputSchema
 from .controller import FunctionSchema
 from .saved_output import SavedOutputSchema
+from .device import DeviceSchema
 
 def alembic_upgrade_db():
     """Upgrade sqlite3 database with alembic"""

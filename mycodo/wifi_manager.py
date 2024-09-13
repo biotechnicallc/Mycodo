@@ -3,6 +3,7 @@ import logging
 import subprocess
 import time
 from config import INSTALL_DIRECTORY
+from cloudflare_config import CloudFlareConfig
 
 class wifiMonitor:
     def __init__(self):
@@ -13,6 +14,9 @@ class wifiMonitor:
         self.ap_enabled = False
         self.ap_directory = os.path.join(INSTALL_DIRECTORY, 'mycodo/scripts/ap')
         self.wifi_directory = os.path.join(INSTALL_DIRECTORY, 'mycodo/scripts/wifi')
+        self.logger.info("WIFI Monitor Initialized")
+        response = CloudFlareConfig().run_config()
+        self.logger.info("CloudFlare Config : {}".format(response))
 
     def Wifi(self):
         while 1:
