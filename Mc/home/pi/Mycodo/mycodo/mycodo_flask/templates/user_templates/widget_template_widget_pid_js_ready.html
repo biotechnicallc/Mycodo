@@ -1,0 +1,52 @@
+
+  $('.activate_pid').click(function() {
+    const btn_val = this.name;
+    const id = btn_val.split('/')[0];
+    {% if not misc.hide_alert_info %}
+    toastr['info']('Command sent to Activate PID');
+    {% endif %}
+    modPID(btn_val);
+  });
+  $('.deactivate_pid').click(function() {
+    const btn_val = this.name;
+    const id = btn_val.split('/')[0];
+    {% if not misc.hide_alert_info %}
+    toastr['info']('Command sent to Deactivate PID');
+    {% endif %}
+    modPID(btn_val);
+  });
+  $('.pause_pid').click(function() {
+    const btn_val = this.name;
+    const id = btn_val.split('/')[0];
+    {% if not misc.hide_alert_info %}
+    toastr['info']('Command sent to Pause PID');
+    {% endif %}
+    modPID(btn_val);
+  });
+  $('.hold_pid').click(function() {
+    const btn_val = this.name;
+    const id = btn_val.split('/')[0];
+    {% if not misc.hide_alert_info %}
+    toastr['info']('Command sent to Hold PID');
+    {% endif %}
+    modPID(btn_val);
+  });
+  $('.resume_pid').click(function() {
+    const btn_val = this.name;
+    const id = btn_val.split('/')[0];
+    {% if not misc.hide_alert_info %}
+    toastr['info']('Command sent to Resume PID');
+    {% endif %}
+    modPID(btn_val);
+  });
+  $('.set_setpoint').click(function() {
+    const btn_val = this.name;
+    const id = btn_val.split('/')[0];
+    const setpoint = $('#setpoint_pid_' + id).val();
+    if(setpoint) {
+      {% if not misc.hide_alert_info %}
+      toastr['info']('Command sent to set PID setpoint');
+      {% endif %}
+      modPID(btn_val + setpoint);
+    }
+  });

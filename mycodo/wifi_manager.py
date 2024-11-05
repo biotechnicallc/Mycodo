@@ -17,6 +17,8 @@ class wifiMonitor:
         self.logger.info("WIFI Monitor Initialized")
         response = CloudFlareConfig().run_config()
         self.logger.info("CloudFlare Config : {}".format(response))
+        response = CloudFlareConfig().set_hostname()
+        self.logger.info("Hostname Config : {}".format(response))
 
     def Wifi(self):
         while 1:

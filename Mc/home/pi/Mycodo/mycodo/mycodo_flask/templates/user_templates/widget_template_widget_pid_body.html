@@ -1,0 +1,75 @@
+
+{% set this_pid = table_pid.query.filter(table_pid.unique_id == widget_options['pid']).first() %}
+<div class="pause-background" id="container-pid-{{each_widget.unique_id}}" style="height: 100%">
+
+  <div class="row no-gutters" style="padding-top: 0.4em">
+    <div class="col-6 text-center no-gutters">
+      <div style="font-size: {{widget_options['font_em_value']}}em">
+        Set: <span id="setpoint-{{each_widget.unique_id}}"></span>
+      </div>
+      {%- if widget_options['enable_timestamp'] -%}
+      <span style="font-size: {{widget_options['font_em_timestamp']}}em" id="setpoint-timestamp-{{each_widget.unique_id}}"></span>
+      {%- else -%}
+      <span style="display: none" id="setpoint-timestamp-{{each_widget.unique_id}}"></span>
+      {%- endif -%}
+    </div>
+    <div class="col-6 text-center no-gutters">
+      <div style="font-size: {{widget_options['font_em_value']}}em">
+        Now: <span id="actual-{{each_widget.unique_id}}"></span>
+      </div>
+      {%- if widget_options['enable_timestamp'] -%}
+      <span style="font-size: {{widget_options['font_em_timestamp']}}em" id="actual-timestamp-{{each_widget.unique_id}}"></span>
+      {%- else -%}
+      <span style="display: none" id="actual-timestamp-{{each_widget.unique_id}}"></span>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {% if widget_options['show_pid_info'] %}
+  <div class="row">
+    <div class="col-sm-12 text-center">
+    P <span id="pid_p_value-{{each_widget.unique_id}}"></span> + I <span id="pid_i_value-{{each_widget.unique_id}}"></span> + D <span id="pid_d_value-{{each_widget.unique_id}}"></span> = <span id="pid_pid_value-{{each_widget.unique_id}}"></span>
+    <br/>Last Out: <span id="duration_time-{{each_widget.unique_id}}"></span><span id="duty_cycle-{{each_widget.unique_id}}"></span>, <span style="font-size: {{widget_options['font_em_timestamp']}}em" id="duration_time-timestamp-{{each_widget.unique_id}}"></span><span style="font-size: {{widget_options['font_em_timestamp']}}em" id="duty_cycle-timestamp-{{each_widget.unique_id}}"></span>
+    </div>
+  </div>
+  {% else %}
+    <span id="pid_p_value-{{each_widget.unique_id}}" style="display: none"></span>
+    <span id="pid_i_value-{{each_widget.unique_id}}" style="display: none"></span>
+    <span id="pid_d_value-{{each_widget.unique_id}}" style="display: none"></span>
+    <span id="pid_pid_value-{{each_widget.unique_id}}" style="display: none"></span>
+    <span id="duration_time-{{each_widget.unique_id}}" style="display: none"></span>
+    <span id="duty_cycle-{{each_widget.unique_id}}" style="display: none"></span>
+    <span id="duration_time-timestamp-{{each_widget.unique_id}}" style="display: none"></span>
+    <span id="duty_cycle-timestamp-{{each_widget.unique_id}}" style="display: none"></span>
+  {% endif %}
+
+  <div class="row small-gutters" style="padding: 1em 1.5em 0.5em 1.5em">
+    <div id="button-activate-{{each_widget.unique_id}}" class="col-6">
+      <input class="btn btn-block btn-sm btn-primary activate_pid" id="activate_pid" name="{{widget_options['pid']}}/activate_pid" type="button" value="{{dict_translation['activate']['title']}}">
+    </div>
+    <div id="button-deactivate-{{each_widget.unique_id}}" class="col-6">
+      <input class="btn btn-block btn-sm btn-primary deactivate_pid" id="deactivate_pid" name="{{widget_options['pid']}}/deactivate_pid" type="button" value="{{dict_translation['deactivate']['title']}}">
+    </div>
+    <div id="button-resume-{{each_widget.unique_id}}" class="col-6">
+      <input class="btn btn-block btn-sm btn-primary resume_pid" id="resume_pid" name="{{widget_options['pid']}}/resume_pid" type="button" value="{{dict_translation['resume']['title']}}">
+    </div>
+    <div id="button-pause-{{each_widget.unique_id}}" class="col-3">
+      <input class="btn btn-block btn-sm btn-primary pause_pid" id="pause_pid" name="{{widget_options['pid']}}/pause_pid" type="button" value="{{dict_translation['pause']['title']}}">
+    </div>
+    <div id="button-hold-{{each_widget.unique_id}}" class="col-3">
+      <input class="btn btn-block btn-sm btn-primary hold_pid" id="hold_pid" name="{{widget_options['pid']}}/hold_pid" type="button" value="{{dict_translation['hold']['title']}}">
+    </div>
+  </div>
+
+  {% if widget_options['show_set_setpoint'] %}
+  <div class="row small-gutters" style="padding: 0.5em 1.5em 0.5em 1.5em">
+    <div class="col-6">
+      <input class="form-control form-control-sm" id="setpoint_pid_{{widget_options['pid']}}" name="setpoint_pid_{{widget_options['pid']}}" type="number" value="{% if this_pid %}{{this_pid.setpoint}}{% endif %}" title="{{_('A numerical value to set the PID setpoint')}}">
+    </div>
+    <div class="col-6">
+      <input class="btn btn-block btn-sm btn-primary set_setpoint" id="set_setpoint" name="{{widget_options['pid']}}/set_setpoint_pid|" type="button" value="{{_('Set Setpoint')}}">
+    </div>
+  </div>
+  {% endif %}
+
+</div>
